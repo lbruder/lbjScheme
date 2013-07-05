@@ -1,0 +1,179 @@
+package org.lb.lbjscheme;
+
+import java.io.*;
+
+public final class Reader {
+	private static final Symbol _dot = Symbol.fromString(".");
+	private static final Symbol _listEnd = Symbol.fromString(")");
+
+	private final java.io.Reader _input;
+	private int _nextChar = 0;
+
+	public Reader(java.io.Reader input) {
+		_input = input;
+		try {
+			readChar();
+		} catch (IOException ex) {
+			_nextChar = -1;
+		}
+	}
+
+	public SchemeObject read() throws IOException, SchemeException, EOFException {
+		skipWhitespace();
+		if (isEof()) throw new EOFException();
+
+		switch (peekChar()) {
+		case ';':
+			skipComment();
+			return read();
+		case '\'':
+			readChar();
+			return new Pair(Symbol.fromString("quote"), new Pair(read(), Nil.getInstance()));
+		case '`':
+			readChar();
+			return new Pair(Symbol.fromString("quasiquote"), new Pair(read(), Nil.getInstance()));
+		case ',':
+			readChar();
+			return new Pair(Symbol.fromString("unquote"), new Pair(read(), Nil.getInstance()));
+		case '(':
+			return readList();
+		case '"':
+			return readString();
+		case '#':
+			return readSpecial();
+		default:
+			return readSymbolOrNumber("");
+		}
+	}
+
+	private void skipWhitespace() throws IOException {
+		while (!isEof() && Character.isWhitespace(peekChar()))
+			readChar();
+	}
+
+	private void skipComment() throws IOException {
+		while (!isEof() && peekChar() != '\n')
+			readChar();
+	}
+
+	private boolean isEof() {
+		return _nextChar == -1;
+	}
+
+	private void assertNotEof() throws IOException {
+		if (isEof()) throw new IOException("Unexpected end of stream");
+	};
+
+	private char peekChar() throws IOException {
+		assertNotEof();
+		return (char) _nextChar;
+	}
+
+	private char readChar() throws IOException {
+		assertNotEof();
+		char ret = (char) _nextChar;
+		_nextChar = _input.read();
+		return ret;
+	}
+
+	private SchemeObject readList() throws IOException, SchemeException {
+		readChar(); // Opening parenthesis
+		Pair ret = null;
+		Pair current = null;
+		while (true) {
+			SchemeObject o = read();
+			if (o == _listEnd) return (ret == null) ? Nil.getInstance() : ret; // )
+			if (o == _dot) {
+				if (current == null) throw new SchemeException("Invalid dotted list");
+				current.setCdr(read());
+				if (read() != _listEnd) throw new SchemeException("Invalid dotted list");
+				return ret;
+			}
+
+			Pair newPair = new Pair(o, Nil.getInstance());
+			if (current == null) {
+				ret = current = newPair;
+			} else {
+				current.setCdr(newPair);
+				current = newPair;
+			}
+		}
+	}
+
+	private SchemeObject readString() throws IOException {
+		readChar(); // Opening quote
+		StringBuilder sb = new StringBuilder();
+		while (peekChar() != '"') {
+			char c = readChar();
+			if (c == '\\') {
+				c = readChar();
+				if (c == 'n') c = '\n';
+				if (c == 'r') c = '\r';
+				if (c == 't') c = '\t';
+			}
+			sb.append(c);
+		}
+		readChar(); // Closing quote
+		return new SchemeString(sb.toString());
+	}
+
+	private SchemeObject readSpecial() throws IOException, SchemeException {
+		readChar(); // #
+		if (peekChar() == '(') {
+			SchemeObject o = readList();
+			return new Vector((SchemeList) o);
+		}
+		if (peekChar() != '\\') return readSymbolOrNumber("#");
+		readChar();
+		return readCharacter();
+	}
+
+	private SchemeObject readCharacter() throws IOException, SchemeException {
+		char c = readChar();
+		if (!Character.isLetter(c)) return new SchemeCharacter(c);
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(c);
+		while (!isEof() && peekChar() != ')' && !Character.isWhitespace(peekChar()))
+			sb.append(readChar());
+		String name = sb.toString();
+		switch (name) {
+		case "cr":
+			return new SchemeCharacter('\r');
+		case "newline":
+			return new SchemeCharacter('\n');
+		case "space":
+			return new SchemeCharacter(' ');
+		case "tab":
+			return new SchemeCharacter('\t');
+		default:
+			if (name.length() == 1) return new SchemeCharacter(name.charAt(0));
+			throw new SchemeException("Invalid character name: \\" + name);
+		}
+	}
+
+	private SchemeObject readSymbolOrNumber(String init) throws IOException {
+		if (init == "" && peekChar() == ')') {
+			readChar();
+			return _listEnd;
+		}
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(init);
+
+		while (!isEof() && peekChar() != ')' && !Character.isWhitespace(peekChar()))
+			sb.append(readChar());
+		String symbol = sb.toString();
+
+		if (symbol.equals("#t")) return True.getInstance();
+		if (symbol.equals("#f")) return False.getInstance();
+
+		try {
+			return new SchemeNumber(Integer.parseInt(symbol));
+		} catch (Exception ex) {
+		}
+		// TODO: Numeric tower
+		if (symbol.startsWith("#x")) return new SchemeNumber(Integer.parseInt(symbol.substring(2), 16));
+		return Symbol.fromString(symbol);
+	}
+}
