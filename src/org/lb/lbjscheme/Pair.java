@@ -1,3 +1,19 @@
+// lbjScheme
+// An experimental Scheme subset interpreter in Java, based on SchemeNet.cs
+// Copyright (c) 2013, Leif Bruder <leifbruder@gmail.com>
+//
+// Permission to use, copy, modify, and/or distribute this software for any
+// purpose with or without fee is hereby granted, provided that the above
+// copyright notice and this permission notice appear in all copies.
+//
+// THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+// WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+// ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+// WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+// ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
 package org.lb.lbjscheme;
 
 import java.util.*;
@@ -47,8 +63,10 @@ public final class Pair implements SchemeObject, SchemeList {
 	public boolean isDottedList() {
 		Pair i = this;
 		while (true) {
-			if (i._cdr instanceof Nil) return false;
-			if (!(i._cdr instanceof Pair)) return true;
+			if (i._cdr instanceof Nil)
+				return false;
+			if (!(i._cdr instanceof Pair))
+				return true;
 			i = (Pair) i._cdr;
 		}
 	}
@@ -69,7 +87,8 @@ public final class Pair implements SchemeObject, SchemeList {
 		Pair i = this;
 		while (true) {
 			ret.append(i._car.toString());
-			if (i._cdr instanceof Nil) break;
+			if (i._cdr instanceof Nil)
+				break;
 			ret.append(" ");
 
 			if (!(i._cdr instanceof Pair)) {

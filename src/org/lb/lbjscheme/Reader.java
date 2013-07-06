@@ -1,3 +1,19 @@
+// lbjScheme
+// An experimental Scheme subset interpreter in Java, based on SchemeNet.cs
+// Copyright (c) 2013, Leif Bruder <leifbruder@gmail.com>
+//
+// Permission to use, copy, modify, and/or distribute this software for any
+// purpose with or without fee is hereby granted, provided that the above
+// copyright notice and this permission notice appear in all copies.
+//
+// THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+// WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+// ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+// WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+// ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
 package org.lb.lbjscheme;
 
 import java.io.*;
@@ -18,9 +34,11 @@ public final class Reader {
 		}
 	}
 
-	public SchemeObject read() throws IOException, SchemeException, EOFException {
+	public SchemeObject read() throws IOException, SchemeException,
+			EOFException {
 		skipWhitespace();
-		if (isEof()) throw new EOFException();
+		if (isEof())
+			throw new EOFException();
 
 		switch (peekChar()) {
 		case ';':
@@ -28,13 +46,16 @@ public final class Reader {
 			return read();
 		case '\'':
 			readChar();
-			return new Pair(Symbol.fromString("quote"), new Pair(read(), Nil.getInstance()));
+			return new Pair(Symbol.fromString("quote"), new Pair(read(),
+					Nil.getInstance()));
 		case '`':
 			readChar();
-			return new Pair(Symbol.fromString("quasiquote"), new Pair(read(), Nil.getInstance()));
+			return new Pair(Symbol.fromString("quasiquote"), new Pair(read(),
+					Nil.getInstance()));
 		case ',':
 			readChar();
-			return new Pair(Symbol.fromString("unquote"), new Pair(read(), Nil.getInstance()));
+			return new Pair(Symbol.fromString("unquote"), new Pair(read(),
+					Nil.getInstance()));
 		case '(':
 			return readList();
 		case '"':
@@ -61,7 +82,8 @@ public final class Reader {
 	}
 
 	private void assertNotEof() throws IOException {
-		if (isEof()) throw new IOException("Unexpected end of stream");
+		if (isEof())
+			throw new IOException("Unexpected end of stream");
 	};
 
 	private char peekChar() throws IOException {
@@ -82,11 +104,14 @@ public final class Reader {
 		Pair current = null;
 		while (true) {
 			SchemeObject o = read();
-			if (o == _listEnd) return (ret == null) ? Nil.getInstance() : ret; // )
+			if (o == _listEnd)
+				return (ret == null) ? Nil.getInstance() : ret; // )
 			if (o == _dot) {
-				if (current == null) throw new SchemeException("Invalid dotted list");
+				if (current == null)
+					throw new SchemeException("Invalid dotted list");
 				current.setCdr(read());
-				if (read() != _listEnd) throw new SchemeException("Invalid dotted list");
+				if (read() != _listEnd)
+					throw new SchemeException("Invalid dotted list");
 				return ret;
 			}
 
@@ -107,9 +132,12 @@ public final class Reader {
 			char c = readChar();
 			if (c == '\\') {
 				c = readChar();
-				if (c == 'n') c = '\n';
-				if (c == 'r') c = '\r';
-				if (c == 't') c = '\t';
+				if (c == 'n')
+					c = '\n';
+				if (c == 'r')
+					c = '\r';
+				if (c == 't')
+					c = '\t';
 			}
 			sb.append(c);
 		}
@@ -123,18 +151,21 @@ public final class Reader {
 			SchemeObject o = readList();
 			return new Vector((SchemeList) o);
 		}
-		if (peekChar() != '\\') return readSymbolOrNumber("#");
+		if (peekChar() != '\\')
+			return readSymbolOrNumber("#");
 		readChar();
 		return readCharacter();
 	}
 
 	private SchemeObject readCharacter() throws IOException, SchemeException {
 		char c = readChar();
-		if (!Character.isLetter(c)) return new SchemeCharacter(c);
+		if (!Character.isLetter(c))
+			return new SchemeCharacter(c);
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(c);
-		while (!isEof() && peekChar() != ')' && !Character.isWhitespace(peekChar()))
+		while (!isEof() && peekChar() != ')'
+				&& !Character.isWhitespace(peekChar()))
 			sb.append(readChar());
 		String name = sb.toString();
 		switch (name) {
@@ -147,7 +178,8 @@ public final class Reader {
 		case "tab":
 			return new SchemeCharacter('\t');
 		default:
-			if (name.length() == 1) return new SchemeCharacter(name.charAt(0));
+			if (name.length() == 1)
+				return new SchemeCharacter(name.charAt(0));
 			throw new SchemeException("Invalid character name: \\" + name);
 		}
 	}
@@ -161,19 +193,23 @@ public final class Reader {
 		StringBuilder sb = new StringBuilder();
 		sb.append(init);
 
-		while (!isEof() && peekChar() != ')' && !Character.isWhitespace(peekChar()))
+		while (!isEof() && peekChar() != ')'
+				&& !Character.isWhitespace(peekChar()))
 			sb.append(readChar());
 		String symbol = sb.toString();
 
-		if (symbol.equals("#t")) return True.getInstance();
-		if (symbol.equals("#f")) return False.getInstance();
+		if (symbol.equals("#t"))
+			return True.getInstance();
+		if (symbol.equals("#f"))
+			return False.getInstance();
 
 		try {
 			return new SchemeNumber(Integer.parseInt(symbol));
 		} catch (Exception ex) {
 		}
 		// TODO: Numeric tower
-		if (symbol.startsWith("#x")) return new SchemeNumber(Integer.parseInt(symbol.substring(2), 16));
+		if (symbol.startsWith("#x"))
+			return new SchemeNumber(Integer.parseInt(symbol.substring(2), 16));
 		return Symbol.fromString(symbol);
 	}
 }
