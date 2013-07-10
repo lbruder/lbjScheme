@@ -17,7 +17,6 @@
 package org.lb.lbjscheme;
 
 import java.io.*;
-import java.util.List;
 
 public abstract class EvaluatorBase implements Evaluator {
 	private final Environment _global = new Environment();
@@ -38,200 +37,46 @@ public abstract class EvaluatorBase implements Evaluator {
 	}
 
 	private void addBuiltinsToGlobalEnvironment() throws SchemeException {
-		// Oh lambda syntax, how I long for thee...
-
-		addBuiltin(new Builtin("cons") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(2, parameters);
-				return Builtins.cons(parameters.get(0), parameters.get(1));
-			}
-		});
-
-		addBuiltin(new Builtin("cons") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(2, parameters);
-				return Builtins.cons(parameters.get(0), parameters.get(1));
-			}
-		});
-
-		addBuiltin(new Builtin("car") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(1, parameters);
-				return Builtins.car(parameters.get(0));
-			}
-		});
-
-		addBuiltin(new Builtin("cdr") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(1, parameters);
-				return Builtins.cdr(parameters.get(0));
-			}
-		});
-
-		addBuiltin(new Builtin("set-car!") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(2, parameters);
-				return Builtins.setCar(parameters.get(0), parameters.get(1));
-			}
-		});
-
-		addBuiltin(new Builtin("set-cdr!") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(2, parameters);
-				return Builtins.setCdr(parameters.get(0), parameters.get(1));
-			}
-		});
-
-		addBuiltin(new Builtin("set-car!") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(2, parameters);
-				return Builtins.setCar(parameters.get(0), parameters.get(1));
-			}
-		});
-
-		addBuiltin(new Builtin("eq?") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(2, parameters);
-				return parameters.get(0) == parameters.get(1) ? True
-						.getInstance() : False.getInstance();
-			}
-		});
-
-		addBuiltin(new Builtin("null?") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(1, parameters);
-				return parameters.get(0) instanceof Nil ? True.getInstance()
-						: False.getInstance();
-			}
-		});
-
-		addBuiltin(new Builtin("pair?") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(1, parameters);
-				return parameters.get(0) instanceof Pair ? True.getInstance()
-						: False.getInstance();
-			}
-		});
-
-		addBuiltin(new Builtin("number?") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(1, parameters);
-				return parameters.get(0) instanceof SchemeNumber ? True
-						.getInstance() : False.getInstance();
-			}
-		});
-
-		addBuiltin(new Builtin("string?") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(1, parameters);
-				return parameters.get(0) instanceof SchemeString ? True
-						.getInstance() : False.getInstance();
-			}
-		});
-
-		addBuiltin(new Builtin("char?") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(1, parameters);
-				return parameters.get(0) instanceof SchemeCharacter ? True
-						.getInstance() : False.getInstance();
-			}
-		});
-
-		addBuiltin(new Builtin("boolean?") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(1, parameters);
-				return (parameters.get(0) instanceof True)
-						|| (parameters.get(0) instanceof False) ? True
-						.getInstance() : False.getInstance();
-			}
-		});
-
-		addBuiltin(new Builtin("symbol?") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(1, parameters);
-				return parameters.get(0) instanceof Symbol ? True.getInstance()
-						: False.getInstance();
-			}
-		});
-
-		addBuiltin(new Builtin("procedure?") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(1, parameters);
-				return (parameters.get(0) instanceof Lambda)
-						|| (parameters.get(0) instanceof Builtin) ? True
-						.getInstance() : False.getInstance();
-			}
-		});
-
-		addBuiltin(new Builtin("list?") {
-			@Override
-			public SchemeObject apply(List<SchemeObject> parameters)
-					throws SchemeException {
-				assertParameterCount(1, parameters);
-				return (parameters.get(0) instanceof SchemeList)
-						&& (!((SchemeList) parameters.get(0)).isDottedList()) ? True
-						.getInstance() : False.getInstance();
-			}
-		});
+		addBuiltin(new Builtin(Builtin.Type.cons));
+		addBuiltin(new Builtin(Builtin.Type.car));
+		addBuiltin(new Builtin(Builtin.Type.cdr));
+		addBuiltin(new Builtin(Builtin.Type.setCar));
+		addBuiltin(new Builtin(Builtin.Type.setCdr));
+		addBuiltin(new Builtin(Builtin.Type.eqp));
+		addBuiltin(new Builtin(Builtin.Type.nullp));
+		addBuiltin(new Builtin(Builtin.Type.pairp));
+		addBuiltin(new Builtin(Builtin.Type.numberp));
+		addBuiltin(new Builtin(Builtin.Type.stringp));
+		addBuiltin(new Builtin(Builtin.Type.charp));
+		addBuiltin(new Builtin(Builtin.Type.booleanp));
+		addBuiltin(new Builtin(Builtin.Type.symbolp));
+		addBuiltin(new Builtin(Builtin.Type.procedurep));
+		addBuiltin(new Builtin(Builtin.Type.listp));
+		addBuiltin(new Builtin(Builtin.Type.add));
+		addBuiltin(new Builtin(Builtin.Type.sub));
+		addBuiltin(new Builtin(Builtin.Type.mul));
+		addBuiltin(new Builtin(Builtin.Type.div));
+		addBuiltin(new Builtin(Builtin.Type.lt));
+		addBuiltin(new Builtin(Builtin.Type.le));
+		addBuiltin(new Builtin(Builtin.Type.gt));
+		addBuiltin(new Builtin(Builtin.Type.ge));
+		addBuiltin(new Builtin(Builtin.Type.numeq));
 
 		// AddFunction("integer?", (object a) => a is int);
 		// AddFunction("real?", (object a) => a is double);
-		// AddFunction("+", MakeNumericalFunction("+", (i1, i2) => checked(i1 +
-		// i2), (d1, d2) => d1 + d2));
-		// AddFunction("-", MakeNumericalFunction("-", (i1, i2) => i1 - i2, (d1,
-		// d2) => d1 - d2));
-		// AddFunction("*", MakeNumericalFunction("*", (i1, i2) => checked(i1 *
-		// i2), (d1, d2) => d1 * d2));
-		// AddFunction("/", MakeNumericalFunction("/", (i1, i2) => i1 / i2, (d1,
-		// d2) => d1 / d2));
-		// AddFunction("<", MakeNumericalFunction("<", (i1, i2) => i1 < i2, (d1,
-		// d2) => d1 < d2));
-		// AddFunction(">", MakeNumericalFunction(">", (i1, i2) => i1 > i2, (d1,
-		// d2) => d1 > d2));
-		// AddFunction("=", MakeNumericalFunction("=", (i1, i2) => i1 == i2,
-		// (d1, d2) => d1 == d2));
+
 		// AddFunction("sin", (double d) => Math.Sin(d));
 		// AddFunction("cos", (double d) => Math.Cos(d));
 		// AddFunction("tan", (double d) => Math.Tan(d));
 		// AddFunction("sqrt", (object a) => Math.Sqrt(Convert.ToDouble(a)));
 		// AddFunction("expt", (object b, object exp) =>
 		// Math.Pow(Convert.ToDouble(b), Convert.ToDouble(exp)));
+
 		// AddFunction("quotient", MakeNumericalFunction("quotient", (i1, i2) =>
 		// i1 / i2, (d1, d2) => (int)(d1 / d2)));
 		// AddFunction("remainder", MakeNumericalFunction("remainder", (i1, i2)
 		// => i1 % i2, (d1, d2) => (int)d1 % (int)d2));
+
 		// AddFunction("random", (int a) => random.Next(a));
 		// AddFunction("display", (object a) => { Print(ObjectToString(a,
 		// true)); return undefinedSymbol; });
@@ -344,7 +189,7 @@ public abstract class EvaluatorBase implements Evaluator {
 		// AddFunction("lb:sleep", (int ms) => { Thread.Sleep(ms); return
 		// undefinedSymbol; });
 		// // TODO: string-set, string-fill!, make-string, string-copy.
-		// Impossible with .NET strings.
+
 		// AddFunction("lb:clr-method", (object o, object name) => new
 		// ClrClosure(o, name.ToString()));
 		// AddFunction("lb:clr-property-names", (object o) =>
@@ -400,45 +245,62 @@ public abstract class EvaluatorBase implements Evaluator {
 			+ "(define (cddddr x) (cdr (cdr (cdr (cdr x)))))"
 			+ "(define (list . lst) lst)"
 			+ "(define (flip f) (lambda (a b) (f b a)))"
-			+ "(define (newline) (display \"\\n\") 'undefined)"
 			+ "(define (zero? x) (= x 0))"
 			+ "(define (positive? x) (> x 0))"
 			+ "(define (negative? x) (< x 0))"
-			+ "(define (<= a b) (if (> a b) #f #t))"
-			+ "(define (>= a b) (if (< a b) #f #t))"
-			+ "(define (char>=? a b) (if (char<? a b) #f #t))"
-			+ "(define (char<=? a b) (if (char>? a b) #f #t))"
-			+ "(define (char-ci>=? a b) (if (char-ci<? a b) #f #t))"
-			+ "(define (char-ci<=? a b) (if (char-ci>? a b) #f #t))"
-			+ "(define (string>=? a b) (if (string<? a b) #f #t))"
-			+ "(define (string<=? a b) (if (string>? a b) #f #t))"
-			+ "(define (string-ci>=? a b) (if (string-ci<? a b) #f #t))"
-			+ "(define (string-ci<=? a b) (if (string-ci>? a b) #f #t))"
-			+ "(define (error . params) (sys:error params))"
 			+ "(define (abs x) (if (positive? x) x (- 0 x)))"
-			+ "(define (sys:sign x) (if (>= x 0) 1 -1))"
-			+ "(define (modulo a b) (if (= (sys:sign a) (sys:sign b)) (remainder a b) (+ b (remainder a b))))"
-			+ "(define (even? x) (zero? (remainder x 2)))"
-			+ "(define (odd? x) (if (even? x) #f #t))"
 			+ "(define (not x) (if x #f #t))"
-			+ "(define (string . values) (list->string values))"
-			+ "(define (list-tail lst k) (if (zero? k) lst (list-tail (cdr lst) (- k 1))))"
-			+ "(define (list-ref lst k) (car (list-tail lst k)))"
-			+ "(define (string->number n . rest) (if (pair? rest) (sys:strtonum n (car rest)) (sys:strtonum n 10)))"
-			+ "(define (number->string n . rest) (if (pair? rest) (sys:numtostr n (car rest)) (sys:numtostr n 10)))"
-			+ "(define (sys:gcd-of-two a b) (if (= b 0) a (sys:gcd-of-two b (remainder a b))))"
-			+ "(define (sys:lcm-of-two a b) (/ (* a b) (sys:gcd-of-two a b)))"
 			+ "(define (fold f acc lst) (if (null? lst) acc (fold f (f (car lst) acc) (cdr lst))))"
 			+ "(define (reduce f ridentity lst) (if (null? lst) ridentity (fold f (car lst) (cdr lst))))"
-			+ "(define (gcd . args) (if (null? args) 0 (abs (fold sys:gcd-of-two (car args) (cdr args)))))"
-			+ "(define (lcm . args) (if (null? args) 1 (abs (fold sys:lcm-of-two (car args) (cdr args)))))"
-			+ "(define (append . lsts) (define (iter current acc) (if (pair? current) (iter (cdr current) (cons (car current) acc)) acc)) (reverse (fold iter '() lsts)))"
-			+ "(define (memq obj lst) (if (pair? lst) (if (eq? obj (car lst)) lst (memq obj (cdr lst))) #f))"
-			+ "(define (memv obj lst) (if (pair? lst) (if (eqv? obj (car lst)) lst (memv obj (cdr lst))) #f))"
-			+ "(define (member obj lst) (if (pair? lst) (if (equal? obj (car lst)) lst (member obj (cdr lst))) #f))"
-			+ "(define (assq obj lst) (if (pair? lst) (if (eq? obj (caar lst)) (car lst) (assq obj (cdr lst))) #f))"
-			+ "(define (assv obj lst) (if (pair? lst) (if (eqv? obj (caar lst)) (car lst) (assv obj (cdr lst))) #f))"
-			+ "(define (assoc obj lst) (if (pair? lst) (if (equal? obj (caar lst)) (car lst) (assoc obj (cdr lst))) #f))"
+			+ "(define (list-tail lst k) (if (zero? k) lst (list-tail (cdr lst) (- k 1))))"
+			+ "(define (list-ref lst k) (car (list-tail lst k)))"
+			+ "(define (last-pair lst) (if (null? (cdr lst)) lst (last-pair (cdr lst))))"
+			+ "(define (last lst) (car (last-pair lst)))"
+			+ "(define (dotted-list? lst) (if (null? lst) #f (if (pair? lst) (dotted-list? (cdr lst)) #t)))"
+			+ "(define drop list-tail)"
+
+			// + "(define (newline) (display \"\\n\") 'undefined)"
+			// + "(define (char>=? a b) (if (char<? a b) #f #t))"
+			// + "(define (char<=? a b) (if (char>? a b) #f #t))"
+			// + "(define (char-ci>=? a b) (if (char-ci<? a b) #f #t))"
+			// + "(define (char-ci<=? a b) (if (char-ci>? a b) #f #t))"
+			// + "(define (string>=? a b) (if (string<? a b) #f #t))"
+			// + "(define (string<=? a b) (if (string>? a b) #f #t))"
+			// + "(define (string-ci>=? a b) (if (string-ci<? a b) #f #t))"
+			// + "(define (string-ci<=? a b) (if (string-ci>? a b) #f #t))"
+			// + "(define (error . params) (sys:error params))"
+			// + "(define (sys:sign x) (if (>= x 0) 1 -1))"
+			// +
+			// "(define (modulo a b) (if (= (sys:sign a) (sys:sign b)) (remainder a b) (+ b (remainder a b))))"
+			// + "(define (even? x) (zero? (remainder x 2)))"
+			// + "(define (odd? x) (if (even? x) #f #t))"
+			// + "(define (string . values) (list->string values))"
+			// +
+			// "(define (string->number n . rest) (if (pair? rest) (sys:strtonum n (car rest)) (sys:strtonum n 10)))"
+			// +
+			// "(define (number->string n . rest) (if (pair? rest) (sys:numtostr n (car rest)) (sys:numtostr n 10)))"
+			// +
+			// "(define (sys:gcd-of-two a b) (if (= b 0) a (sys:gcd-of-two b (remainder a b))))"
+			// +
+			// "(define (sys:lcm-of-two a b) (/ (* a b) (sys:gcd-of-two a b)))"
+			// +
+			// "(define (gcd . args) (if (null? args) 0 (abs (fold sys:gcd-of-two (car args) (cdr args)))))"
+			// +
+			// "(define (lcm . args) (if (null? args) 1 (abs (fold sys:lcm-of-two (car args) (cdr args)))))"
+			// +
+			// "(define (append . lsts) (define (iter current acc) (if (pair? current) (iter (cdr current) (cons (car current) acc)) acc)) (reverse (fold iter '() lsts)))"
+			// +
+			// "(define (memq obj lst) (if (pair? lst) (if (eq? obj (car lst)) lst (memq obj (cdr lst))) #f))"
+			// +
+			// "(define (memv obj lst) (if (pair? lst) (if (eqv? obj (car lst)) lst (memv obj (cdr lst))) #f))"
+			// +
+			// "(define (member obj lst) (if (pair? lst) (if (equal? obj (car lst)) lst (member obj (cdr lst))) #f))"
+			// +
+			// "(define (assq obj lst) (if (pair? lst) (if (eq? obj (caar lst)) (car lst) (assq obj (cdr lst))) #f))"
+			// +
+			// "(define (assv obj lst) (if (pair? lst) (if (eqv? obj (caar lst)) (car lst) (assv obj (cdr lst))) #f))"
+			// +
+			// "(define (assoc obj lst) (if (pair? lst) (if (equal? obj (caar lst)) (car lst) (assoc obj (cdr lst))) #f))"
 			// +
 			// "(defmacro quasiquote (value) (define (qq i) (if (pair? i) (if (eq? 'unquote (car i)) (cadr i) (cons 'list (map qq i))) (list 'quote i))) (qq value))"
 			// +
@@ -466,12 +328,6 @@ public abstract class EvaluatorBase implements Evaluator {
 			// "(define (take-while f lst) (define (iter l acc) (cond ((null? l) acc) ((f (car l)) (iter (cdr l) (cons (car l) acc))) (else acc))) (reverse (iter lst '())))"
 			// +
 			// "(define (take lst i) (define (iter l totake acc) (cond ((null? l) acc) ((zero? totake) acc) (else (iter (cdr l) (- totake 1) (cons (car l) acc))))) (reverse (iter lst i '())))"
-			// + "(define drop list-tail)"
-			// +
-			// "(define (last-pair lst) (if (null? (cdr lst)) lst (last-pair (cdr lst))))"
-			// + "(define (last lst) (car (last-pair lst)))"
-			// +
-			// "(define (dotted-list? lst) (if (null? lst) #f (if (pair? lst) (dotted-list? (cdr lst)) #t)))"
 			// +
 			// "(define (make-proper-list lst) (define (iter i acc) (cond ((pair? i) (iter (cdr i) (cons (car i) acc))) ((null? i) acc) (else (cons i acc)))) (reverse (iter lst '())))"
 			// +
@@ -496,10 +352,6 @@ public abstract class EvaluatorBase implements Evaluator {
 			// "(defmacro do (vars pred . body) (let ((symbol (gensym))) `(let ((,symbol '())) (set! ,symbol (lambda ,(map car vars) (if ,(car pred) ,(cadr pred) ,(cons 'begin (append body (list (cons symbol (map caddr vars)))))))) ,(cons symbol (map cadr vars))))) "
 			// +
 			// "(defmacro while (exp . body) (cons 'do (cons '() (cons `((not ,exp) 'undefined) body))))"
-			// +
-			// "(define (flatten lst) (define (iter i acc) (cond ((null? i) acc) ((pair? (car i)) (iter (cdr i) (iter (car i) acc))) (else (iter (cdr i) (cons (car i) acc))))) (reverse (iter lst '())))"
-			// +
-			// "(define (print . args) (for-each display (flatten args)) (newline))"
 			// +
 			// "(define (lb:partial-apply proc . cargs) (lambda args (apply proc (append cargs args))))"
 			// +
@@ -528,16 +380,6 @@ public abstract class EvaluatorBase implements Evaluator {
 			// +
 			// "(defmacro assert (form) `(sys:test-assertion (quote ,form) ,form))"
 			//
-			// "(let ((original display)) (set! display (lambda args (for-each original args))))"
-			// +
-			// "(let ((original +)) (set! + (lambda args (fold original 0 args))))"
-			// +
-			// "(let ((original *)) (set! * (lambda args (fold original 1 args))))"
-			// +
-			// "(let ((original -)) (set! - (lambda args (if (null? (cdr args)) (original 0 (car args)) (fold (flip original) (car args) (cdr args))))))"
-			// +
-			// "(let ((original /)) (set! / (lambda args (if (null? (cdr args)) (original 1 (car args)) (fold (flip original) (car args) (cdr args))))))"
-			// +
 			// "(let ((original string-append)) (set! string-append (lambda args (fold (flip original) \"\" args))))"
 			// + "(define partial-apply lb:partial-apply)"
 			// + "(define range lb:range)" + "(define count lb:count)"

@@ -16,6 +16,8 @@
 
 package org.lb.lbjscheme;
 
+import java.util.List;
+
 public final class Builtins {
 	public static SchemeObject cons(SchemeObject o1, SchemeObject o2) {
 		return new Pair(o1, o2);
@@ -57,5 +59,131 @@ public final class Builtins {
 		throw new SchemeException(
 				"set-cdr!: Invalid parameter type; expected Pair, got "
 						+ o.getClass());
+	}
+
+	private static int toNumber(String procedure, SchemeObject o)
+			throws SchemeException {
+		if (o instanceof SchemeNumber)
+			return ((SchemeNumber) o).getValue();
+		else
+			throw new SchemeException(procedure
+					+ ": Invalid type conversion; expected Number, got "
+					+ o.getClass());
+	}
+
+	public static SchemeObject add(List<SchemeObject> parameters)
+			throws SchemeException {
+		int ret = 0;
+		for (SchemeObject o : parameters)
+			ret += toNumber("+", o);
+		return new SchemeNumber(ret);
+	}
+
+	public static SchemeObject sub(List<SchemeObject> parameters)
+			throws SchemeException {
+		if (parameters.size() == 0)
+			throw new SchemeException("-: Expected at least one parameter");
+
+		int ret = toNumber("-", parameters.get(0));
+		if (parameters.size() == 1)
+			return new SchemeNumber(-ret);
+		for (SchemeObject o : parameters.subList(1, parameters.size()))
+			ret -= toNumber("-", o);
+		return new SchemeNumber(ret);
+	}
+
+	public static SchemeObject mul(List<SchemeObject> parameters)
+			throws SchemeException {
+		int ret = 1;
+		for (SchemeObject o : parameters)
+			ret *= toNumber("*", o);
+		return new SchemeNumber(ret);
+	}
+
+	public static SchemeObject div(List<SchemeObject> parameters)
+			throws SchemeException {
+		if (parameters.size() == 0)
+			throw new SchemeException("/: Expected at least one parameter");
+
+		int ret = toNumber("/", parameters.get(0));
+		if (parameters.size() == 1)
+			return new SchemeNumber(1 / ret); // TODO Rationals
+		for (SchemeObject o : parameters.subList(1, parameters.size()))
+			ret /= toNumber("/", o); // TODO Rationals
+		return new SchemeNumber(ret);
+	}
+
+	public static SchemeObject lt(List<SchemeObject> parameters)
+			throws SchemeException {
+		if (parameters.size() < 2)
+			throw new SchemeException("<: Expected at least two parameters");
+
+		int last = toNumber("<", parameters.get(0));
+		for (SchemeObject o : parameters.subList(1, parameters.size())) {
+			int now = toNumber("<", o);
+			if (last >= now)
+				return False.getInstance();
+			last = now;
+		}
+		return True.getInstance();
+	}
+
+	public static SchemeObject le(List<SchemeObject> parameters)
+			throws SchemeException {
+		if (parameters.size() < 2)
+			throw new SchemeException("<=: Expected at least two parameters");
+
+		int last = toNumber("<=", parameters.get(0));
+		for (SchemeObject o : parameters.subList(1, parameters.size())) {
+			int now = toNumber("<=", o);
+			if (last > now)
+				return False.getInstance();
+			last = now;
+		}
+		return True.getInstance();
+	}
+
+	public static SchemeObject gt(List<SchemeObject> parameters)
+			throws SchemeException {
+		if (parameters.size() < 2)
+			throw new SchemeException(">: Expected at least two parameters");
+
+		int last = toNumber(">", parameters.get(0));
+		for (SchemeObject o : parameters.subList(1, parameters.size())) {
+			int now = toNumber(">", o);
+			if (last <= now)
+				return False.getInstance();
+			last = now;
+		}
+		return True.getInstance();
+	}
+
+	public static SchemeObject ge(List<SchemeObject> parameters)
+			throws SchemeException {
+		if (parameters.size() < 2)
+			throw new SchemeException(">=: Expected at least two parameters");
+
+		int last = toNumber(">=", parameters.get(0));
+		for (SchemeObject o : parameters.subList(1, parameters.size())) {
+			int now = toNumber(">=", o);
+			if (last < now)
+				return False.getInstance();
+			last = now;
+		}
+		return True.getInstance();
+	}
+
+	public static SchemeObject numeq(List<SchemeObject> parameters)
+			throws SchemeException {
+		if (parameters.size() < 2)
+			throw new SchemeException("=: Expected at least two parameters");
+
+		int last = toNumber("=", parameters.get(0));
+		for (SchemeObject o : parameters.subList(1, parameters.size())) {
+			int now = toNumber("=", o);
+			if (last != now)
+				return False.getInstance();
+		}
+		return True.getInstance();
 	}
 }
