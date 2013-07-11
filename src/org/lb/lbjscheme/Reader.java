@@ -93,7 +93,7 @@ public final class Reader {
 
 	private char readChar() throws IOException {
 		assertNotEof();
-		char ret = (char) _nextChar;
+		final char ret = (char) _nextChar;
 		_nextChar = _input.read();
 		return ret;
 	}
@@ -103,7 +103,7 @@ public final class Reader {
 		Pair ret = null;
 		Pair current = null;
 		while (true) {
-			SchemeObject o = read();
+			final SchemeObject o = read();
 			if (o == _listEnd)
 				return (ret == null) ? Nil.getInstance() : ret; // )
 			if (o == _dot) {
@@ -115,7 +115,7 @@ public final class Reader {
 				return ret;
 			}
 
-			Pair newPair = new Pair(o, Nil.getInstance());
+			final Pair newPair = new Pair(o, Nil.getInstance());
 			if (current == null) {
 				ret = current = newPair;
 			} else {
@@ -127,7 +127,7 @@ public final class Reader {
 
 	private SchemeObject readString() throws IOException {
 		readChar(); // Opening quote
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		while (peekChar() != '"') {
 			char c = readChar();
 			if (c == '\\') {
@@ -147,10 +147,8 @@ public final class Reader {
 
 	private SchemeObject readSpecial() throws IOException, SchemeException {
 		readChar(); // #
-		if (peekChar() == '(') {
-			SchemeObject o = readList();
-			return new Vector((SchemeList) o);
-		}
+		if (peekChar() == '(')
+			return new Vector((SchemeList) readList());
 		if (peekChar() != '\\')
 			return readSymbolOrNumber("#");
 		readChar();
@@ -158,16 +156,16 @@ public final class Reader {
 	}
 
 	private SchemeObject readCharacter() throws IOException, SchemeException {
-		char c = readChar();
+		final char c = readChar();
 		if (!Character.isLetter(c))
 			return new SchemeCharacter(c);
 
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append(c);
 		while (!isEof() && peekChar() != ')'
 				&& !Character.isWhitespace(peekChar()))
 			sb.append(readChar());
-		String name = sb.toString();
+		final String name = sb.toString();
 		switch (name) {
 		case "cr":
 			return new SchemeCharacter('\r');
@@ -190,13 +188,13 @@ public final class Reader {
 			return _listEnd;
 		}
 
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append(init);
 
 		while (!isEof() && peekChar() != ')'
 				&& !Character.isWhitespace(peekChar()))
 			sb.append(readChar());
-		String symbol = sb.toString();
+		final String symbol = sb.toString();
 
 		if (symbol.equals("#t"))
 			return True.getInstance();

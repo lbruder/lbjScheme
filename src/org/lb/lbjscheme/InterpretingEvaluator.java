@@ -19,14 +19,14 @@ package org.lb.lbjscheme;
 import java.util.*;
 
 public final class InterpretingEvaluator extends EvaluatorBase {
-	private static final Symbol undefinedSymbol = Symbol
+	private static final Symbol _undefinedSymbol = Symbol
 			.fromString("undefined");
-	private static final Symbol quoteSymbol = Symbol.fromString("quote");
-	private static final Symbol defineSymbol = Symbol.fromString("define");
-	private static final Symbol setSymbol = Symbol.fromString("set!");
-	private static final Symbol ifSymbol = Symbol.fromString("if");
-	private static final Symbol beginSymbol = Symbol.fromString("begin");
-	private static final Symbol lambdaSymbol = Symbol.fromString("lambda");
+	private static final Symbol _quoteSymbol = Symbol.fromString("quote");
+	private static final Symbol _defineSymbol = Symbol.fromString("define");
+	private static final Symbol _setSymbol = Symbol.fromString("set!");
+	private static final Symbol _ifSymbol = Symbol.fromString("if");
+	private static final Symbol _beginSymbol = Symbol.fromString("begin");
+	private static final Symbol _lambdaSymbol = Symbol.fromString("lambda");
 
 	public InterpretingEvaluator() throws SchemeException {
 		super();
@@ -43,18 +43,18 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 			if (o instanceof Symbol)
 				return env.get((Symbol) o);
 			if (o instanceof Pair) {
-				Pair p = (Pair) o;
-				SchemeObject car = p.getCar();
-				if (car == lambdaSymbol)
+				final Pair p = (Pair) o;
+				final SchemeObject car = p.getCar();
+				if (car == _lambdaSymbol)
 					return makeLambda(p.getCdr(), env);
-				if (car == defineSymbol)
+				if (car == _defineSymbol)
 					return define(p.getCdr(), env);
-				List<SchemeObject> form = p.toJavaList();
-				if (car == quoteSymbol)
+				final List<SchemeObject> form = p.toJavaList();
+				if (car == _quoteSymbol)
 					return Builtins.car(p.getCdr());
-				if (car == setSymbol)
+				if (car == _setSymbol)
 					return set(form, env);
-				if (car == ifSymbol) {
+				if (car == _ifSymbol) {
 					SchemeObject condition;
 					SchemeObject thenPart;
 					SchemeObject elsePart;
@@ -76,7 +76,7 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 							: elsePart;
 					continue tailCall;
 				}
-				if (car == beginSymbol) {
+				if (car == _beginSymbol) {
 					if (form.size() == 1)
 						throw new SchemeException("Invalid begin form: Empty");
 					for (int i = 1; i < form.size(); ++i) {
@@ -84,12 +84,12 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 						if (i == form.size() - 1) // Last form in (begin...)
 							continue tailCall;
 						else
-							eval(o);
+							eval(o, env);
 					}
 				}
 
-				SchemeObject procedure = eval(car, env);
-				ArrayList<SchemeObject> parameters = new ArrayList<SchemeObject>();
+				final SchemeObject procedure = eval(car, env);
+				final ArrayList<SchemeObject> parameters = new ArrayList<SchemeObject>();
 				for (int i = 1; i < form.size(); ++i)
 					parameters.add(eval(form.get(i), env));
 
@@ -97,8 +97,8 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 					return ((Builtin) procedure).apply(parameters);
 
 				if (procedure instanceof Lambda) {
-					Lambda l = (Lambda) procedure;
-					o = new Pair(beginSymbol, l.getForms());
+					final Lambda l = (Lambda) procedure;
+					o = new Pair(_beginSymbol, l.getForms());
 					env = new Environment(l.getCaptured());
 					env.expand(l.getParameterNames(), l.hasRestParameter(),
 							parameters);
@@ -118,12 +118,12 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 		if (!(form instanceof Pair))
 			throw new SchemeException(
 					"Invalid lambda form: Expected at least a parameter list and one form");
-		Pair p1 = (Pair) form;
-		SchemeObject parameterNameObject = p1.getCar();
+		final Pair p1 = (Pair) form;
+		final SchemeObject parameterNameObject = p1.getCar();
 		if (!(p1.getCdr() instanceof Pair))
 			throw new SchemeException(
 					"Invalid lambda form: Expected at least a parameter list and one form");
-		Pair forms = (Pair) p1.getCdr();
+		final Pair forms = (Pair) p1.getCdr();
 		if (parameterNameObject instanceof Symbol) // (lambda x forms)
 			return makeLambdaWithRestParameterOnly(env, parameterNameObject,
 					forms);
@@ -134,7 +134,7 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 
 	private SchemeObject makeLambdaWithRestParameterOnly(Environment env,
 			SchemeObject parameterNameObject, Pair forms) {
-		List<Symbol> parameterNames = new ArrayList<Symbol>();
+		final List<Symbol> parameterNames = new ArrayList<Symbol>();
 		parameterNames.add((Symbol) parameterNameObject);
 		return new Lambda("lambda", parameterNames, true, forms, env);
 	}
@@ -142,8 +142,8 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 	private SchemeObject makeLambdaWithParameterList(Environment env,
 			SchemeObject parameterNameObject, Pair forms)
 			throws SchemeException {
-		List<Symbol> parameterNames = new ArrayList<Symbol>();
-		boolean hasRestParameter = ((SchemeList) parameterNameObject)
+		final List<Symbol> parameterNames = new ArrayList<Symbol>();
+		final boolean hasRestParameter = ((SchemeList) parameterNameObject)
 				.isDottedList();
 		for (SchemeObject o : (SchemeList) parameterNameObject) {
 			if (o instanceof Symbol)
@@ -161,7 +161,7 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 		if (!(form instanceof Pair))
 			throw new SchemeException(
 					"Invalid define form: Expected target and value");
-		Pair p1 = (Pair) form;
+		final Pair p1 = (Pair) form;
 		if (p1.getCar() instanceof Symbol)
 			return defineValue(env, p1);
 		if (p1.getCar() instanceof Pair)
@@ -173,28 +173,28 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 
 	private SchemeObject defineValue(Environment env, Pair p1)
 			throws SchemeException {
-		Symbol sym = (Symbol) p1.getCar();
-		SchemeObject valueObject = p1.getCdr();
+		final Symbol sym = (Symbol) p1.getCar();
+		final SchemeObject valueObject = p1.getCdr();
 		if (!(valueObject instanceof Pair))
 			throw new SchemeException(
 					"Invalid define form: Expected target and value");
 		if (!(((Pair) valueObject).getCdr() instanceof Nil))
 			throw new SchemeException(
 					"Invalid define form: Too many parameters");
-		SchemeObject value = eval(((Pair) valueObject).getCar());
+		final SchemeObject value = eval(((Pair) valueObject).getCar(), env);
 		env.define(sym, value);
-		return undefinedSymbol;
+		return _undefinedSymbol;
 	}
 
 	private SchemeObject defineProcedure(Environment env, Pair p1)
 			throws SchemeException {
-		SchemeList target = (SchemeList) p1.getCar();
-		SchemeObject forms = p1.getCdr();
+		final SchemeList target = (SchemeList) p1.getCar();
+		final SchemeObject forms = p1.getCdr();
 		if (!(forms instanceof Pair))
 			throw new SchemeException(
 					"Invalid define form: Expected lambda forms");
 		Symbol sym = null;
-		List<Symbol> parameterNames = new ArrayList<Symbol>();
+		final List<Symbol> parameterNames = new ArrayList<Symbol>();
 		for (SchemeObject o : target) {
 			if (!(o instanceof Symbol))
 				throw new SchemeException(
@@ -208,7 +208,7 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 				sym,
 				new Lambda(sym.toString(), parameterNames, target
 						.isDottedList(), (Pair) forms, env));
-		return undefinedSymbol;
+		return _undefinedSymbol;
 	}
 
 	private SchemeObject set(List<SchemeObject> form, Environment env)
@@ -221,9 +221,9 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 			throw new SchemeException(
 					"Invalid set! form: Expected symbol as target");
 
-		Symbol sym = (Symbol) form.get(1);
-		SchemeObject value = form.get(2);
-		env.set(sym, eval(value));
-		return undefinedSymbol;
+		final Symbol sym = (Symbol) form.get(1);
+		final SchemeObject value = form.get(2);
+		env.set(sym, eval(value, env));
+		return _undefinedSymbol;
 	}
 }

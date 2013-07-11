@@ -26,7 +26,7 @@ public final class Vector implements SchemeObject {
 	}
 
 	public Vector(SchemeList items) {
-		List<SchemeObject> asList = new ArrayList<SchemeObject>();
+		final List<SchemeObject> asList = new ArrayList<SchemeObject>();
 		for (SchemeObject o : items)
 			asList.add(o);
 		_values = asList.toArray(new SchemeObject[0]);
@@ -46,7 +46,7 @@ public final class Vector implements SchemeObject {
 
 	@Override
 	public String toString() {
-		StringBuilder ret = new StringBuilder();
+		final StringBuilder ret = new StringBuilder();
 		ret.append("#(");
 		for (SchemeObject c : _values) {
 			ret.append(c.toString());

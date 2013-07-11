@@ -48,7 +48,7 @@ public final class Pair implements SchemeObject, SchemeList {
 		Pair current = null;
 
 		for (SchemeObject o : values) {
-			Pair newPair = new Pair(o, Nil.getInstance());
+			final Pair newPair = new Pair(o, Nil.getInstance());
 			if (current == null) {
 				ret = current = newPair;
 			} else {
@@ -73,7 +73,7 @@ public final class Pair implements SchemeObject, SchemeList {
 
 	@Override
 	public List<SchemeObject> toJavaList() {
-		List<SchemeObject> ret = new ArrayList<SchemeObject>();
+		final List<SchemeObject> ret = new ArrayList<SchemeObject>();
 		for (SchemeObject o : this)
 			ret.add(o);
 		return ret;
@@ -81,7 +81,7 @@ public final class Pair implements SchemeObject, SchemeList {
 
 	@Override
 	public String toString() {
-		StringBuilder ret = new StringBuilder();
+		final StringBuilder ret = new StringBuilder();
 		ret.append("(");
 
 		Pair i = this;

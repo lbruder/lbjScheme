@@ -35,14 +35,13 @@ final class PairIterator implements Iterator<SchemeObject> {
 		if (_current instanceof Nil)
 			throw new UnsupportedOperationException();
 		if (_current instanceof Pair) {
-			SchemeObject ret = ((Pair) _current).getCar();
+			final SchemeObject ret = ((Pair) _current).getCar();
 			_current = ((Pair) _current).getCdr();
 			return ret;
-		} else {
-			SchemeObject ret = _current;
-			_current = Nil.getInstance();
-			return ret;
 		}
+		final SchemeObject ret = _current;
+		_current = Nil.getInstance();
+		return ret;
 	}
 
 	@Override
