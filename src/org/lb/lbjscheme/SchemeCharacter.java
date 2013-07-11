@@ -31,7 +31,9 @@ public final class SchemeCharacter implements SchemeObject {
 	public String toString() {
 		switch (_value) {
 		case '\\':
-			return "\\\\";
+			return "#\\\\";
+		case ' ':
+			return "#\\space";
 		case '\n':
 			return "#\\newline";
 		case '\r':
@@ -39,7 +41,7 @@ public final class SchemeCharacter implements SchemeObject {
 		case '\t':
 			return "#\\tab";
 		default:
-			return String.valueOf(_value);
+			return "#\\" + String.valueOf(_value);
 		}
 	}
 }
