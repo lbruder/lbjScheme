@@ -20,13 +20,15 @@ import java.io.*;
 
 public final class Test {
 	public static void main(String[] args) throws IOException, SchemeException {
-		Reader r = new Reader(new InputStreamReader(System.in));
-		Evaluator e = new InterpretingEvaluator();
+		final Reader r = new Reader(new InputStreamReader(System.in));
+		final Evaluator e = new InterpretingEvaluator();
 
 		// Our basic read-eval-print-loop:
 		while (true) {
 			try {
 				System.out.println(e.eval(r.read()));
+			} catch (EOFException ex) {
+				break;
 			} catch (SchemeException ex) {
 				System.out.println(ex.getMessage());
 				System.in.skip(System.in.available());
@@ -34,13 +36,13 @@ public final class Test {
 		}
 
 		// TODO:
-		// - Builtins
-		// - Base library
+		// - Builtins, base library
 		// - Ports
 		// - Unit tests!
 		// - Gradually add full numeric tower to number data type
 		// - Some kind of interface to native Java data types
 		// - Interface to javax.script
+		// - Line numbers in error messages (can of worms)
 		// - AnalyzingEvaluator
 		// - CompilingEvaluator
 	}
