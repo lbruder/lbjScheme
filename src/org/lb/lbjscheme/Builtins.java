@@ -200,4 +200,25 @@ public final class Builtins {
 				% toNumber("remainder", p1)); // TODO: assuming toNumber
 												// returns an integer value
 	}
+
+	public static SchemeObject charToInt(SchemeObject o) throws SchemeException {
+		if (o instanceof SchemeCharacter)
+			return new SchemeNumber(((SchemeCharacter) o).getValue());
+		throw new SchemeException(
+				"char->integer: Invalid parameter type; expected character, got "
+						+ o.getClass());
+	}
+
+	public static SchemeObject intToChar(SchemeObject o) throws SchemeException {
+		if (o instanceof SchemeNumber)
+			return new SchemeCharacter((char) ((SchemeNumber) o).getValue());
+		throw new SchemeException(
+				"integer->char: Invalid parameter type; expected integer, got "
+						+ o.getClass());
+	}
+
+	public static SchemeObject write(SchemeObject o) throws SchemeException {
+		System.out.println(o);
+		return Symbol.fromString("undefined");
+	}
 }

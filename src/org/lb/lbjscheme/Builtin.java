@@ -18,13 +18,15 @@ package org.lb.lbjscheme;
 
 import java.util.*;
 
+// Class explosion or giant switch block. I'd rather have less classes for now.
+
 public final class Builtin implements SchemeObject {
 	private final Type _type;
 	private static final True _true = True.getInstance();
 	private static final False _false = False.getInstance();
 
 	public enum Type {
-		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder
+		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInt, intToChar, write
 	};
 
 	public Builtin(Type type) {
@@ -43,6 +45,8 @@ public final class Builtin implements SchemeObject {
 			return "cdr";
 		case charp:
 			return "char?";
+		case charToInt:
+			return "char->integer";
 		case cons:
 			return "cons";
 		case div:
@@ -53,6 +57,8 @@ public final class Builtin implements SchemeObject {
 			return ">=";
 		case gt:
 			return ">";
+		case intToChar:
+			return "integer->char";
 		case listp:
 			return "list?";
 		case mul:
@@ -85,6 +91,8 @@ public final class Builtin implements SchemeObject {
 			return "-";
 		case symbolp:
 			return "symbol?";
+		case write:
+			return "write";
 		default:
 			throw new RuntimeException("Unknown builtin type " + _type);
 		}
@@ -123,6 +131,9 @@ public final class Builtin implements SchemeObject {
 			assertParameterCount(1, parameters);
 			return parameters.get(0) instanceof SchemeCharacter ? _true
 					: _false;
+		case charToInt:
+			assertParameterCount(1, parameters);
+			return Builtins.charToInt(parameters.get(0));
 		case cons:
 			assertParameterCount(2, parameters);
 			return Builtins.cons(parameters.get(0), parameters.get(1));
@@ -135,6 +146,9 @@ public final class Builtin implements SchemeObject {
 			return Builtins.ge(parameters);
 		case gt:
 			return Builtins.gt(parameters);
+		case intToChar:
+			assertParameterCount(1, parameters);
+			return Builtins.intToChar(parameters.get(0));
 		case listp:
 			assertParameterCount(1, parameters);
 			return (parameters.get(0) instanceof SchemeList)
@@ -181,6 +195,9 @@ public final class Builtin implements SchemeObject {
 		case symbolp:
 			assertParameterCount(1, parameters);
 			return parameters.get(0) instanceof Symbol ? _true : _false;
+		case write:
+			assertParameterCount(1, parameters);
+			return Builtins.write(parameters.get(0));
 		default:
 			throw new RuntimeException("Unknown builtin type " + _type);
 		}

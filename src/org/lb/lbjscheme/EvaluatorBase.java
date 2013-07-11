@@ -63,40 +63,11 @@ public abstract class EvaluatorBase implements Evaluator {
 		addBuiltin(new Builtin(Builtin.Type.numeq));
 		addBuiltin(new Builtin(Builtin.Type.quotient));
 		addBuiltin(new Builtin(Builtin.Type.remainder));
+		addBuiltin(new Builtin(Builtin.Type.charToInt));
+		addBuiltin(new Builtin(Builtin.Type.intToChar));
+		addBuiltin(new Builtin(Builtin.Type.write));
 
 		// TODO: integer? real? sin cos tan sqrt expt display random
-
-		// TODO: Character procedures:
-		// AddFunction("char->integer", (char c) => (int)c);
-		// AddFunction("integer->char", (int i) => (char)i);
-
-		// TODO Character procedures, write in Scheme for now
-		// AddFunction("char=?", (char a, char b) => a == b);
-		// AddFunction("char>?", (char a, char b) => a > b);
-		// AddFunction("char<?", (char a, char b) => a < b);
-		// AddFunction("char-ci=?", (char a, char b) => char.ToLowerInvariant(a)
-		// == char.ToLowerInvariant(b));
-		// AddFunction("char-ci>?", (char a, char b) => char.ToLowerInvariant(a)
-		// > char.ToLowerInvariant(b));
-		// AddFunction("char-ci<?", (char a, char b) => char.ToLowerInvariant(a)
-		// < char.ToLowerInvariant(b));
-		// AddFunction("char-alphabetic?", (char a) => char.IsLetter(a)); //
-		// HACK: Re-code in Scheme
-		// AddFunction("char-numeric?", (char a) => char.IsDigit(a)); // HACK:
-		// Re-code in Scheme
-		// AddFunction("char-whitespace?", (char a) => char.IsWhiteSpace(a)); //
-		// HACK: Re-code in Scheme
-		// AddFunction("char-upper-case?", (char a) => char.IsUpper(a)); //
-		// HACK: Re-code in Scheme
-		// AddFunction("char-lower-case?", (char a) => char.IsLower(a)); //
-		// HACK: Re-code in Scheme
-		// AddFunction("char-upcase", (char a) => char.ToUpperInvariant(a)); //
-		// HACK: Re-code in Scheme
-		// AddFunction("char-downcase", (char a) => char.ToLowerInvariant(a));
-		// + "(define (char>=? a b) (if (char<? a b) #f #t))"
-		// + "(define (char<=? a b) (if (char>? a b) #f #t))"
-		// + "(define (char-ci>=? a b) (if (char-ci<? a b) #f #t))"
-		// + "(define (char-ci<=? a b) (if (char-ci>? a b) #f #t))"
 
 		// TODO String procedures:
 		// TODO: make-string
@@ -104,6 +75,7 @@ public abstract class EvaluatorBase implements Evaluator {
 		// AddFunction("string-ref", (string s, int index) => s[index]);
 		// AddFunction("string->symbol", (string s) => Symbol.FromString(s));
 		// AddFunction("symbol->string", (Symbol s) => s.ToString());
+		// string-set!
 
 		// TODO String procedures, write in Scheme for now
 		// AddFunction("string=?", (string a, string b) => String.Compare(a, b,
@@ -129,7 +101,7 @@ public abstract class EvaluatorBase implements Evaluator {
 		// + "(define (string<=? a b) (if (string>? a b) #f #t))"
 		// + "(define (string-ci>=? a b) (if (string-ci<? a b) #f #t))"
 		// + "(define (string-ci<=? a b) (if (string-ci>? a b) #f #t))"
-		// TODO: string-set, string-fill!, string-copy.
+		// TODO: string-fill!, string-copy.
 
 		// TODO vector procedures:
 		// AddFunction("sys:make-vector", (int size) => new object[size]);
@@ -146,11 +118,6 @@ public abstract class EvaluatorBase implements Evaluator {
 		// Convert.ToInt32(s, b));
 		// AddFunction("sys:numtostr", (object i, int b) => (i is int) ?
 		// Convert.ToString((int)i, b) : Convert.ToString((double)i));
-		// AddFunction("map", (object f, IEnumerable<object> list) => list ==
-		// null ? null : Pair.FromEnumerable(list.Select(i => Apply(f, false,
-		// i))));
-		// AddFunction("for-each", (object f, IEnumerable<object> list) => list
-		// == null ? 0 : list.Select(i => Apply(f, false, i)).Count());
 		// AddFunction("apply", (object f, IEnumerable<object> arguments) =>
 		// arguments == null ? Apply(f, false) : Apply(f, false,
 		// arguments.ToArray()));
@@ -160,6 +127,8 @@ public abstract class EvaluatorBase implements Evaluator {
 		// AddFunction<IEnumerable<object>>("sys:error", ErrorFunction);
 	}
 
+	// HACK: Written in Scheme for simplicity. Re-write as builtins for
+	// performance and better error messages!
 	private final String _initScript = "(define (complex? obj) #f)"
 			+ "(define (rational? obj) #f)"
 			// + "(define exact? integer?)"
@@ -198,6 +167,7 @@ public abstract class EvaluatorBase implements Evaluator {
 			+ "(define (positive? x) (> x 0))"
 			+ "(define (negative? x) (< x 0))"
 			+ "(define (abs x) (if (positive? x) x (- 0 x)))"
+			+ "(define (modulo a b) (define (sgn x) (if (>= x 0) 1 -1)) (if (= (sgn a) (sgn b)) (remainder a b) (+ b (remainder a b))))"
 			+ "(define (not x) (if x #f #t))"
 			+ "(define (fold f acc lst) (if (null? lst) acc (fold f (f (car lst) acc) (cdr lst))))"
 			+ "(define (reduce f ridentity lst) (if (null? lst) ridentity (fold f (car lst) (cdr lst))))"
@@ -208,6 +178,8 @@ public abstract class EvaluatorBase implements Evaluator {
 			+ "(define (dotted-list? lst) (if (null? lst) #f (if (pair? lst) (dotted-list? (cdr lst)) #t)))"
 			+ "(define drop list-tail)"
 			+ "(define (reverse lst) (fold cons '() lst))"
+			+ "(define (map f lst) (reverse (fold (lambda (i acc) (cons (f i) acc)) '() lst)))"
+			+ "(define (for-each f lst) (fold (lambda (i acc) (f i) 'undefined) 'undefined lst))"
 			+ "(define (filter f lst) (define (iter l acc) (if (null? l) (reverse acc) (if (f (car l)) (iter (cdr l) (cons (car l) acc)) (iter (cdr l) acc)))) (iter lst '()))"
 			+ "(define (even? x) (zero? (remainder x 2)))"
 			+ "(define (odd? x) (if (even? x) #f #t))"
@@ -222,37 +194,41 @@ public abstract class EvaluatorBase implements Evaluator {
 			+ "(define (find-tail f lst) (if (null? lst) #f (if (f (car lst)) lst (find-tail f (cdr lst)))))"
 			+ "(define (find f lst) (if (null? lst) #f (if (f (car lst)) (car lst) (find f (cdr lst)))))"
 			+ "(define (drop-while f lst) (if (null? lst) '() (if (f (car lst)) (drop-while f (cdr lst)) lst)))"
-
 			// "(define (take-while f lst) (define (iter l acc) (cond ((null? l) acc) ((f (car l)) (iter (cdr l) (cons (car l) acc))) (else acc))) (reverse (iter lst '())))"
-			// +
 			// "(define (take lst i) (define (iter l totake acc) (cond ((null? l) acc) ((zero? totake) acc) (else (iter (cdr l) (- totake 1) (cons (car l) acc))))) (reverse (iter lst i '())))"
-			// +
+			+ "(define (char=? a b) (= (char->integer a) (char->integer b)))"
+			+ "(define (char>? a b) (> (char->integer a) (char->integer b)))"
+			+ "(define (char<? a b) (< (char->integer a) (char->integer b)))"
+			+ "(define (char>=? a b) (>= (char->integer a) (char->integer b)))"
+			+ "(define (char<=? a b) (<= (char->integer a) (char->integer b)))"
+			+ "(define (char-upper-case? x) (if (< (char->integer x) 65) #f (< (char->integer x) 91)))"
+			+ "(define (char-lower-case? x) (if (< (char->integer x) 97) #f (< (char->integer x) 123)))"
+			+ "(define (char-upcase x) (if (char-lower-case? x) (integer->char (- (char->integer x) 32)) x))"
+			+ "(define (char-downcase x) (if (char-upper-case? x) (integer->char (+ (char->integer x) 32)) x))"
+			+ "(define (char-ci=? a b) (char=? (char-downcase a) (char-downcase b)))"
+			+ "(define (char-ci<? a b) (char<? (char-downcase a) (char-downcase b)))"
+			+ "(define (char-ci>? a b) (char>? (char-downcase a) (char-downcase b)))"
+			+ "(define (char-ci<=? a b) (char<=? (char-downcase a) (char-downcase b)))"
+			+ "(define (char-ci>=? a b) (char>=? (char-downcase a) (char-downcase b)))"
+			+ "(define (char-alphabetic? x) (if (char-upper-case? x) #t (char-lower-case? x)))"
+			+ "(define (char-numeric? x) (if (>= (char->integer x) 48) (<= (char->integer x) 57) #f))"
+			+ "(define (char-whitespace? x) (if (char=? x #\\space) #t (if (char=? x #\\tab) #t (if (char=? x #\\newline) #t (char=? x #\\cr)))))"
+			+ "(define (append . lsts) (define (iter current acc) (if (pair? current) (iter (cdr current) (cons (car current) acc)) acc)) (reverse (fold iter '() lsts)))"
+			+ "(define (memq obj lst) (if (pair? lst) (if (eq? obj (car lst)) lst (memq obj (cdr lst))) #f))"
+			// "(define (memv obj lst) (if (pair? lst) (if (eqv? obj (car lst)) lst (memv obj (cdr lst))) #f))"
+			// "(define (member obj lst) (if (pair? lst) (if (equal? obj (car lst)) lst (member obj (cdr lst))) #f))"
+			+ "(define (assq obj lst) (if (pair? lst) (if (eq? obj (caar lst)) (car lst) (assq obj (cdr lst))) #f))"
+			// "(define (assv obj lst) (if (pair? lst) (if (eqv? obj (caar lst)) (car lst) (assv obj (cdr lst))) #f))"
+			// "(define (assoc obj lst) (if (pair? lst) (if (equal? obj (caar lst)) (car lst) (assoc obj (cdr lst))) #f))"
 
 			// TODO
 			// + "(define (newline) (display \"\\n\") 'undefined)"
 			// + "(define (error . params) (sys:error params))"
-			// + "(define (sys:sign x) (if (>= x 0) 1 -1))"
-			// +
-			// "(define (modulo a b) (if (= (sys:sign a) (sys:sign b)) (remainder a b) (+ b (remainder a b))))"
 			// + "(define (string . values) (list->string values))"
 			// +
 			// "(define (string->number n . rest) (if (pair? rest) (sys:strtonum n (car rest)) (sys:strtonum n 10)))"
 			// +
 			// "(define (number->string n . rest) (if (pair? rest) (sys:numtostr n (car rest)) (sys:numtostr n 10)))"
-			// +
-			// "(define (append . lsts) (define (iter current acc) (if (pair? current) (iter (cdr current) (cons (car current) acc)) acc)) (reverse (fold iter '() lsts)))"
-			// +
-			// "(define (memq obj lst) (if (pair? lst) (if (eq? obj (car lst)) lst (memq obj (cdr lst))) #f))"
-			// +
-			// "(define (memv obj lst) (if (pair? lst) (if (eqv? obj (car lst)) lst (memv obj (cdr lst))) #f))"
-			// +
-			// "(define (member obj lst) (if (pair? lst) (if (equal? obj (car lst)) lst (member obj (cdr lst))) #f))"
-			// +
-			// "(define (assq obj lst) (if (pair? lst) (if (eq? obj (caar lst)) (car lst) (assq obj (cdr lst))) #f))"
-			// +
-			// "(define (assv obj lst) (if (pair? lst) (if (eqv? obj (caar lst)) (car lst) (assv obj (cdr lst))) #f))"
-			// +
-			// "(define (assoc obj lst) (if (pair? lst) (if (equal? obj (caar lst)) (car lst) (assoc obj (cdr lst))) #f))"
 			// +
 			// "(defmacro quasiquote (value) (define (qq i) (if (pair? i) (if (eq? 'unquote (car i)) (cadr i) (cons 'list (map qq i))) (list 'quote i))) (qq value))"
 			// +
@@ -295,17 +271,7 @@ public abstract class EvaluatorBase implements Evaluator {
 			// +
 			// "(defmacro while (exp . body) (cons 'do (cons '() (cons `((not ,exp) 'undefined) body))))"
 			// +
-			// "(define (lb:partial-apply proc . cargs) (lambda args (apply proc (append cargs args))))"
-			// +
-			// "(define (lb:count from to f) (if (< to from) '() (begin (f from) (lb:count (+ 1 from) to f))))"
-			// +
-			// "(defmacro lb:with-range (var from to . body) (list 'lb:count from to (append (list 'lambda (list var)) body)))"
-			// +
-			// "(define (lb:split str sep) (define (iter acc cur s) (cond ((string=? s \"\") (reverse (cons cur acc))) ((char=? (string-ref s 0) sep) (iter (cons cur acc) \"\" (substring s 1 (string-length s)))) (else (iter acc (string-append cur (substring s 0 1)) (substring s 1 (string-length s)))))) (iter '() \"\" str))"
-			// +
 			// "(define (vector-fill! v obj) (lb:with-range i 0 (- (vector-length v) 1) (vector-set! v i obj)) 'unspecified)"
-			// +
-			// "(define (make-vector . args) (let ((v (sys:make-vector (car args)))) (if (null? (cdr args)) v (begin (vector-fill! v (cadr args)) v))))"
 			// +
 			// "(define (list->vector lst) (define (iter v i vals) (vector-set! v i (car vals)) (if (zero? i) v (iter v (- i 1) (cdr vals)))) (let ((v (sys:make-vector (length lst)))) (if (zero? (vector-length v)) v (iter v (- (vector-length v) 1) (reverse lst)))))"
 			// +
