@@ -24,7 +24,7 @@ public final class Builtin implements SchemeObject {
 	private static final False _false = False.getInstance();
 
 	public enum Type {
-		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, add, sub, mul, div, lt, le, gt, ge, numeq
+		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder
 	};
 
 	public Builtin(Type type) {
@@ -71,6 +71,10 @@ public final class Builtin implements SchemeObject {
 			return "pair?";
 		case procedurep:
 			return "procedure?";
+		case quotient:
+			return "quotient";
+		case remainder:
+			return "remainder";
 		case setCar:
 			return "set-car!";
 		case setCdr:
@@ -157,6 +161,12 @@ public final class Builtin implements SchemeObject {
 			assertParameterCount(1, parameters);
 			return (parameters.get(0) instanceof Lambda)
 					|| (parameters.get(0) instanceof Builtin) ? _true : _false;
+		case quotient:
+			assertParameterCount(2, parameters);
+			return Builtins.quotient(parameters.get(0), parameters.get(1));
+		case remainder:
+			assertParameterCount(2, parameters);
+			return Builtins.remainder(parameters.get(0), parameters.get(1));
 		case setCar:
 			assertParameterCount(2, parameters);
 			return Builtins.setCar(parameters.get(0), parameters.get(1));

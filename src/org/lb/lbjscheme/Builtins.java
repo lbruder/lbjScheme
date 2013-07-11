@@ -178,12 +178,26 @@ public final class Builtins {
 		if (parameters.size() < 2)
 			throw new SchemeException("=: Expected at least two parameters");
 
-		int last = toNumber("=", parameters.get(0));
+		final int last = toNumber("=", parameters.get(0));
 		for (SchemeObject o : parameters.subList(1, parameters.size())) {
 			int now = toNumber("=", o);
 			if (last != now)
 				return False.getInstance();
 		}
 		return True.getInstance();
+	}
+
+	public static SchemeObject quotient(SchemeObject p0, SchemeObject p1)
+			throws SchemeException {
+		return new SchemeNumber(toNumber("quotient", p0)
+				/ toNumber("quotient", p1)); // TODO: assuming toNumber
+												// returns an integer value
+	}
+
+	public static SchemeObject remainder(SchemeObject p0, SchemeObject p1)
+			throws SchemeException {
+		return new SchemeNumber(toNumber("remainder", p0)
+				% toNumber("remainder", p1)); // TODO: assuming toNumber
+												// returns an integer value
 	}
 }

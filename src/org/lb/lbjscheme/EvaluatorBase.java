@@ -61,25 +61,16 @@ public abstract class EvaluatorBase implements Evaluator {
 		addBuiltin(new Builtin(Builtin.Type.gt));
 		addBuiltin(new Builtin(Builtin.Type.ge));
 		addBuiltin(new Builtin(Builtin.Type.numeq));
+		addBuiltin(new Builtin(Builtin.Type.quotient));
+		addBuiltin(new Builtin(Builtin.Type.remainder));
 
-		// AddFunction("integer?", (object a) => a is int);
-		// AddFunction("real?", (object a) => a is double);
+		// TODO: integer? real? sin cos tan sqrt expt display random
 
-		// AddFunction("sin", (double d) => Math.Sin(d));
-		// AddFunction("cos", (double d) => Math.Cos(d));
-		// AddFunction("tan", (double d) => Math.Tan(d));
-		// AddFunction("sqrt", (object a) => Math.Sqrt(Convert.ToDouble(a)));
-		// AddFunction("expt", (object b, object exp) =>
-		// Math.Pow(Convert.ToDouble(b), Convert.ToDouble(exp)));
+		// TODO: Character procedures:
+		// AddFunction("char->integer", (char c) => (int)c);
+		// AddFunction("integer->char", (int i) => (char)i);
 
-		// AddFunction("quotient", MakeNumericalFunction("quotient", (i1, i2) =>
-		// i1 / i2, (d1, d2) => (int)(d1 / d2)));
-		// AddFunction("remainder", MakeNumericalFunction("remainder", (i1, i2)
-		// => i1 % i2, (d1, d2) => (int)d1 % (int)d2));
-
-		// AddFunction("random", (int a) => random.Next(a));
-		// AddFunction("display", (object a) => { Print(ObjectToString(a,
-		// true)); return undefinedSymbol; });
+		// TODO Character procedures, write in Scheme for now
 		// AddFunction("char=?", (char a, char b) => a == b);
 		// AddFunction("char>?", (char a, char b) => a > b);
 		// AddFunction("char<?", (char a, char b) => a < b);
@@ -102,7 +93,19 @@ public abstract class EvaluatorBase implements Evaluator {
 		// AddFunction("char-upcase", (char a) => char.ToUpperInvariant(a)); //
 		// HACK: Re-code in Scheme
 		// AddFunction("char-downcase", (char a) => char.ToLowerInvariant(a));
-		// // HACK: Re-code in Scheme
+		// + "(define (char>=? a b) (if (char<? a b) #f #t))"
+		// + "(define (char<=? a b) (if (char>? a b) #f #t))"
+		// + "(define (char-ci>=? a b) (if (char-ci<? a b) #f #t))"
+		// + "(define (char-ci<=? a b) (if (char-ci>? a b) #f #t))"
+
+		// TODO String procedures:
+		// TODO: make-string
+		// AddFunction("string-length", (string a) => a.Length);
+		// AddFunction("string-ref", (string s, int index) => s[index]);
+		// AddFunction("string->symbol", (string s) => Symbol.FromString(s));
+		// AddFunction("symbol->string", (Symbol s) => s.ToString());
+
+		// TODO String procedures, write in Scheme for now
 		// AddFunction("string=?", (string a, string b) => String.Compare(a, b,
 		// false, CultureInfo.InvariantCulture) == 0);
 		// AddFunction("string>?", (string a, string b) => String.Compare(a, b,
@@ -115,54 +118,20 @@ public abstract class EvaluatorBase implements Evaluator {
 		// b, true, CultureInfo.InvariantCulture) > 0);
 		// AddFunction("string-ci<?", (string a, string b) => String.Compare(a,
 		// b, true, CultureInfo.InvariantCulture) < 0);
-		// AddFunction("string-length", (string a) => a.Length);
 		// AddFunction("substring", (string a, int start, int end) =>
-		// a.Substring(start, end - start)); // HACK: Re-code in Scheme
-		// AddFunction("string-append", (string a, string b) => a + b); // HACK:
-		// Re-code in Scheme
-		// AddFunction("char->integer", (char c) => (int)c);
-		// AddFunction("integer->char", (int i) => (char)i);
-		// AddFunction("string-ref", (string s, int index) => s[index]);
-		// AddFunction("string->symbol", (string s) => Symbol.FromString(s));
-		// AddFunction("symbol->string", (Symbol s) => s.ToString());
+		// a.Substring(start, end - start));
+		// AddFunction("string-append", (string a, string b) => a + b);
 		// AddFunction("string->list", (string s) =>
-		// Pair.FromEnumerable(s.ToCharArray().Cast<object>())); // HACK:
-		// Re-code in Scheme
+		// Pair.FromEnumerable(s.ToCharArray().Cast<object>()));
 		// AddFunction("list->string", (IEnumerable<object> list) => list ==
-		// null ? "" : new string(list.Cast<char>().ToArray())); // HACK:
-		// Re-code in Scheme
-		// AddFunction("length", (IEnumerable<object> a) => a == null ? 0 :
-		// a.Count());
-		// AddFunction("reverse", (IEnumerable<object> list) => list == null ?
-		// null : Pair.FromEnumerable(list.Reverse())); // HACK: Re-code in
-		// Scheme
-		// AddFunction("sys:strtonum", (string s, int b) => s.Contains('.') ?
-		// Convert.ToDouble(s, CultureInfo.InvariantCulture) :
-		// Convert.ToInt32(s, b)); // HACK: Re-code in Scheme
-		// AddFunction("sys:numtostr", (object i, int b) => (i is int) ?
-		// Convert.ToString((int)i, b) : Convert.ToString((double)i)); // HACK:
-		// Re-code in Scheme
-		// AddFunction("map", (object f, IEnumerable<object> list) => list ==
-		// null ? null : Pair.FromEnumerable(list.Select(i => Apply(f, false,
-		// i)))); // HACK: Re-code in Scheme
-		// AddFunction("for-each", (object f, IEnumerable<object> list) => list
-		// == null ? 0 : list.Select(i => Apply(f, false, i)).Count()); // HACK:
-		// Re-code in Scheme
-		// AddFunction("filter", (object f, IEnumerable<object> list) => list ==
-		// null ? null : Pair.FromEnumerable(list.Where(i =>
-		// EvaluatesToTrue(Apply(f, false, i))))); // HACK: Re-code in Scheme
-		// AddFunction("every", (object f, IEnumerable<object> list) => list ==
-		// null || list.All(i => EvaluatesToTrue(Apply(f, false, i)))); // HACK:
-		// Re-code in Scheme
-		// AddFunction("any", (object f, IEnumerable<object> list) => list !=
-		// null && list.Any(i => EvaluatesToTrue(Apply(f, false, i)))); // HACK:
-		// Re-code in Scheme
-		// AddFunction("sort", (IEnumerable<object> list, object f) => list ==
-		// null ? null : Pair.FromEnumerable(Sort(list.ToList(), f))); // HACK:
-		// Re-code in Scheme
-		// AddFunction("apply", (object f, IEnumerable<object> arguments) =>
-		// arguments == null ? Apply(f, false) : Apply(f, false,
-		// arguments.ToArray()));
+		// null ? "" : new string(list.Cast<char>().ToArray()));
+		// + "(define (string>=? a b) (if (string<? a b) #f #t))"
+		// + "(define (string<=? a b) (if (string>? a b) #f #t))"
+		// + "(define (string-ci>=? a b) (if (string-ci<? a b) #f #t))"
+		// + "(define (string-ci<=? a b) (if (string-ci>? a b) #f #t))"
+		// TODO: string-set, string-fill!, string-copy.
+
+		// TODO vector procedures:
 		// AddFunction("sys:make-vector", (int size) => new object[size]);
 		// AddFunction("vector-ref", (object[] vector, int index) =>
 		// vector[index]);
@@ -170,45 +139,25 @@ public abstract class EvaluatorBase implements Evaluator {
 		// AddFunction("vector-set!", (object[] vector, int index, object obj)
 		// => { vector[index] = obj; return undefinedSymbol; });
 		// AddFunction("vector?", (object o) => o is object[]);
-		// AddFunction("wall-time", (object f) => { var sw = new
-		// System.Diagnostics.Stopwatch(); sw.Start(); Apply(f, false);
-		// sw.Stop(); return (int)sw.ElapsedMilliseconds; });
+
+		// TODO other procedures...
+		// AddFunction("sys:strtonum", (string s, int b) => s.Contains('.') ?
+		// Convert.ToDouble(s, CultureInfo.InvariantCulture) :
+		// Convert.ToInt32(s, b));
+		// AddFunction("sys:numtostr", (object i, int b) => (i is int) ?
+		// Convert.ToString((int)i, b) : Convert.ToString((double)i));
+		// AddFunction("map", (object f, IEnumerable<object> list) => list ==
+		// null ? null : Pair.FromEnumerable(list.Select(i => Apply(f, false,
+		// i))));
+		// AddFunction("for-each", (object f, IEnumerable<object> list) => list
+		// == null ? 0 : list.Select(i => Apply(f, false, i)).Count());
+		// AddFunction("apply", (object f, IEnumerable<object> arguments) =>
+		// arguments == null ? Apply(f, false) : Apply(f, false,
+		// arguments.ToArray()));
+
 		// AddFunction<object, object>("eqv?", Eqv);
 		// AddFunction<object, object>("equal?", Equal);
 		// AddFunction<IEnumerable<object>>("sys:error", ErrorFunction);
-		//
-		// AddFunction("sys:read-file", (string fileName) =>
-		// File.ReadAllText(fileName));
-		// AddFunction("sys:write-file", (string fileName, string contents) => {
-		// File.WriteAllText(fileName, contents); return true; });
-		// AddFunction("sys:string->object", (string value) => new Reader(new
-		// StringReader(value)).Read());
-		// AddFunction("sys:object->string", (object o) => ObjectToString(o,
-		// false));
-		//
-		// AddFunction("lb:sleep", (int ms) => { Thread.Sleep(ms); return
-		// undefinedSymbol; });
-		// // TODO: string-set, string-fill!, make-string, string-copy.
-
-		// AddFunction("lb:clr-method", (object o, object name) => new
-		// ClrClosure(o, name.ToString()));
-		// AddFunction("lb:clr-property-names", (object o) =>
-		// o.GetType().GetProperties().Select(i =>
-		// Symbol.FromString(i.Name)).ToList());
-		// AddFunction("lb:clr-method-names", (object o) =>
-		// o.GetType().GetMethods().Select(i =>
-		// Symbol.FromString(i.Name)).ToList());
-		// AddFunction("lb:clr-get", (object o, Symbol name) =>
-		// GetClrProperty(o, name).GetValue(o, new object[0]));
-		// AddFunction("lb:clr-set", (object o, Symbol name, object value) =>
-		// SetClrProperty(o, name, value));
-		// AddFunction("lb:clr-new", (object className, IEnumerable<object>
-		// parameters) =>
-		// {
-		// Type type = Type.GetType(className.ToString(), true);
-		// return parameters == null ? Activator.CreateInstance(type) :
-		// Activator.CreateInstance(type, parameters.ToArray());
-		// });
 	}
 
 	private final String _initScript = "(define (complex? obj) #f)"
@@ -258,35 +207,38 @@ public abstract class EvaluatorBase implements Evaluator {
 			+ "(define (last lst) (car (last-pair lst)))"
 			+ "(define (dotted-list? lst) (if (null? lst) #f (if (pair? lst) (dotted-list? (cdr lst)) #t)))"
 			+ "(define drop list-tail)"
+			+ "(define (reverse lst) (fold cons '() lst))"
+			+ "(define (filter f lst) (define (iter l acc) (if (null? l) (reverse acc) (if (f (car l)) (iter (cdr l) (cons (car l) acc)) (iter (cdr l) acc)))) (iter lst '()))"
+			+ "(define (even? x) (zero? (remainder x 2)))"
+			+ "(define (odd? x) (if (even? x) #f #t))"
+			+ "(define (sys:gcd-of-two a b) (if (zero? b) a (sys:gcd-of-two b (remainder a b))))"
+			+ "(define (sys:lcm-of-two a b) (/ (* a b) (sys:gcd-of-two a b)))"
+			+ "(define (gcd . args) (if (null? args) 0 (abs (fold sys:gcd-of-two (car args) (cdr args)))))"
+			+ "(define (lcm . args) (if (null? args) 1 (abs (fold sys:lcm-of-two (car args) (cdr args)))))"
+			+ "(define (range from to) (define (iter t acc) (if (> from t) acc (iter (- t 1) (cons t acc)))) (iter to '()))"
+			+ "(define (every f lst) (if (null? lst) #t (if (f (car lst)) (every f (cdr lst)) #f)))"
+			+ "(define (any f lst) (if (null? lst) #f (if (f (car lst)) #t (any f (cdr lst)))))"
+			+ "(define (length lst) (define (iter l acc) (if (null? l) acc (iter (cdr l) (+ acc 1)))) (iter lst 0))"
+			+ "(define (find-tail f lst) (if (null? lst) #f (if (f (car lst)) lst (find-tail f (cdr lst)))))"
+			+ "(define (find f lst) (if (null? lst) #f (if (f (car lst)) (car lst) (find f (cdr lst)))))"
+			+ "(define (drop-while f lst) (if (null? lst) '() (if (f (car lst)) (drop-while f (cdr lst)) lst)))"
 
+			// "(define (take-while f lst) (define (iter l acc) (cond ((null? l) acc) ((f (car l)) (iter (cdr l) (cons (car l) acc))) (else acc))) (reverse (iter lst '())))"
+			// +
+			// "(define (take lst i) (define (iter l totake acc) (cond ((null? l) acc) ((zero? totake) acc) (else (iter (cdr l) (- totake 1) (cons (car l) acc))))) (reverse (iter lst i '())))"
+			// +
+
+			// TODO
 			// + "(define (newline) (display \"\\n\") 'undefined)"
-			// + "(define (char>=? a b) (if (char<? a b) #f #t))"
-			// + "(define (char<=? a b) (if (char>? a b) #f #t))"
-			// + "(define (char-ci>=? a b) (if (char-ci<? a b) #f #t))"
-			// + "(define (char-ci<=? a b) (if (char-ci>? a b) #f #t))"
-			// + "(define (string>=? a b) (if (string<? a b) #f #t))"
-			// + "(define (string<=? a b) (if (string>? a b) #f #t))"
-			// + "(define (string-ci>=? a b) (if (string-ci<? a b) #f #t))"
-			// + "(define (string-ci<=? a b) (if (string-ci>? a b) #f #t))"
 			// + "(define (error . params) (sys:error params))"
 			// + "(define (sys:sign x) (if (>= x 0) 1 -1))"
 			// +
 			// "(define (modulo a b) (if (= (sys:sign a) (sys:sign b)) (remainder a b) (+ b (remainder a b))))"
-			// + "(define (even? x) (zero? (remainder x 2)))"
-			// + "(define (odd? x) (if (even? x) #f #t))"
 			// + "(define (string . values) (list->string values))"
 			// +
 			// "(define (string->number n . rest) (if (pair? rest) (sys:strtonum n (car rest)) (sys:strtonum n 10)))"
 			// +
 			// "(define (number->string n . rest) (if (pair? rest) (sys:numtostr n (car rest)) (sys:numtostr n 10)))"
-			// +
-			// "(define (sys:gcd-of-two a b) (if (= b 0) a (sys:gcd-of-two b (remainder a b))))"
-			// +
-			// "(define (sys:lcm-of-two a b) (/ (* a b) (sys:gcd-of-two a b)))"
-			// +
-			// "(define (gcd . args) (if (null? args) 0 (abs (fold sys:gcd-of-two (car args) (cdr args)))))"
-			// +
-			// "(define (lcm . args) (if (null? args) 1 (abs (fold sys:lcm-of-two (car args) (cdr args)))))"
 			// +
 			// "(define (append . lsts) (define (iter current acc) (if (pair? current) (iter (cdr current) (cons (car current) acc)) acc)) (reverse (fold iter '() lsts)))"
 			// +
@@ -319,16 +271,6 @@ public abstract class EvaluatorBase implements Evaluator {
 			// +
 			// "(define (max . args) (define (max-of-two a b) (if (> a b) a b)) (let ((l (length args))) (cond ((= 0 l) (error \"max called without parameters\")) ((= 1 l) (car args)) (else (fold max-of-two (car args) (cdr args))))))"
 			// +
-			// "(define (find-tail f lst) (cond ((null? lst) #f) ((f (car lst)) lst) (else (find-tail f (cdr lst)))))"
-			// +
-			// "(define (find f lst) (cond ((null? lst) #f) ((f (car lst)) (car lst)) (else (find f (cdr lst)))))"
-			// +
-			// "(define (drop-while f lst) (cond ((null? lst) '()) ((f (car lst)) (drop-while f (cdr lst))) (else lst)))"
-			// +
-			// "(define (take-while f lst) (define (iter l acc) (cond ((null? l) acc) ((f (car l)) (iter (cdr l) (cons (car l) acc))) (else acc))) (reverse (iter lst '())))"
-			// +
-			// "(define (take lst i) (define (iter l totake acc) (cond ((null? l) acc) ((zero? totake) acc) (else (iter (cdr l) (- totake 1) (cons (car l) acc))))) (reverse (iter lst i '())))"
-			// +
 			// "(define (make-proper-list lst) (define (iter i acc) (cond ((pair? i) (iter (cdr i) (cons (car i) acc))) ((null? i) acc) (else (cons i acc)))) (reverse (iter lst '())))"
 			// +
 			// "(defmacro when (expr . body) `(if ,expr ,(cons 'begin body) #f))"
@@ -355,8 +297,6 @@ public abstract class EvaluatorBase implements Evaluator {
 			// +
 			// "(define (lb:partial-apply proc . cargs) (lambda args (apply proc (append cargs args))))"
 			// +
-			// "(define (lb:range from to) (define (iter i acc) (if (> from i) acc (iter (- i 1) (cons i acc)))) (iter to '()))"
-			// +
 			// "(define (lb:count from to f) (if (< to from) '() (begin (f from) (lb:count (+ 1 from) to f))))"
 			// +
 			// "(defmacro lb:with-range (var from to . body) (list 'lb:count from to (append (list 'lambda (list var)) body)))"
@@ -372,28 +312,13 @@ public abstract class EvaluatorBase implements Evaluator {
 			// "(define (vector->list v) (define (iter i acc) (if (< i 0) acc (iter (- i 1) (cons (vector-ref v i) acc)))) (iter (- (vector-length v) 1) '()))"
 			// + "(define (vector . lst) (list->vector lst))"
 			// +
-			// "(define (lb:clr. object name . params) (let ((closure (lb:clr-method object name))) (if (null? closure) (error \"Method not found:\" name) (apply closure params))))"
-			// +
-			// "(define (lb:clr-properties obj) (map (lambda (name) (cons name (lb:clr-get obj name))) (lb:clr-property-names obj)))"
-			// +
-			// "(define (sys:test-assertion name value) (if value 'ok (error 'Assertion 'failed: name)))"
-			// +
-			// "(defmacro assert (form) `(sys:test-assertion (quote ,form) ,form))"
-			//
 			// "(let ((original string-append)) (set! string-append (lambda args (fold (flip original) \"\" args))))"
 			// + "(define partial-apply lb:partial-apply)"
-			// + "(define range lb:range)" + "(define count lb:count)"
-			// + "(define sleep lb:sleep)" + "(define split lb:split)"
-			// + "(define clr-property-names lb:clr-property-names)"
-			// + "(define clr-method-names lb:clr-method-names)"
-			// + "(define clr-properties lb:clr-properties)"
-			// + "(define clr-get lb:clr-get)" + "(define clr-set lb:clr-set)"
-			// + "(define clr. lb:clr.)"
 			+ "(define (id x) x)";
 
 	@Override
 	public SchemeObject eval(String commands) throws SchemeException {
-		Reader r = new Reader(new StringReader(commands));
+		final Reader r = new Reader(new StringReader(commands));
 		SchemeObject ret = Symbol.fromString("undefined");
 		while (true) {
 			try {
