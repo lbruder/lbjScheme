@@ -71,7 +71,7 @@ public abstract class EvaluatorBase implements Evaluator {
 	}
 
 	// HACK: Written in Scheme for simplicity. Re-write as builtins for
-	// performance and better error messages!
+	// performance and better error messages! This code is horribly inefficient!
 	private final String _initScript = "(define (complex? obj) #f)"
 			+ "(define (rational? obj) #f)"
 			// + "(define exact? integer?)"
@@ -163,36 +163,23 @@ public abstract class EvaluatorBase implements Evaluator {
 			+ "(define (assq obj lst) (if (pair? lst) (if (eq? obj (caar lst)) (car lst) (assq obj (cdr lst))) #f))"
 			// "(define (assv obj lst) (if (pair? lst) (if (eqv? obj (caar lst)) (car lst) (assv obj (cdr lst))) #f))"
 			// "(define (assoc obj lst) (if (pair? lst) (if (equal? obj (caar lst)) (car lst) (assoc obj (cdr lst))) #f))"
-
-			// TODO String procedures, write in Scheme for now
 			+ "(define (string=? a b) (define (check i max) (if (>= i max) #t (if (char=? (string-ref a i) (string-ref b i)) (check (+ i 1) max) #f))) (if (= (string-length a) (string-length b)) (check 0 (string-length a)) #f))"
 			+ "(define (string-ci=? a b) (define (check i max) (if (>= i max) #t (if (char-ci=? (string-ref a i) (string-ref b i)) (check (+ i 1) max) #f))) (if (= (string-length a) (string-length b)) (check 0 (string-length a)) #f))"
-			// AddFunction("string>?", (string a, string b) => String.Compare(a,
-			// b,
-			// false, CultureInfo.InvariantCulture) > 0);
-			// AddFunction("string<?", (string a, string b) => String.Compare(a,
-			// b,
-			// false, CultureInfo.InvariantCulture) < 0);
-
-			// AddFunction("string-ci>?", (string a, string b) =>
-			// String.Compare(a,
-			// b, true, CultureInfo.InvariantCulture) > 0);
-			// AddFunction("string-ci<?", (string a, string b) =>
-			// String.Compare(a,
-			// b, true, CultureInfo.InvariantCulture) < 0);
-			// AddFunction("substring", (string a, int start, int end) =>
-			// a.Substring(start, end - start));
-			// AddFunction("string-append", (string a, string b) => a + b);
-			// AddFunction("string->list", (string s) =>
-			// Pair.FromEnumerable(s.ToCharArray().Cast<object>()));
-			// AddFunction("list->string", (IEnumerable<object> list) => list ==
-			// null ? "" : new string(list.Cast<char>().ToArray()));
-			// + "(define (string>=? a b) (if (string<? a b) #f #t))"
-			// + "(define (string<=? a b) (if (string>? a b) #f #t))"
-			// + "(define (string-ci>=? a b) (if (string-ci<? a b) #f #t))"
-			// + "(define (string-ci<=? a b) (if (string-ci>? a b) #f #t))"
-			// TODO: string-fill!, string-copy.
-			// + "(define (string . values) (list->string values))"
+			+ "(define (string>? a b) (define (check i max-a max-b) (if (>= i max-a) #f (if (>= i max-b) #t (if (char=? (string-ref a i) (string-ref b i)) (check (+ i 1) max-a max-b) (char>? (string-ref a i) (string-ref b i)))))) (check 0 (string-length a) (string-length b)))"
+			+ "(define (string-ci>? a b) (define (check i max-a max-b) (if (>= i max-a) #f (if (>= i max-b) #t (if (char-ci=? (string-ref a i) (string-ref b i)) (check (+ i 1) max-a max-b) (char-ci>? (string-ref a i) (string-ref b i)))))) (check 0 (string-length a) (string-length b)))"
+			+ "(define (string<? a b) (if (string=? a b) #f (not (string>? a b))))"
+			+ "(define (string-ci<? a b) (if (string-ci=? a b) #f (not (string-ci>? a b))))"
+			+ "(define (string>=? a b) (not (string<? a b)))"
+			+ "(define (string<=? a b) (not (string>? a b)))"
+			+ "(define (string-ci>=? a b) (not (string-ci<? a b)))"
+			+ "(define (string-ci<=? a b) (not (string-ci>? a b)))"
+			+ "(define (string->list x) (define (iter i max acc) (if (>= i max) (reverse acc) (iter (+ i 1) max (cons (string-ref x i) acc)))) (iter 0 (string-length x) '()))"
+			+ "(define (list->string lst) (define (iter i l acc) (if (null? l) acc (begin (string-set! acc i (car l)) (iter (+ i 1) (cdr l) acc)))) (iter 0 lst (make-string (length lst))))"
+			+ "(define (string . values) (list->string values))"
+			+ "(define (substring s start end) (list->string (take (list-tail (string->list s) start) (- end start))))"
+			+ "(define (string-append . strings) (list->string (fold append '() (map string->list (reverse strings)))))"
+			+ "(define (string-copy s) (list->string (string->list s)))"
+			+ "(define (string-fill! s c) (define (iter i max) (if (>= i max) s (begin (string-set! s i c) (iter (+ i 1) max)))) (iter 0 (string-length s)))"
 
 			// TODO
 			// + "(define (newline) (display \"\\n\") 'undefined)"
@@ -250,8 +237,6 @@ public abstract class EvaluatorBase implements Evaluator {
 			// "(define (vector->list v) (define (iter i acc) (if (< i 0) acc (iter (- i 1) (cons (vector-ref v i) acc)))) (iter (- (vector-length v) 1) '()))"
 			// + "(define (vector . lst) (list->vector lst))"
 			// +
-			// "(let ((original string-append)) (set! string-append (lambda args (fold (flip original) \"\" args))))"
-			// + "(define partial-apply lb:partial-apply)"
 			+ "(define (id x) x)";
 
 	@Override
