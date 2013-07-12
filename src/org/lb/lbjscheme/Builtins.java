@@ -218,7 +218,7 @@ public final class Builtins {
 	}
 
 	public static SchemeObject write(SchemeObject o) throws SchemeException {
-		System.out.println(o);
+		System.out.print(o);
 		return Symbol.fromString("undefined");
 	}
 }
