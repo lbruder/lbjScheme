@@ -35,11 +35,18 @@ public final class SchemeString implements SchemeObject {
 		return _characters.length;
 	}
 
-	public char getAt(int position) {
+	public char getAt(int position) throws SchemeException {
+		assertValidIndex(position);
 		return _characters[position];
 	}
 
-	public void setAt(int position, char value) {
+	private void assertValidIndex(int position) throws SchemeException {
+		if (position < 0 || position >= getLength())
+			throw new SchemeException("String index out of bounds");
+	}
+
+	public void setAt(int position, char value) throws SchemeException {
+		assertValidIndex(position);
 		_characters[position] = value;
 	}
 
