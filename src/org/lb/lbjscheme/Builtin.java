@@ -26,7 +26,7 @@ public final class Builtin implements SchemeObject {
 	private static final False _false = False.getInstance();
 
 	public enum Type {
-		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInt, intToChar, write
+		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInt, intToChar, write, makeString, stringLength, stringRef, stringSet
 	};
 
 	public Builtin(Type type) {
@@ -61,6 +61,8 @@ public final class Builtin implements SchemeObject {
 			return "integer->char";
 		case listp:
 			return "list?";
+		case makeString:
+			return "make-string";
 		case mul:
 			return "*";
 		case nullp:
@@ -85,8 +87,14 @@ public final class Builtin implements SchemeObject {
 			return "set-car!";
 		case setCdr:
 			return "set-cdr!";
+		case stringLength:
+			return "string-length";
 		case stringp:
 			return "string?";
+		case stringRef:
+			return "string-ref";
+		case stringSet:
+			return "string-set!";
 		case sub:
 			return "-";
 		case symbolp:
@@ -158,6 +166,8 @@ public final class Builtin implements SchemeObject {
 			return Builtins.le(parameters);
 		case lt:
 			return Builtins.lt(parameters);
+		case makeString:
+			return Builtins.makeString(parameters);
 		case mul:
 			return Builtins.mul(parameters);
 		case nullp:
@@ -187,9 +197,19 @@ public final class Builtin implements SchemeObject {
 		case setCdr:
 			assertParameterCount(2, parameters);
 			return Builtins.setCdr(parameters.get(0), parameters.get(1));
+		case stringLength:
+			assertParameterCount(1, parameters);
+			return Builtins.stringLength(parameters.get(0));
 		case stringp:
 			assertParameterCount(1, parameters);
 			return parameters.get(0) instanceof SchemeString ? _true : _false;
+		case stringRef:
+			assertParameterCount(2, parameters);
+			return Builtins.stringRef(parameters.get(0), parameters.get(1));
+		case stringSet:
+			assertParameterCount(3, parameters);
+			return Builtins.stringSet(parameters.get(0), parameters.get(1),
+					parameters.get(2));
 		case sub:
 			return Builtins.sub(parameters);
 		case symbolp:

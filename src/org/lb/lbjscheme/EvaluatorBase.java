@@ -37,71 +37,14 @@ public abstract class EvaluatorBase implements Evaluator {
 	}
 
 	private void addBuiltinsToGlobalEnvironment() throws SchemeException {
-		addBuiltin(new Builtin(Builtin.Type.cons));
-		addBuiltin(new Builtin(Builtin.Type.car));
-		addBuiltin(new Builtin(Builtin.Type.cdr));
-		addBuiltin(new Builtin(Builtin.Type.setCar));
-		addBuiltin(new Builtin(Builtin.Type.setCdr));
-		addBuiltin(new Builtin(Builtin.Type.eqp));
-		addBuiltin(new Builtin(Builtin.Type.nullp));
-		addBuiltin(new Builtin(Builtin.Type.pairp));
-		addBuiltin(new Builtin(Builtin.Type.numberp));
-		addBuiltin(new Builtin(Builtin.Type.stringp));
-		addBuiltin(new Builtin(Builtin.Type.charp));
-		addBuiltin(new Builtin(Builtin.Type.booleanp));
-		addBuiltin(new Builtin(Builtin.Type.symbolp));
-		addBuiltin(new Builtin(Builtin.Type.procedurep));
-		addBuiltin(new Builtin(Builtin.Type.listp));
-		addBuiltin(new Builtin(Builtin.Type.add));
-		addBuiltin(new Builtin(Builtin.Type.sub));
-		addBuiltin(new Builtin(Builtin.Type.mul));
-		addBuiltin(new Builtin(Builtin.Type.div));
-		addBuiltin(new Builtin(Builtin.Type.lt));
-		addBuiltin(new Builtin(Builtin.Type.le));
-		addBuiltin(new Builtin(Builtin.Type.gt));
-		addBuiltin(new Builtin(Builtin.Type.ge));
-		addBuiltin(new Builtin(Builtin.Type.numeq));
-		addBuiltin(new Builtin(Builtin.Type.quotient));
-		addBuiltin(new Builtin(Builtin.Type.remainder));
-		addBuiltin(new Builtin(Builtin.Type.charToInt));
-		addBuiltin(new Builtin(Builtin.Type.intToChar));
-		addBuiltin(new Builtin(Builtin.Type.write));
+		for (Builtin.Type t : Builtin.Type.values())
+			addBuiltin(new Builtin(t));
 
 		// TODO: integer? real? sin cos tan sqrt expt display random
 
 		// TODO String procedures:
-		// TODO: make-string
-		// AddFunction("string-length", (string a) => a.Length);
-		// AddFunction("string-ref", (string s, int index) => s[index]);
 		// AddFunction("string->symbol", (string s) => Symbol.FromString(s));
 		// AddFunction("symbol->string", (Symbol s) => s.ToString());
-		// string-set!
-
-		// TODO String procedures, write in Scheme for now
-		// AddFunction("string=?", (string a, string b) => String.Compare(a, b,
-		// false, CultureInfo.InvariantCulture) == 0);
-		// AddFunction("string>?", (string a, string b) => String.Compare(a, b,
-		// false, CultureInfo.InvariantCulture) > 0);
-		// AddFunction("string<?", (string a, string b) => String.Compare(a, b,
-		// false, CultureInfo.InvariantCulture) < 0);
-		// AddFunction("string-ci=?", (string a, string b) => String.Compare(a,
-		// b, true, CultureInfo.InvariantCulture) == 0);
-		// AddFunction("string-ci>?", (string a, string b) => String.Compare(a,
-		// b, true, CultureInfo.InvariantCulture) > 0);
-		// AddFunction("string-ci<?", (string a, string b) => String.Compare(a,
-		// b, true, CultureInfo.InvariantCulture) < 0);
-		// AddFunction("substring", (string a, int start, int end) =>
-		// a.Substring(start, end - start));
-		// AddFunction("string-append", (string a, string b) => a + b);
-		// AddFunction("string->list", (string s) =>
-		// Pair.FromEnumerable(s.ToCharArray().Cast<object>()));
-		// AddFunction("list->string", (IEnumerable<object> list) => list ==
-		// null ? "" : new string(list.Cast<char>().ToArray()));
-		// + "(define (string>=? a b) (if (string<? a b) #f #t))"
-		// + "(define (string<=? a b) (if (string>? a b) #f #t))"
-		// + "(define (string-ci>=? a b) (if (string-ci<? a b) #f #t))"
-		// + "(define (string-ci<=? a b) (if (string-ci>? a b) #f #t))"
-		// TODO: string-fill!, string-copy.
 
 		// TODO vector procedures:
 		// AddFunction("sys:make-vector", (int size) => new object[size]);
@@ -221,10 +164,39 @@ public abstract class EvaluatorBase implements Evaluator {
 			// "(define (assv obj lst) (if (pair? lst) (if (eqv? obj (caar lst)) (car lst) (assv obj (cdr lst))) #f))"
 			// "(define (assoc obj lst) (if (pair? lst) (if (equal? obj (caar lst)) (car lst) (assoc obj (cdr lst))) #f))"
 
+			// TODO String procedures, write in Scheme for now
+			+ "(define (string=? a b) (define (check i max) (if (>= i max) #t (if (char=? (string-ref a i) (string-ref b i)) (check (+ i 1) max) #f))) (if (= (string-length a) (string-length b)) (check 0 (string-length a)) #f))"
+			+ "(define (string-ci=? a b) (define (check i max) (if (>= i max) #t (if (char-ci=? (string-ref a i) (string-ref b i)) (check (+ i 1) max) #f))) (if (= (string-length a) (string-length b)) (check 0 (string-length a)) #f))"
+			// AddFunction("string>?", (string a, string b) => String.Compare(a,
+			// b,
+			// false, CultureInfo.InvariantCulture) > 0);
+			// AddFunction("string<?", (string a, string b) => String.Compare(a,
+			// b,
+			// false, CultureInfo.InvariantCulture) < 0);
+
+			// AddFunction("string-ci>?", (string a, string b) =>
+			// String.Compare(a,
+			// b, true, CultureInfo.InvariantCulture) > 0);
+			// AddFunction("string-ci<?", (string a, string b) =>
+			// String.Compare(a,
+			// b, true, CultureInfo.InvariantCulture) < 0);
+			// AddFunction("substring", (string a, int start, int end) =>
+			// a.Substring(start, end - start));
+			// AddFunction("string-append", (string a, string b) => a + b);
+			// AddFunction("string->list", (string s) =>
+			// Pair.FromEnumerable(s.ToCharArray().Cast<object>()));
+			// AddFunction("list->string", (IEnumerable<object> list) => list ==
+			// null ? "" : new string(list.Cast<char>().ToArray()));
+			// + "(define (string>=? a b) (if (string<? a b) #f #t))"
+			// + "(define (string<=? a b) (if (string>? a b) #f #t))"
+			// + "(define (string-ci>=? a b) (if (string-ci<? a b) #f #t))"
+			// + "(define (string-ci<=? a b) (if (string-ci>? a b) #f #t))"
+			// TODO: string-fill!, string-copy.
+			// + "(define (string . values) (list->string values))"
+
 			// TODO
 			// + "(define (newline) (display \"\\n\") 'undefined)"
 			// + "(define (error . params) (sys:error params))"
-			// + "(define (string . values) (list->string values))"
 			// +
 			// "(define (string->number n . rest) (if (pair? rest) (sys:strtonum n (car rest)) (sys:strtonum n 10)))"
 			// +

@@ -221,4 +221,62 @@ public final class Builtins {
 		System.out.print(o);
 		return Symbol.fromString("undefined");
 	}
+
+	public static SchemeObject makeString(List<SchemeObject> parameters)
+			throws SchemeException {
+		switch (parameters.size()) {
+		case 1:
+			return new SchemeString(toNumber("make-string", parameters.get(0)));
+		case 2:
+			int length = toNumber("make-string", parameters.get(0));
+			if (!(parameters.get(1) instanceof SchemeCharacter))
+				throw new SchemeException(
+						"make-string: Invalid parameter type; expected character as second parameter, got "
+								+ parameters.get(1).getClass());
+			char c = ((SchemeCharacter) parameters.get(1)).getValue();
+			SchemeString ret = new SchemeString(length);
+			for (int i = 0; i < length; ++i)
+				ret.setAt(i, c);
+			return ret;
+
+		default:
+			throw new SchemeException(
+					"make-string: Expected 1 or 2 parameters, got "
+							+ parameters.size());
+		}
+	}
+
+	public static SchemeObject stringLength(SchemeObject o)
+			throws SchemeException {
+		if (o instanceof SchemeString)
+			return new SchemeNumber(((SchemeString) o).getLength());
+		throw new SchemeException(
+				"string-length: Invalid parameter type; expected string, got "
+						+ o.getClass());
+	}
+
+	public static SchemeObject stringRef(SchemeObject str, SchemeObject indexObj)
+			throws SchemeException {
+		if (!(str instanceof SchemeString))
+			throw new SchemeException(
+					"string-ref: Invalid parameter type; expected string, got "
+							+ str.getClass());
+		return new SchemeCharacter(((SchemeString) str).getAt(toNumber(
+				"string-ref", indexObj)));
+	}
+
+	public static SchemeObject stringSet(SchemeObject str,
+			SchemeObject indexObj, SchemeObject charObj) throws SchemeException {
+		if (!(str instanceof SchemeString))
+			throw new SchemeException(
+					"string-set!: Invalid parameter type; expected string, got "
+							+ str.getClass());
+		if (!(charObj instanceof SchemeCharacter))
+			throw new SchemeException(
+					"string-set!: Invalid parameter type; expected character, got "
+							+ charObj.getClass());
+		((SchemeString) str).setAt(toNumber("string-set!", indexObj),
+				((SchemeCharacter) charObj).getValue());
+		return charObj;
+	}
 }
