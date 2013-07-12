@@ -45,5 +45,6 @@ public final class Test {
 		// - Line numbers in error messages (can of worms)
 		// - AnalyzingEvaluator
 		// - CompilingEvaluator
+		// - Continuations (can of worms)
 	}
 }
