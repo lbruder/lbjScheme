@@ -55,7 +55,8 @@ public abstract class EvaluatorBase implements Evaluator {
 
 	// HACK: Written in Scheme for simplicity. Re-write as builtins for
 	// performance and better error messages! This code is horribly inefficient!
-	private final String _initScript = "(define (complex? obj) #f)"
+	private final String _initScript = "(define (newline) (display \"\\n\") 'undefined)"
+			+ "(define (complex? obj) #f)"
 			+ "(define (rational? obj) #f)"
 			// + "(define exact? integer?)"
 			// + "(define inexact? real?)"
@@ -163,44 +164,25 @@ public abstract class EvaluatorBase implements Evaluator {
 			+ "(define (string-append . strings) (list->string (fold append '() (map string->list (reverse strings)))))"
 			+ "(define (string-copy s) (list->string (string->list s)))"
 			+ "(define (string-fill! s c) (define (iter i max) (if (>= i max) s (begin (string-set! s i c) (iter (+ i 1) max)))) (iter 0 (string-length s)))"
-
-			// TODO
-			// + "(define (newline) (display \"\\n\") 'undefined)"
-			// +
-			// "(defmacro quasiquote (value) (define (qq i) (if (pair? i) (if (eq? 'unquote (car i)) (cadr i) (cons 'list (map qq i))) (list 'quote i))) (qq value))"
-			// +
-			// "(defmacro let (lst . forms) (cons (cons 'lambda (cons (map car lst) forms)) (map cadr lst)))"
-			// +
-			// "(defmacro let* (lst . forms) (if (null? lst) (cons 'begin forms) (list 'let (list (car lst)) (cons 'let* (cons (cdr lst) forms)))))"
-			// +
-			// "(defmacro cond list-of-forms (define (expand-cond lst) (if (null? lst) #f (if (eq? (caar lst) 'else) (cons 'begin (cdar lst)) (list 'if (caar lst) (cons 'begin (cdar lst)) (expand-cond (cdr lst)))))) (expand-cond list-of-forms))"
-			// +
-			// "(defmacro and list-of-forms (if (null? list-of-forms) #t (if (null? (cdr list-of-forms)) (car list-of-forms) (list 'if (car list-of-forms) (append '(and) (cdr list-of-forms)) #f))))"
-			// +
-			// "(defmacro delay (expression) (list 'let '((##forced_value (quote ##not_forced_yet))) (list 'lambda '() (list 'if '(eq? ##forced_value (quote ##not_forced_yet)) (list 'set! '##forced_value expression)) '##forced_value)))"
-			// + "(define (force promise) (promise))"
-			// +
-			// "(define (min . args) (define (min-of-two a b) (if (< a b) a b)) (let ((l (length args))) (cond ((= 0 l) (error \"min called without parameters\")) ((= 1 l) (car args)) (else (fold min-of-two (car args) (cdr args))))))"
-			// +
-			// "(define (max . args) (define (max-of-two a b) (if (> a b) a b)) (let ((l (length args))) (cond ((= 0 l) (error \"max called without parameters\")) ((= 1 l) (car args)) (else (fold max-of-two (car args) (cdr args))))))"
-			// +
-			// "(define (make-proper-list lst) (define (iter i acc) (cond ((pair? i) (iter (cdr i) (cons (car i) acc))) ((null? i) acc) (else (cons i acc)))) (reverse (iter lst '())))"
-			// +
-			// "(defmacro when (expr . body) `(if ,expr ,(cons 'begin body) #f))"
-			// +
-			// "(defmacro unless (expr . body) `(if ,expr #f ,(cons 'begin body)))"
-			// +
-			// "(defmacro aif (expr then . rest) `(let ((it ,expr)) (if it ,then ,(if (null? rest) #f (car rest)))))"
-			// +
-			// "(defmacro awhen (expr . then) `(let ((it ,expr)) (if it ,(cons 'begin then) #f)))"
-			// +
-			// "(defmacro or args (if (null? (cdr args)) (car args) (list 'aif (car args) 'it (cons 'or (cdr args)))))"
-			// +
-			// "(define (sys:count upto f) (define (iter i) (if (= i upto) 'undefined (begin (f i) (iter (+ i 1))))) (iter 0))"
-			// +
-			// "(defmacro dotimes (lst . body) (list 'sys:count (cadr lst) (cons 'lambda (cons (list (car lst)) body))))"
-			// +
-			// "(defmacro dolist (lst . forms) (list 'for-each (cons 'lambda (cons (list (car lst)) forms)) (cadr lst)))"
+			+ "(defmacro quasiquote (value) (define (qq i) (if (pair? i) (if (eq? 'unquote (car i)) (cadr i) (cons 'list (map qq i))) (list 'quote i))) (qq value))"
+			+ "(defmacro let (lst . forms) (cons (cons 'lambda (cons (map car lst) forms)) (map cadr lst)))"
+			+ "(defmacro let* (lst . forms) (if (null? lst) (cons 'begin forms) (list 'let (list (car lst)) (cons 'let* (cons (cdr lst) forms)))))"
+			+ "(defmacro cond list-of-forms (define (expand-cond lst) (if (null? lst) #f (if (eq? (caar lst) 'else) (cons 'begin (cdar lst)) (list 'if (caar lst) (cons 'begin (cdar lst)) (expand-cond (cdr lst)))))) (expand-cond list-of-forms))"
+			+ "(defmacro and list-of-forms (if (null? list-of-forms) #t (if (null? (cdr list-of-forms)) (car list-of-forms) (list 'if (car list-of-forms) (append '(and) (cdr list-of-forms)) #f))))"
+			+ "(define (make-promise f) (let ((value #f) (forced #f)) (lambda () (if forced value (begin (set! value (f)) (set! forced #t) value)))))"
+			+ "(define (force obj) (obj))"
+			+ "(defmacro delay (expression) (list 'make-promise (list 'lambda '() expression)))"
+			+ "(define (min . args) (define (min-of-two a b) (if (< a b) a b)) (let ((l (length args))) (cond ((= 0 l) (error \"min called without parameters\")) ((= 1 l) (car args)) (else (fold min-of-two (car args) (cdr args))))))"
+			+ "(define (max . args) (define (max-of-two a b) (if (> a b) a b)) (let ((l (length args))) (cond ((= 0 l) (error \"max called without parameters\")) ((= 1 l) (car args)) (else (fold max-of-two (car args) (cdr args))))))"
+			+ "(define (make-proper-list lst) (define (iter i acc) (cond ((pair? i) (iter (cdr i) (cons (car i) acc))) ((null? i) acc) (else (cons i acc)))) (reverse (iter lst '())))"
+			+ "(defmacro when (expr . body) `(if ,expr ,(cons 'begin body) #f))"
+			+ "(defmacro unless (expr . body) `(if ,expr #f ,(cons 'begin body)))"
+			+ "(defmacro aif (expr then . rest) `(let ((it ,expr)) (if it ,then ,(if (null? rest) #f (car rest)))))"
+			+ "(defmacro awhen (expr . then) `(let ((it ,expr)) (if it ,(cons 'begin then) #f)))"
+			+ "(defmacro or args (if (null? (cdr args)) (car args) (list 'aif (car args) 'it (cons 'or (cdr args)))))"
+			+ "(define (sys:count upto f) (define (iter i) (if (= i upto) 'undefined (begin (f i) (iter (+ i 1))))) (iter 0))"
+			+ "(defmacro dotimes (lst . body) (list 'sys:count (cadr lst) (cons 'lambda (cons (list (car lst)) body))))"
+			+ "(defmacro dolist (lst . forms) (list 'for-each (cons 'lambda (cons (list (car lst)) forms)) (cadr lst)))"
 			// +
 			// "(define gensym (let ((sym 0)) (lambda () (set! sym (+ sym 1)) (string->symbol (string-append \"##gensym##\" (number->string sym))))))"
 			// +

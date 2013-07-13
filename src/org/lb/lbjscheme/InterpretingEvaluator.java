@@ -23,6 +23,7 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 			.fromString("undefined");
 	private static final Symbol _quoteSymbol = Symbol.fromString("quote");
 	private static final Symbol _defineSymbol = Symbol.fromString("define");
+	private static final Symbol _defmacroSymbol = Symbol.fromString("defmacro");
 	private static final Symbol _setSymbol = Symbol.fromString("set!");
 	private static final Symbol _ifSymbol = Symbol.fromString("if");
 	private static final Symbol _beginSymbol = Symbol.fromString("begin");
@@ -49,6 +50,8 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 					return makeLambda(p.getCdr(), env);
 				if (car == _defineSymbol)
 					return define(p.getCdr(), env);
+				if (car == _defmacroSymbol)
+					return defmacro(p.getCdr(), env);
 				final List<SchemeObject> form = p.toJavaList();
 				if (car == _quoteSymbol)
 					return Builtins.car(p.getCdr());
@@ -90,6 +93,19 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 
 				final SchemeObject procedure = eval(car, env);
 				final ArrayList<SchemeObject> parameters = new ArrayList<SchemeObject>();
+
+				if (procedure instanceof Macro) {
+					final Macro m = (Macro) procedure;
+					final Environment macroEnv = new Environment(
+							m.getCaptured());
+					for (int i = 1; i < form.size(); ++i)
+						parameters.add(form.get(i));
+					macroEnv.expand(m.getParameterNames(),
+							m.hasRestParameter(), parameters);
+					o = eval(new Pair(_beginSymbol, m.getForms()), macroEnv);
+					continue tailCall;
+				}
+
 				for (int i = 1; i < form.size(); ++i)
 					parameters.add(eval(form.get(i), env));
 
@@ -208,6 +224,45 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 				sym,
 				new Lambda(sym.toString(), parameterNames, target
 						.isDottedList(), (Pair) forms, env));
+		return _undefinedSymbol;
+	}
+
+	private SchemeObject defmacro(SchemeObject obj, Environment env)
+			throws SchemeException {
+		if (!(obj instanceof Pair))
+			throw new SchemeException("Invalid defmacro form: Empty form");
+		final Pair p1 = (Pair) obj;
+		final SchemeObject nameObj = p1.getCar();
+		if (!(nameObj instanceof Symbol))
+			throw new SchemeException(
+					"Invalid defmacro form: Expected macro name");
+		final Symbol name = (Symbol) nameObj;
+		if (!(p1.getCdr() instanceof Pair))
+			throw new SchemeException(
+					"Invalid defmacro form: Expected parameter list and forms");
+		final SchemeObject paramListObj = ((Pair) p1.getCdr()).getCar();
+		final SchemeObject formsObj = ((Pair) p1.getCdr()).getCdr();
+		if (!(formsObj instanceof Pair))
+			throw new SchemeException("Invalid defmacro form: Expected forms");
+		Pair forms = (Pair) formsObj;
+		final List<Symbol> parameterNames = new ArrayList<Symbol>();
+		boolean hasRestParameter;
+		if (paramListObj instanceof Symbol) {
+			hasRestParameter = true;
+			parameterNames.add((Symbol) paramListObj);
+		} else if (paramListObj instanceof SchemeList) {
+			hasRestParameter = ((SchemeList) paramListObj).isDottedList();
+			for (SchemeObject o : ((SchemeList) paramListObj)) {
+				if (!(o instanceof Symbol))
+					throw new SchemeException(
+							"Invalid defmacro form: All parameter names must be symbols");
+				parameterNames.add((Symbol) o);
+			}
+		} else
+			throw new SchemeException(
+					"Invalid defmacro form: Expected argument or argument list");
+		env.define(name, new Macro(name.toString(), parameterNames,
+				hasRestParameter, forms, env));
 		return _undefinedSymbol;
 	}
 
