@@ -40,6 +40,11 @@ public class Nil implements SchemeObject, SchemeList {
 
 	@Override
 	public String toString() {
+		return toString(false);
+	}
+
+	@Override
+	public String toString(boolean forDisplay) {
 		return "()";
 	}
 

@@ -56,6 +56,11 @@ public final class Macro implements SchemeObject {
 
 	@Override
 	public String toString() {
+		return toString(false);
+	}
+
+	@Override
+	public String toString(boolean forDisplay) {
 		return "<macro " + _name + ">";
 	}
 }

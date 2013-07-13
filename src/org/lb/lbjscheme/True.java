@@ -30,4 +30,9 @@ public class True implements SchemeObject {
 	public String toString() {
 		return "#t";
 	}
+
+	@Override
+	public String toString(boolean forDisplay) {
+		return "#t";
+	}
 }

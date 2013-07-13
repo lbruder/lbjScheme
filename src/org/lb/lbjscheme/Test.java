@@ -36,7 +36,8 @@ public final class Test {
 		}
 
 		// TODO:
-		// - Builtins, base library
+		// - apply, error
+		// - Complete builtins and base library
 		// - Ports
 		// - Unit tests!
 		// - Gradually add full numeric tower to number data type

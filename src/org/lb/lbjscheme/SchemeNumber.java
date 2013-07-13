@@ -29,6 +29,11 @@ public final class SchemeNumber implements SchemeObject {
 
 	@Override
 	public String toString() {
+		return toString(false);
+	}
+
+	@Override
+	public String toString(boolean forDisplay) {
 		return Integer.toString(_value);
 	}
 }

@@ -18,8 +18,6 @@ package org.lb.lbjscheme;
 
 import java.util.List;
 
-// TODO: display, apply, error
-
 public final class Builtins {
 	public static SchemeObject cons(SchemeObject o1, SchemeObject o2) {
 		return new Pair(o1, o2);

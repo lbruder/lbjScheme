@@ -56,6 +56,11 @@ public final class Lambda implements SchemeObject {
 
 	@Override
 	public String toString() {
+		return toString(false);
+	}
+
+	@Override
+	public String toString(boolean forDisplay) {
 		return "<procedure " + _name + ">";
 	}
 }

@@ -17,4 +17,7 @@
 package org.lb.lbjscheme;
 
 public interface SchemeObject {
+	public abstract String toString();
+
+	public abstract String toString(boolean forDisplay);
 }

@@ -81,19 +81,24 @@ public final class Pair implements SchemeObject, SchemeList {
 
 	@Override
 	public String toString() {
+		return toString(false);
+	}
+
+	@Override
+	public String toString(boolean forDisplay) {
 		final StringBuilder ret = new StringBuilder();
 		ret.append("(");
 
 		Pair i = this;
 		while (true) {
-			ret.append(i._car.toString());
+			ret.append(i._car.toString(forDisplay));
 			if (i._cdr instanceof Nil)
 				break;
 			ret.append(" ");
 
 			if (!(i._cdr instanceof Pair)) {
 				ret.append(". ");
-				ret.append(i._cdr.toString());
+				ret.append(i._cdr.toString(forDisplay));
 				break;
 			}
 			i = (Pair) i._cdr;

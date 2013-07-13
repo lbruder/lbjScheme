@@ -26,7 +26,7 @@ public final class Builtin implements SchemeObject {
 	private static final False _false = False.getInstance();
 
 	public enum Type {
-		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, vectorp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInt, intToChar, write, makeString, stringLength, stringRef, stringSet, stringToSymbol, symbolToString, makeVector, vectorLength, vectorRef, vectorSet, numberToString, stringToNumber
+		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, vectorp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInt, intToChar, write, makeString, stringLength, stringRef, stringSet, stringToSymbol, symbolToString, makeVector, vectorLength, vectorRef, vectorSet, numberToString, stringToNumber, display
 	};
 
 	public Builtin(Type type) {
@@ -49,6 +49,8 @@ public final class Builtin implements SchemeObject {
 			return "char->integer";
 		case cons:
 			return "cons";
+		case display:
+			return "display";
 		case div:
 			return "/";
 		case eqp:
@@ -126,6 +128,11 @@ public final class Builtin implements SchemeObject {
 
 	@Override
 	public String toString() {
+		return toString(false);
+	}
+
+	@Override
+	public String toString(boolean forDisplay) {
 		return "Builtin procedure " + getName();
 	}
 
@@ -163,6 +170,10 @@ public final class Builtin implements SchemeObject {
 		case cons:
 			assertParameterCount(2, parameters);
 			return Builtins.cons(parameters.get(0), parameters.get(1));
+		case display:
+			assertParameterCount(1, parameters); // HACK: For now
+			System.out.print(parameters.get(0).toString(true));
+			return parameters.get(0);
 		case div:
 			return Builtins.div(parameters);
 		case eqp:

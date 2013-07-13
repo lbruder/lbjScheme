@@ -29,6 +29,14 @@ public final class SchemeCharacter implements SchemeObject {
 
 	@Override
 	public String toString() {
+		return toString(false);
+	}
+
+	@Override
+	public String toString(boolean forDisplay) {
+		if (forDisplay)
+			return String.valueOf(_value);
+
 		switch (_value) {
 		case '\\':
 			return "#\\\\";

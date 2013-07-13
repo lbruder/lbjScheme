@@ -30,4 +30,9 @@ public class False implements SchemeObject {
 	public String toString() {
 		return "#f";
 	}
+
+	@Override
+	public String toString(boolean forDisplay) {
+		return "#f";
+	}
 }

@@ -27,6 +27,11 @@ public final class Symbol implements SchemeObject {
 
 	@Override
 	public String toString() {
+		return toString(false);
+	}
+
+	@Override
+	public String toString(boolean forDisplay) {
 		return _name;
 	}
 
