@@ -26,7 +26,7 @@ public final class Builtin implements SchemeObject {
 	private static final False _false = False.getInstance();
 
 	public enum Type {
-		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInt, intToChar, write, makeString, stringLength, stringRef, stringSet
+		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInt, intToChar, write, makeString, stringLength, stringRef, stringSet, stringToSymbol, symbolToString
 	};
 
 	public Builtin(Type type) {
@@ -95,10 +95,14 @@ public final class Builtin implements SchemeObject {
 			return "string-ref";
 		case stringSet:
 			return "string-set!";
+		case stringToSymbol:
+			return "string->symbol";
 		case sub:
 			return "-";
 		case symbolp:
 			return "symbol?";
+		case symbolToString:
+			return "symbol->string";
 		case write:
 			return "write";
 		default:
@@ -210,11 +214,17 @@ public final class Builtin implements SchemeObject {
 			assertParameterCount(3, parameters);
 			return Builtins.stringSet(parameters.get(0), parameters.get(1),
 					parameters.get(2));
+		case stringToSymbol:
+			assertParameterCount(1, parameters);
+			return Builtins.stringToSymbol(parameters.get(0));
 		case sub:
 			return Builtins.sub(parameters);
 		case symbolp:
 			assertParameterCount(1, parameters);
 			return parameters.get(0) instanceof Symbol ? _true : _false;
+		case symbolToString:
+			assertParameterCount(1, parameters);
+			return Builtins.symbolToString(parameters.get(0));
 		case write:
 			assertParameterCount(1, parameters);
 			return Builtins.write(parameters.get(0));

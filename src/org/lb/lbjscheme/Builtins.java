@@ -279,4 +279,22 @@ public final class Builtins {
 				((SchemeCharacter) charObj).getValue());
 		return charObj;
 	}
+
+	public static SchemeObject stringToSymbol(SchemeObject str)
+			throws SchemeException {
+		if (!(str instanceof SchemeString))
+			throw new SchemeException(
+					"string->symbol: Invalid parameter type; expected string, got "
+							+ str.getClass());
+		return Symbol.fromString(((SchemeString) str).getValue());
+	}
+
+	public static SchemeObject symbolToString(SchemeObject sym)
+			throws SchemeException {
+		if (!(sym instanceof Symbol))
+			throw new SchemeException(
+					"symbol->string: Invalid parameter type; expected symbol, got "
+							+ sym.getClass());
+		return new SchemeString(((Symbol) sym).toString());
+	}
 }

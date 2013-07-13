@@ -41,10 +41,7 @@ public abstract class EvaluatorBase implements Evaluator {
 			addBuiltin(new Builtin(t));
 
 		// TODO: integer? real? sin cos tan sqrt expt display random
-
-		// TODO String procedures:
-		// AddFunction("string->symbol", (string s) => Symbol.FromString(s));
-		// AddFunction("symbol->string", (Symbol s) => s.ToString());
+		// number->string string->number apply eqv? equal? error
 
 		// TODO vector procedures:
 		// AddFunction("sys:make-vector", (int size) => new object[size]);
@@ -54,20 +51,6 @@ public abstract class EvaluatorBase implements Evaluator {
 		// AddFunction("vector-set!", (object[] vector, int index, object obj)
 		// => { vector[index] = obj; return undefinedSymbol; });
 		// AddFunction("vector?", (object o) => o is object[]);
-
-		// TODO other procedures...
-		// AddFunction("sys:strtonum", (string s, int b) => s.Contains('.') ?
-		// Convert.ToDouble(s, CultureInfo.InvariantCulture) :
-		// Convert.ToInt32(s, b));
-		// AddFunction("sys:numtostr", (object i, int b) => (i is int) ?
-		// Convert.ToString((int)i, b) : Convert.ToString((double)i));
-		// AddFunction("apply", (object f, IEnumerable<object> arguments) =>
-		// arguments == null ? Apply(f, false) : Apply(f, false,
-		// arguments.ToArray()));
-
-		// AddFunction<object, object>("eqv?", Eqv);
-		// AddFunction<object, object>("equal?", Equal);
-		// AddFunction<IEnumerable<object>>("sys:error", ErrorFunction);
 	}
 
 	// HACK: Written in Scheme for simplicity. Re-write as builtins for
@@ -183,11 +166,6 @@ public abstract class EvaluatorBase implements Evaluator {
 
 			// TODO
 			// + "(define (newline) (display \"\\n\") 'undefined)"
-			// + "(define (error . params) (sys:error params))"
-			// +
-			// "(define (string->number n . rest) (if (pair? rest) (sys:strtonum n (car rest)) (sys:strtonum n 10)))"
-			// +
-			// "(define (number->string n . rest) (if (pair? rest) (sys:numtostr n (car rest)) (sys:numtostr n 10)))"
 			// +
 			// "(defmacro quasiquote (value) (define (qq i) (if (pair? i) (if (eq? 'unquote (car i)) (cadr i) (cons 'list (map qq i))) (list 'quote i))) (qq value))"
 			// +
