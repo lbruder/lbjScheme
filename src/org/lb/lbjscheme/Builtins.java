@@ -297,4 +297,53 @@ public final class Builtins {
 							+ sym.getClass());
 		return new SchemeString(((Symbol) sym).toString());
 	}
+
+	public static SchemeObject makeVector(List<SchemeObject> parameters)
+			throws SchemeException {
+		switch (parameters.size()) {
+		case 1:
+			return new Vector(toNumber("make-vector", parameters.get(0)));
+		case 2:
+			int length = toNumber("make-vector", parameters.get(0));
+			SchemeObject o = parameters.get(1);
+			Vector ret = new Vector(length);
+			for (int i = 0; i < length; ++i)
+				ret.setAt(i, o);
+			return ret;
+
+		default:
+			throw new SchemeException(
+					"make-vector: Expected 1 or 2 parameters, got "
+							+ parameters.size());
+		}
+	}
+
+	public static SchemeObject vectorLength(SchemeObject o)
+			throws SchemeException {
+		if (o instanceof Vector)
+			return new SchemeNumber(((Vector) o).getLength());
+		throw new SchemeException(
+				"vector-length: Invalid parameter type; expected vector, got "
+						+ o.getClass());
+	}
+
+	public static SchemeObject vectorRef(SchemeObject vec, SchemeObject indexObj)
+			throws SchemeException {
+		if (!(vec instanceof Vector))
+			throw new SchemeException(
+					"vector-ref: Invalid parameter type; expected vector, got "
+							+ vec.getClass());
+		return ((Vector) vec).getAt(toNumber("vector-ref", indexObj));
+	}
+
+	public static SchemeObject vectorSet(SchemeObject vec,
+			SchemeObject indexObj, SchemeObject obj) throws SchemeException {
+		if (!(vec instanceof Vector))
+			throw new SchemeException(
+					"vector-set!: Invalid parameter type; expected vector, got "
+							+ vec.getClass());
+		((Vector) vec).setAt(toNumber("vector-set!", indexObj), obj);
+		return obj;
+	}
+
 }

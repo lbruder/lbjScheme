@@ -26,7 +26,7 @@ public final class Builtin implements SchemeObject {
 	private static final False _false = False.getInstance();
 
 	public enum Type {
-		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInt, intToChar, write, makeString, stringLength, stringRef, stringSet, stringToSymbol, symbolToString
+		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, vectorp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInt, intToChar, write, makeString, stringLength, stringRef, stringSet, stringToSymbol, symbolToString, makeVector, vectorLength, vectorRef, vectorSet
 	};
 
 	public Builtin(Type type) {
@@ -63,6 +63,8 @@ public final class Builtin implements SchemeObject {
 			return "list?";
 		case makeString:
 			return "make-string";
+		case makeVector:
+			return "make-vector";
 		case mul:
 			return "*";
 		case nullp:
@@ -103,6 +105,14 @@ public final class Builtin implements SchemeObject {
 			return "symbol?";
 		case symbolToString:
 			return "symbol->string";
+		case vectorLength:
+			return "vector-length";
+		case vectorp:
+			return "vector?";
+		case vectorRef:
+			return "vector-ref";
+		case vectorSet:
+			return "vector-set!";
 		case write:
 			return "write";
 		default:
@@ -172,6 +182,8 @@ public final class Builtin implements SchemeObject {
 			return Builtins.lt(parameters);
 		case makeString:
 			return Builtins.makeString(parameters);
+		case makeVector:
+			return Builtins.makeVector(parameters);
 		case mul:
 			return Builtins.mul(parameters);
 		case nullp:
@@ -225,6 +237,19 @@ public final class Builtin implements SchemeObject {
 		case symbolToString:
 			assertParameterCount(1, parameters);
 			return Builtins.symbolToString(parameters.get(0));
+		case vectorLength:
+			assertParameterCount(1, parameters);
+			return Builtins.vectorLength(parameters.get(0));
+		case vectorp:
+			assertParameterCount(1, parameters);
+			return parameters.get(0) instanceof Vector ? _true : _false;
+		case vectorRef:
+			assertParameterCount(2, parameters);
+			return Builtins.vectorRef(parameters.get(0), parameters.get(1));
+		case vectorSet:
+			assertParameterCount(3, parameters);
+			return Builtins.vectorSet(parameters.get(0), parameters.get(1),
+					parameters.get(2));
 		case write:
 			assertParameterCount(1, parameters);
 			return Builtins.write(parameters.get(0));
