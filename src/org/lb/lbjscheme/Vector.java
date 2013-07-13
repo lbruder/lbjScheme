@@ -59,9 +59,16 @@ public final class Vector implements SchemeObject {
 	@Override
 	public String toString(boolean forDisplay) {
 		final StringBuilder ret = new StringBuilder();
+
+		if (forDisplay) {
+			for (SchemeObject o : _values)
+				ret.append(o.toString(true));
+			return ret.toString();
+		}
+
 		ret.append("#(");
 		for (SchemeObject c : _values) {
-			ret.append(c.toString(forDisplay));
+			ret.append(c.toString(false));
 			ret.append(" ");
 		}
 
