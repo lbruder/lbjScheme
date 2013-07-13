@@ -36,11 +36,18 @@ public final class Vector implements SchemeObject {
 		return _values.length;
 	}
 
-	public SchemeObject getAt(int position) {
+	public SchemeObject getAt(int position) throws SchemeException {
+		assertValidIndex(position);
 		return _values[position];
 	}
 
-	public void setAt(int position, SchemeObject value) {
+	private void assertValidIndex(int position) throws SchemeException {
+		if (position < 0 || position >= getLength())
+			throw new SchemeException("Vector index out of bounds");
+	}
+
+	public void setAt(int position, SchemeObject value) throws SchemeException {
+		assertValidIndex(position);
 		_values[position] = value;
 	}
 
