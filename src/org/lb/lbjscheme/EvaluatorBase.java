@@ -41,7 +41,7 @@ public abstract class EvaluatorBase implements Evaluator {
 			addBuiltin(new Builtin(t));
 
 		// TODO: integer? real? sin cos tan sqrt expt display random
-		// number->string string->number apply eqv? equal? error
+		// number->string string->number apply error
 
 		// TODO vector procedures:
 		// AddFunction("sys:make-vector", (int size) => new object[size]);
@@ -141,12 +141,6 @@ public abstract class EvaluatorBase implements Evaluator {
 			+ "(define (char-numeric? x) (if (>= (char->integer x) 48) (<= (char->integer x) 57) #f))"
 			+ "(define (char-whitespace? x) (if (char=? x #\\space) #t (if (char=? x #\\tab) #t (if (char=? x #\\newline) #t (char=? x #\\cr)))))"
 			+ "(define (append . lsts) (define (iter current acc) (if (pair? current) (iter (cdr current) (cons (car current) acc)) acc)) (reverse (fold iter '() lsts)))"
-			+ "(define (memq obj lst) (if (pair? lst) (if (eq? obj (car lst)) lst (memq obj (cdr lst))) #f))"
-			// "(define (memv obj lst) (if (pair? lst) (if (eqv? obj (car lst)) lst (memv obj (cdr lst))) #f))"
-			// "(define (member obj lst) (if (pair? lst) (if (equal? obj (car lst)) lst (member obj (cdr lst))) #f))"
-			+ "(define (assq obj lst) (if (pair? lst) (if (eq? obj (caar lst)) (car lst) (assq obj (cdr lst))) #f))"
-			// "(define (assv obj lst) (if (pair? lst) (if (eqv? obj (caar lst)) (car lst) (assv obj (cdr lst))) #f))"
-			// "(define (assoc obj lst) (if (pair? lst) (if (equal? obj (caar lst)) (car lst) (assoc obj (cdr lst))) #f))"
 			+ "(define (string=? a b) (define (check i max) (if (>= i max) #t (if (char=? (string-ref a i) (string-ref b i)) (check (+ i 1) max) #f))) (if (= (string-length a) (string-length b)) (check 0 (string-length a)) #f))"
 			+ "(define (string-ci=? a b) (define (check i max) (if (>= i max) #t (if (char-ci=? (string-ref a i) (string-ref b i)) (check (+ i 1) max) #f))) (if (= (string-length a) (string-length b)) (check 0 (string-length a)) #f))"
 			+ "(define (string>? a b) (define (check i max-a max-b) (if (>= i max-a) #f (if (>= i max-b) #t (if (char=? (string-ref a i) (string-ref b i)) (check (+ i 1) max-a max-b) (char>? (string-ref a i) (string-ref b i)))))) (check 0 (string-length a) (string-length b)))"
@@ -183,6 +177,15 @@ public abstract class EvaluatorBase implements Evaluator {
 			+ "(define (sys:count upto f) (define (iter i) (if (= i upto) 'undefined (begin (f i) (iter (+ i 1))))) (iter 0))"
 			+ "(defmacro dotimes (lst . body) (list 'sys:count (cadr lst) (cons 'lambda (cons (list (car lst)) body))))"
 			+ "(defmacro dolist (lst . forms) (list 'for-each (cons 'lambda (cons (list (car lst)) forms)) (cadr lst)))"
+			+ "(define (eqv? a b) (define (bool=? a b) (if a b (not b))) (cond ((eq? a b) #t) ((and (number? a) (number? b)) (= a b)) ((and (char? a) (char? b)) (char=? a b)) ((and (boolean? a) (boolean? b)) (bool=? a b)) (else #f)))"
+			+ "(define (equal? a b) (define (list-equal? i j) (cond ((and (null? i) (null? j)) #t) ((null? i) #f) ((null? j) #f) ((equal? (car i) (car j)) (list-equal? (cdr i) (cdr j))) (else #f))) (define (vector-equal? i j) (list-equal? (vector->list a) (vector->list b))) (cond ((eqv? a b) #t) ((and (string? a) (string? b)) (string=? a b)) ((and (pair? a) (pair? b)) (list-equal? a b)) ((and (vector? a) (vector? b)) (vector-equal? a b)) (else #f)))"
+			+ "(define (memq obj lst) (if (pair? lst) (if (eq? obj (car lst)) lst (memq obj (cdr lst))) #f))"
+			+ "(define (memv obj lst) (if (pair? lst) (if (eqv? obj (car lst)) lst (memv obj (cdr lst))) #f))"
+			+ "(define (member obj lst) (if (pair? lst) (if (equal? obj (car lst)) lst (member obj (cdr lst))) #f))"
+			+ "(define (assq obj lst) (if (pair? lst) (if (eq? obj (caar lst)) (car lst) (assq obj (cdr lst))) #f))"
+			+ "(define (assv obj lst) (if (pair? lst) (if (eqv? obj (caar lst)) (car lst) (assv obj (cdr lst))) #f))"
+			+ "(define (assoc obj lst) (if (pair? lst) (if (equal? obj (caar lst)) (car lst) (assoc obj (cdr lst))) #f))"
+
 			// +
 			// "(define gensym (let ((sym 0)) (lambda () (set! sym (+ sym 1)) (string->symbol (string-append \"##gensym##\" (number->string sym))))))"
 			// +
