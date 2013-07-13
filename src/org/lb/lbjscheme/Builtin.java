@@ -26,7 +26,7 @@ public final class Builtin implements SchemeObject {
 	private static final False _false = False.getInstance();
 
 	public enum Type {
-		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, vectorp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInt, intToChar, write, makeString, stringLength, stringRef, stringSet, stringToSymbol, symbolToString, makeVector, vectorLength, vectorRef, vectorSet
+		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, vectorp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInt, intToChar, write, makeString, stringLength, stringRef, stringSet, stringToSymbol, symbolToString, makeVector, vectorLength, vectorRef, vectorSet, numberToString, stringToNumber
 	};
 
 	public Builtin(Type type) {
@@ -75,6 +75,8 @@ public final class Builtin implements SchemeObject {
 			return "<";
 		case numberp:
 			return "number?";
+		case numberToString:
+			return "number->string";
 		case numeq:
 			return "=";
 		case pairp:
@@ -97,6 +99,8 @@ public final class Builtin implements SchemeObject {
 			return "string-ref";
 		case stringSet:
 			return "string-set!";
+		case stringToNumber:
+			return "string->number";
 		case stringToSymbol:
 			return "string->symbol";
 		case sub:
@@ -192,6 +196,8 @@ public final class Builtin implements SchemeObject {
 		case numberp:
 			assertParameterCount(1, parameters);
 			return parameters.get(0) instanceof SchemeNumber ? _true : _false;
+		case numberToString:
+			return Builtins.numberToString(parameters);
 		case numeq:
 			return Builtins.numeq(parameters);
 		case pairp:
@@ -226,6 +232,8 @@ public final class Builtin implements SchemeObject {
 			assertParameterCount(3, parameters);
 			return Builtins.stringSet(parameters.get(0), parameters.get(1),
 					parameters.get(2));
+		case stringToNumber:
+			return Builtins.stringToNumber(parameters);
 		case stringToSymbol:
 			assertParameterCount(1, parameters);
 			return Builtins.stringToSymbol(parameters.get(0));

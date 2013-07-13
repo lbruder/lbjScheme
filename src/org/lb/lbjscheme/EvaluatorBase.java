@@ -39,9 +39,6 @@ public abstract class EvaluatorBase implements Evaluator {
 	private void addBuiltinsToGlobalEnvironment() throws SchemeException {
 		for (Builtin.Type t : Builtin.Type.values())
 			addBuiltin(new Builtin(t));
-
-		// TODO: integer? real? display random number->string string->number
-		// apply error
 	}
 
 	// HACK: Written in Scheme for simplicity. Re-write as builtins for
@@ -49,8 +46,6 @@ public abstract class EvaluatorBase implements Evaluator {
 	private final String _initScript = "(define (newline) (display \"\\n\") 'undefined)"
 			+ "(define (complex? obj) #f)"
 			+ "(define (rational? obj) #f)"
-			// + "(define exact? integer?)"
-			// + "(define inexact? real?)"
 			+ "(define (caar x) (car (car x)))"
 			+ "(define (cadr x) (car (cdr x)))"
 			+ "(define (cdar x) (cdr (car x)))"
@@ -176,12 +171,9 @@ public abstract class EvaluatorBase implements Evaluator {
 			+ "(define (assq obj lst) (if (pair? lst) (if (eq? obj (caar lst)) (car lst) (assq obj (cdr lst))) #f))"
 			+ "(define (assv obj lst) (if (pair? lst) (if (eqv? obj (caar lst)) (car lst) (assv obj (cdr lst))) #f))"
 			+ "(define (assoc obj lst) (if (pair? lst) (if (equal? obj (caar lst)) (car lst) (assoc obj (cdr lst))) #f))"
-			// +
-			// "(define gensym (let ((sym 0)) (lambda () (set! sym (+ sym 1)) (string->symbol (string-append \"##gensym##\" (number->string sym))))))"
-			// +
-			// "(defmacro do (vars pred . body) (let ((symbol (gensym))) `(let ((,symbol '())) (set! ,symbol (lambda ,(map car vars) (if ,(car pred) ,(cadr pred) ,(cons 'begin (append body (list (cons symbol (map caddr vars)))))))) ,(cons symbol (map cadr vars))))) "
-			// +
-			// "(defmacro while (exp . body) (cons 'do (cons '() (cons `((not ,exp) 'undefined) body))))"
+			+ "(define gensym (let ((sym 0)) (lambda () (set! sym (+ sym 1)) (string->symbol (string-append \"##gensym##\" (number->string sym))))))"
+			+ "(defmacro do (vars pred . body) (let ((symbol (gensym))) `(let ((,symbol '())) (set! ,symbol (lambda ,(map car vars) (if ,(car pred) ,(cadr pred) ,(cons 'begin (append body (list (cons symbol (map caddr vars)))))))) ,(cons symbol (map cadr vars))))) "
+			+ "(defmacro while (exp . body) (cons 'do (cons '() (cons `((not ,exp) 'undefined) body))))"
 			+ "(define (vector-fill! v obj) (lb:with-range i 0 (- (vector-length v) 1) (vector-set! v i obj)) 'unspecified)"
 			+ "(define (list->vector lst) (define (iter v i vals) (vector-set! v i (car vals)) (if (zero? i) v (iter v (- i 1) (cdr vals)))) (let ((v (make-vector (length lst)))) (if (zero? (vector-length v)) v (iter v (- (vector-length v) 1) (reverse lst)))))"
 			+ "(define (vector->list v) (define (iter i acc) (if (< i 0) acc (iter (- i 1) (cons (vector-ref v i) acc)))) (iter (- (vector-length v) 1) '()))"

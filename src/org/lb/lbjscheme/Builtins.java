@@ -18,6 +18,8 @@ package org.lb.lbjscheme;
 
 import java.util.List;
 
+// TODO: display, apply, error
+
 public final class Builtins {
 	public static SchemeObject cons(SchemeObject o1, SchemeObject o2) {
 		return new Pair(o1, o2);
@@ -346,4 +348,54 @@ public final class Builtins {
 		return obj;
 	}
 
+	public static SchemeObject numberToString(List<SchemeObject> parameters)
+			throws SchemeException {
+		switch (parameters.size()) {
+		case 1:
+			return new SchemeString(Integer.toString(toNumber("number->string",
+					parameters.get(0))));
+		case 2:
+			int num = toNumber("number->string", parameters.get(0));
+			int base = toNumber("number->string", parameters.get(1));
+			return new SchemeString(Integer.toString(num, base));
+
+		default:
+			throw new SchemeException(
+					"number->string: Expected 1 or 2 parameters, got "
+							+ parameters.size());
+		}
+	}
+
+	public static SchemeObject stringToNumber(List<SchemeObject> parameters)
+			throws SchemeException {
+		try {
+			switch (parameters.size()) {
+			case 1:
+				SchemeObject value = parameters.get(0);
+				if (!(value instanceof SchemeString))
+					throw new SchemeException(
+							"string->number: Invalid parameter type; expected string, got "
+									+ value.getClass());
+				return new SchemeNumber(Integer.parseInt(
+						((SchemeString) value).getValue(), 10));
+			case 2:
+				SchemeObject value_twoParams = parameters.get(0);
+				if (!(value_twoParams instanceof SchemeString))
+					throw new SchemeException(
+							"string->number: Invalid parameter type; expected string, got "
+									+ value_twoParams.getClass());
+				int base = toNumber("string->number", parameters.get(1));
+				return new SchemeNumber(Integer.parseInt(
+						((SchemeString) value_twoParams).getValue(), base));
+
+			default:
+				throw new SchemeException(
+						"string->number: Expected 1 or 2 parameters, got "
+								+ parameters.size());
+			}
+		} catch (NumberFormatException ex) {
+			throw new SchemeException(
+					"string->number: Value can not be converted");
+		}
+	}
 }
