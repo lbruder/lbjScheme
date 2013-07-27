@@ -61,10 +61,10 @@ public final class Builtins {
 						+ o.getClass());
 	}
 
-	private static int toNumber(String procedure, SchemeObject o)
+	private static SchemeNumber asNumber(String procedure, SchemeObject o)
 			throws SchemeException {
 		if (o instanceof SchemeNumber)
-			return ((SchemeNumber) o).getValue();
+			return ((SchemeNumber) o);
 		else
 			throw new SchemeException(procedure
 					+ ": Invalid type conversion; expected Number, got "
@@ -73,10 +73,10 @@ public final class Builtins {
 
 	public static SchemeObject add(List<SchemeObject> parameters)
 			throws SchemeException {
-		int ret = 0;
+		SchemeNumber ret = new SchemeNumber(0);
 		for (SchemeObject o : parameters)
-			ret += toNumber("+", o);
-		return new SchemeNumber(ret);
+			ret = ret.add(asNumber("+", o));
+		return ret;
 	}
 
 	public static SchemeObject sub(List<SchemeObject> parameters)
@@ -84,20 +84,20 @@ public final class Builtins {
 		if (parameters.size() == 0)
 			throw new SchemeException("-: Expected at least one parameter");
 
-		int ret = toNumber("-", parameters.get(0));
+		SchemeNumber ret = asNumber("-", parameters.get(0));
 		if (parameters.size() == 1)
-			return new SchemeNumber(-ret);
+			return new SchemeNumber(0).sub(ret);
 		for (SchemeObject o : parameters.subList(1, parameters.size()))
-			ret -= toNumber("-", o);
-		return new SchemeNumber(ret);
+			ret = ret.sub(asNumber("-", o));
+		return ret;
 	}
 
 	public static SchemeObject mul(List<SchemeObject> parameters)
 			throws SchemeException {
-		int ret = 1;
+		SchemeNumber ret = new SchemeNumber(1);
 		for (SchemeObject o : parameters)
-			ret *= toNumber("*", o);
-		return new SchemeNumber(ret);
+			ret = ret.mul(asNumber("*", o));
+		return ret;
 	}
 
 	public static SchemeObject div(List<SchemeObject> parameters)
@@ -105,12 +105,12 @@ public final class Builtins {
 		if (parameters.size() == 0)
 			throw new SchemeException("/: Expected at least one parameter");
 
-		int ret = toNumber("/", parameters.get(0));
+		SchemeNumber ret = asNumber("/", parameters.get(0));
 		if (parameters.size() == 1)
-			return new SchemeNumber(1 / ret); // TODO Rationals
+			return new SchemeNumber(1).div(ret);
 		for (SchemeObject o : parameters.subList(1, parameters.size()))
-			ret /= toNumber("/", o); // TODO Rationals
-		return new SchemeNumber(ret);
+			ret = ret.div(asNumber("/", o));
+		return ret;
 	}
 
 	public static SchemeObject lt(List<SchemeObject> parameters)
@@ -118,10 +118,10 @@ public final class Builtins {
 		if (parameters.size() < 2)
 			throw new SchemeException("<: Expected at least two parameters");
 
-		int last = toNumber("<", parameters.get(0));
+		SchemeNumber last = asNumber("<", parameters.get(0));
 		for (SchemeObject o : parameters.subList(1, parameters.size())) {
-			int now = toNumber("<", o);
-			if (last >= now)
+			SchemeNumber now = asNumber("<", o);
+			if (last.ge(now))
 				return False.getInstance();
 			last = now;
 		}
@@ -133,10 +133,10 @@ public final class Builtins {
 		if (parameters.size() < 2)
 			throw new SchemeException("<=: Expected at least two parameters");
 
-		int last = toNumber("<=", parameters.get(0));
+		SchemeNumber last = asNumber("<=", parameters.get(0));
 		for (SchemeObject o : parameters.subList(1, parameters.size())) {
-			int now = toNumber("<=", o);
-			if (last > now)
+			SchemeNumber now = asNumber("<=", o);
+			if (last.gt(now))
 				return False.getInstance();
 			last = now;
 		}
@@ -148,10 +148,10 @@ public final class Builtins {
 		if (parameters.size() < 2)
 			throw new SchemeException(">: Expected at least two parameters");
 
-		int last = toNumber(">", parameters.get(0));
+		SchemeNumber last = asNumber(">", parameters.get(0));
 		for (SchemeObject o : parameters.subList(1, parameters.size())) {
-			int now = toNumber(">", o);
-			if (last <= now)
+			SchemeNumber now = asNumber(">", o);
+			if (last.le(now))
 				return False.getInstance();
 			last = now;
 		}
@@ -163,10 +163,10 @@ public final class Builtins {
 		if (parameters.size() < 2)
 			throw new SchemeException(">=: Expected at least two parameters");
 
-		int last = toNumber(">=", parameters.get(0));
+		SchemeNumber last = asNumber(">=", parameters.get(0));
 		for (SchemeObject o : parameters.subList(1, parameters.size())) {
-			int now = toNumber(">=", o);
-			if (last < now)
+			SchemeNumber now = asNumber(">=", o);
+			if (last.lt(now))
 				return False.getInstance();
 			last = now;
 		}
@@ -178,10 +178,10 @@ public final class Builtins {
 		if (parameters.size() < 2)
 			throw new SchemeException("=: Expected at least two parameters");
 
-		final int last = toNumber("=", parameters.get(0));
+		final SchemeNumber last = asNumber("=", parameters.get(0));
 		for (SchemeObject o : parameters.subList(1, parameters.size())) {
-			int now = toNumber("=", o);
-			if (last != now)
+			SchemeNumber now = asNumber("=", o);
+			if (!last.eq(now))
 				return False.getInstance();
 		}
 		return True.getInstance();
@@ -189,16 +189,12 @@ public final class Builtins {
 
 	public static SchemeObject quotient(SchemeObject p0, SchemeObject p1)
 			throws SchemeException {
-		return new SchemeNumber(toNumber("quotient", p0)
-				/ toNumber("quotient", p1)); // TODO: assuming toNumber
-												// returns an integer value
+		return asNumber("quotient", p0).idiv(asNumber("quotient", p1));
 	}
 
 	public static SchemeObject remainder(SchemeObject p0, SchemeObject p1)
 			throws SchemeException {
-		return new SchemeNumber(toNumber("remainder", p0)
-				% toNumber("remainder", p1)); // TODO: assuming toNumber
-												// returns an integer value
+		return asNumber("remainder", p0).mod(asNumber("remainder", p1));
 	}
 
 	public static SchemeObject charToInt(SchemeObject o) throws SchemeException {
@@ -222,13 +218,23 @@ public final class Builtins {
 		return Symbol.fromString("undefined");
 	}
 
+	private static int toInteger(String procedure, SchemeObject o)
+			throws SchemeException {
+		if (o instanceof SchemeNumber)
+			return ((SchemeNumber) o).getValue();
+		else
+			throw new SchemeException(procedure
+					+ ": Invalid type conversion; expected Fixnum, got "
+					+ o.getClass());
+	}
+
 	public static SchemeObject makeString(List<SchemeObject> parameters)
 			throws SchemeException {
 		switch (parameters.size()) {
 		case 1:
-			return new SchemeString(toNumber("make-string", parameters.get(0)));
+			return new SchemeString(toInteger("make-string", parameters.get(0)));
 		case 2:
-			int length = toNumber("make-string", parameters.get(0));
+			int length = toInteger("make-string", parameters.get(0));
 			if (!(parameters.get(1) instanceof SchemeCharacter))
 				throw new SchemeException(
 						"make-string: Invalid parameter type; expected character as second parameter, got "
@@ -261,7 +267,7 @@ public final class Builtins {
 			throw new SchemeException(
 					"string-ref: Invalid parameter type; expected string, got "
 							+ str.getClass());
-		return new SchemeCharacter(((SchemeString) str).getAt(toNumber(
+		return new SchemeCharacter(((SchemeString) str).getAt(toInteger(
 				"string-ref", indexObj)));
 	}
 
@@ -275,7 +281,7 @@ public final class Builtins {
 			throw new SchemeException(
 					"string-set!: Invalid parameter type; expected character, got "
 							+ charObj.getClass());
-		((SchemeString) str).setAt(toNumber("string-set!", indexObj),
+		((SchemeString) str).setAt(toInteger("string-set!", indexObj),
 				((SchemeCharacter) charObj).getValue());
 		return charObj;
 	}
@@ -302,9 +308,9 @@ public final class Builtins {
 			throws SchemeException {
 		switch (parameters.size()) {
 		case 1:
-			return new Vector(toNumber("make-vector", parameters.get(0)));
+			return new Vector(toInteger("make-vector", parameters.get(0)));
 		case 2:
-			int length = toNumber("make-vector", parameters.get(0));
+			int length = toInteger("make-vector", parameters.get(0));
 			SchemeObject o = parameters.get(1);
 			Vector ret = new Vector(length);
 			for (int i = 0; i < length; ++i)
@@ -333,7 +339,7 @@ public final class Builtins {
 			throw new SchemeException(
 					"vector-ref: Invalid parameter type; expected vector, got "
 							+ vec.getClass());
-		return ((Vector) vec).getAt(toNumber("vector-ref", indexObj));
+		return ((Vector) vec).getAt(toInteger("vector-ref", indexObj));
 	}
 
 	public static SchemeObject vectorSet(SchemeObject vec,
@@ -342,7 +348,7 @@ public final class Builtins {
 			throw new SchemeException(
 					"vector-set!: Invalid parameter type; expected vector, got "
 							+ vec.getClass());
-		((Vector) vec).setAt(toNumber("vector-set!", indexObj), obj);
+		((Vector) vec).setAt(toInteger("vector-set!", indexObj), obj);
 		return obj;
 	}
 
@@ -350,12 +356,12 @@ public final class Builtins {
 			throws SchemeException {
 		switch (parameters.size()) {
 		case 1:
-			return new SchemeString(Integer.toString(toNumber("number->string",
-					parameters.get(0))));
+			return new SchemeString(asNumber("number->string",
+					parameters.get(0)).toString(false));
 		case 2:
-			int num = toNumber("number->string", parameters.get(0));
-			int base = toNumber("number->string", parameters.get(1));
-			return new SchemeString(Integer.toString(num, base));
+			SchemeNumber num = asNumber("number->string", parameters.get(0));
+			int base = toInteger("number->string", parameters.get(1));
+			return new SchemeString(num.toString(false, base));
 
 		default:
 			throw new SchemeException(
@@ -374,17 +380,17 @@ public final class Builtins {
 					throw new SchemeException(
 							"string->number: Invalid parameter type; expected string, got "
 									+ value.getClass());
-				return new SchemeNumber(Integer.parseInt(
-						((SchemeString) value).getValue(), 10));
+				return SchemeNumber.fromString(
+						((SchemeString) value).getValue(), 10);
 			case 2:
 				SchemeObject value_twoParams = parameters.get(0);
 				if (!(value_twoParams instanceof SchemeString))
 					throw new SchemeException(
 							"string->number: Invalid parameter type; expected string, got "
 									+ value_twoParams.getClass());
-				int base = toNumber("string->number", parameters.get(1));
-				return new SchemeNumber(Integer.parseInt(
-						((SchemeString) value_twoParams).getValue(), base));
+				int base = toInteger("string->number", parameters.get(1));
+				return SchemeNumber.fromString(
+						((SchemeString) value_twoParams).getValue(), base);
 
 			default:
 				throw new SchemeException(

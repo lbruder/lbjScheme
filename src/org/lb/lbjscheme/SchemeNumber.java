@@ -29,11 +29,63 @@ public final class SchemeNumber implements SchemeObject {
 
 	@Override
 	public String toString() {
-		return toString(false);
+		return toString(false, 10);
 	}
 
 	@Override
 	public String toString(boolean forDisplay) {
-		return Integer.toString(_value);
+		return toString(forDisplay, 10);
+	}
+
+	public String toString(boolean forDisplay, int base) {
+		return Integer.toString(_value, base);
+	}
+
+	public SchemeNumber add(SchemeNumber other) {
+		return new SchemeNumber(_value + other._value);
+	}
+
+	public SchemeNumber sub(SchemeNumber other) {
+		return new SchemeNumber(_value - other._value);
+	}
+
+	public SchemeNumber mul(SchemeNumber other) {
+		return new SchemeNumber(_value * other._value);
+	}
+
+	public SchemeNumber div(SchemeNumber other) {
+		return new SchemeNumber(_value / other._value);
+	}
+
+	public SchemeNumber idiv(SchemeNumber other) {
+		return new SchemeNumber(_value / other._value);
+	}
+
+	public SchemeNumber mod(SchemeNumber other) {
+		return new SchemeNumber(_value % other._value);
+	}
+
+	public boolean eq(SchemeNumber other) {
+		return _value == other._value;
+	}
+
+	public boolean lt(SchemeNumber other) {
+		return _value < other._value;
+	}
+
+	public boolean le(SchemeNumber other) {
+		return _value <= other._value;
+	}
+
+	public boolean gt(SchemeNumber other) {
+		return _value > other._value;
+	}
+
+	public boolean ge(SchemeNumber other) {
+		return _value >= other._value;
+	}
+
+	public static SchemeNumber fromString(String value, int base) {
+		return new SchemeNumber(Integer.parseInt(value, base));
 	}
 }

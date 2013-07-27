@@ -202,12 +202,12 @@ public final class Reader {
 			return False.getInstance();
 
 		try {
-			return new SchemeNumber(Integer.parseInt(symbol));
+			return SchemeNumber.fromString(symbol, 10);
 		} catch (Exception ex) {
 		}
-		// TODO: Numeric tower
+
 		if (symbol.startsWith("#x"))
-			return new SchemeNumber(Integer.parseInt(symbol.substring(2), 16));
+			return SchemeNumber.fromString(symbol.substring(2), 16);
 		return Symbol.fromString(symbol);
 	}
 }
