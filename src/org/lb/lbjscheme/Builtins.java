@@ -73,7 +73,7 @@ public final class Builtins {
 
 	public static SchemeObject add(List<SchemeObject> parameters)
 			throws SchemeException {
-		SchemeNumber ret = new SchemeNumber(0);
+		SchemeNumber ret = new Fixnum(0);
 		for (SchemeObject o : parameters)
 			ret = ret.add(asNumber("+", o));
 		return ret;
@@ -86,7 +86,7 @@ public final class Builtins {
 
 		SchemeNumber ret = asNumber("-", parameters.get(0));
 		if (parameters.size() == 1)
-			return new SchemeNumber(0).sub(ret);
+			return new Fixnum(0).sub(ret);
 		for (SchemeObject o : parameters.subList(1, parameters.size()))
 			ret = ret.sub(asNumber("-", o));
 		return ret;
@@ -94,7 +94,7 @@ public final class Builtins {
 
 	public static SchemeObject mul(List<SchemeObject> parameters)
 			throws SchemeException {
-		SchemeNumber ret = new SchemeNumber(1);
+		SchemeNumber ret = new Fixnum(1);
 		for (SchemeObject o : parameters)
 			ret = ret.mul(asNumber("*", o));
 		return ret;
@@ -107,7 +107,7 @@ public final class Builtins {
 
 		SchemeNumber ret = asNumber("/", parameters.get(0));
 		if (parameters.size() == 1)
-			return new SchemeNumber(1).div(ret);
+			return new Fixnum(1).div(ret);
 		for (SchemeObject o : parameters.subList(1, parameters.size()))
 			ret = ret.div(asNumber("/", o));
 		return ret;
@@ -197,35 +197,31 @@ public final class Builtins {
 		return asNumber("remainder", p0).mod(asNumber("remainder", p1));
 	}
 
+	private static int toInteger(String procedure, SchemeObject o)
+			throws SchemeException {
+		if (o instanceof Fixnum)
+			return ((Fixnum) o).getValue();
+		else
+			throw new SchemeException(procedure
+					+ ": Invalid type conversion; expected Fixnum, got "
+					+ o.getClass());
+	}
+
 	public static SchemeObject charToInt(SchemeObject o) throws SchemeException {
 		if (o instanceof SchemeCharacter)
-			return new SchemeNumber(((SchemeCharacter) o).getValue());
+			return new Fixnum(((SchemeCharacter) o).getValue());
 		throw new SchemeException(
 				"char->integer: Invalid parameter type; expected character, got "
 						+ o.getClass());
 	}
 
 	public static SchemeObject intToChar(SchemeObject o) throws SchemeException {
-		if (o instanceof SchemeNumber)
-			return new SchemeCharacter((char) ((SchemeNumber) o).getValue());
-		throw new SchemeException(
-				"integer->char: Invalid parameter type; expected integer, got "
-						+ o.getClass());
+		return new SchemeCharacter((char) toInteger("integer->char", o));
 	}
 
 	public static SchemeObject write(SchemeObject o) throws SchemeException {
 		System.out.print(o);
 		return Symbol.fromString("undefined");
-	}
-
-	private static int toInteger(String procedure, SchemeObject o)
-			throws SchemeException {
-		if (o instanceof SchemeNumber)
-			return ((SchemeNumber) o).getValue();
-		else
-			throw new SchemeException(procedure
-					+ ": Invalid type conversion; expected Fixnum, got "
-					+ o.getClass());
 	}
 
 	public static SchemeObject makeString(List<SchemeObject> parameters)
@@ -255,7 +251,7 @@ public final class Builtins {
 	public static SchemeObject stringLength(SchemeObject o)
 			throws SchemeException {
 		if (o instanceof SchemeString)
-			return new SchemeNumber(((SchemeString) o).getLength());
+			return new Fixnum(((SchemeString) o).getLength());
 		throw new SchemeException(
 				"string-length: Invalid parameter type; expected string, got "
 						+ o.getClass());
@@ -327,7 +323,7 @@ public final class Builtins {
 	public static SchemeObject vectorLength(SchemeObject o)
 			throws SchemeException {
 		if (o instanceof Vector)
-			return new SchemeNumber(((Vector) o).getLength());
+			return new Fixnum(((Vector) o).getLength());
 		throw new SchemeException(
 				"vector-length: Invalid parameter type; expected vector, got "
 						+ o.getClass());
