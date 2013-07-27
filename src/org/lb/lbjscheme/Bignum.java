@@ -18,6 +18,8 @@ package org.lb.lbjscheme;
 
 import java.math.BigInteger;
 
+// TODO: Automatic demotion to Fixnum if possible
+
 public final class Bignum extends SchemeNumber {
 	private final BigInteger _value;
 
