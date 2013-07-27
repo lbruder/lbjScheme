@@ -16,100 +16,90 @@
 
 package org.lb.lbjscheme;
 
-public final class Fixnum extends SchemeNumber {
-	private final int _value;
+import java.math.BigInteger;
 
-	public Fixnum(String value, int base) {
-		_value = Integer.parseInt(value, base);
+public final class Bignum extends SchemeNumber {
+	private final BigInteger _value;
+
+	public Bignum(String value, int base) {
+		_value = new BigInteger(value, base);
 	}
 
-	public Fixnum(int value) {
+	public Bignum(long value) {
+		_value = BigInteger.valueOf(value);
+	}
+
+	public Bignum(BigInteger value) {
 		_value = value;
-	}
-
-	public int getValue() {
-		return _value;
 	}
 
 	@Override
 	public int getLevel() {
-		return 1; // 1 = Fixnum, 2 = Bignum, 3 = Rational, 4 = Real, 5 = Complex
+		return 2; // 1 = Fixnum, 2 = Bignum, 3 = Rational, 4 = Real, 5 = Complex
 	}
 
 	@Override
 	public String toString(boolean forDisplay, int base) {
-		return Integer.toString(_value, base);
+		return _value.toString(base);
 	}
 
 	@Override
 	public SchemeNumber promote() {
-		return new Bignum(_value);
-	}
-
-	private static SchemeNumber valueOf(long value) {
-		if (value > Integer.MAX_VALUE || value < Integer.MIN_VALUE)
-			return new Bignum(value);
-		return new Fixnum((int) value);
+		return null; // TODO
 	}
 
 	@Override
 	protected SchemeNumber doAdd(SchemeNumber other) {
-		final long v = (long) _value + (long) ((Fixnum) other)._value;
-		return valueOf(v);
+		return new Bignum(_value.add(((Bignum) other)._value));
 	}
 
 	@Override
 	public SchemeNumber doSub(SchemeNumber other) {
-		final long v = (long) _value - (long) ((Fixnum) other)._value;
-		return valueOf(v);
+		return new Bignum(_value.subtract(((Bignum) other)._value));
 	}
 
 	@Override
 	public SchemeNumber doMul(SchemeNumber other) {
-		final long v = (long) _value * (long) ((Fixnum) other)._value;
-		return valueOf(v);
+		return new Bignum(_value.multiply(((Bignum) other)._value));
 	}
 
 	@Override
 	public SchemeNumber doDiv(SchemeNumber other) {
-		final long v = (long) _value / (long) ((Fixnum) other)._value;
-		return valueOf(v);
+		return new Bignum(_value.divide(((Bignum) other)._value));
 	}
 
 	@Override
 	public SchemeNumber doIdiv(SchemeNumber other) {
-		final long v = (long) _value / (long) ((Fixnum) other)._value;
-		return valueOf(v);
+		return new Bignum(_value.divide(((Bignum) other)._value));
 	}
 
 	@Override
 	public SchemeNumber doMod(SchemeNumber other) {
-		final long v = (long) _value % (long) ((Fixnum) other)._value;
-		return valueOf(v);
+		return new Bignum(_value.mod(((Bignum) other)._value));
 	}
 
 	@Override
 	public boolean doEq(SchemeNumber other) {
-		return _value == ((Fixnum) other)._value;
+		return _value.compareTo(((Bignum) other)._value) == 0;
 	}
 
 	@Override
 	public boolean doLt(SchemeNumber other) {
-		return _value < ((Fixnum) other)._value;
+		return _value.compareTo(((Bignum) other)._value) < 0;
 	}
 
 	@Override
 	public boolean doLe(SchemeNumber other) {
-		return _value <= ((Fixnum) other)._value;
+		return _value.compareTo(((Bignum) other)._value) <= 0;
 	}
 
 	@Override
 	public boolean doGt(SchemeNumber other) {
-		return _value > ((Fixnum) other)._value;
+		return _value.compareTo(((Bignum) other)._value) > 0;
 	}
 
 	@Override
 	public boolean doGe(SchemeNumber other) {
-		return _value >= ((Fixnum) other)._value;
+		return _value.compareTo(((Bignum) other)._value) >= 0;
 	}
 }

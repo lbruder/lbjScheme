@@ -153,7 +153,17 @@ public abstract class SchemeNumber implements SchemeObject {
 
 	protected abstract boolean doGe(SchemeNumber other);
 
-	public static SchemeNumber fromString(String value, int base) {
-		return new Fixnum(Integer.parseInt(value, base)); // TODO: Others
+	public static SchemeNumber fromString(String value, int base)
+			throws SchemeException {
+		try {
+			return new Fixnum(value, base);
+		} catch (Exception ex) {
+			try {
+				return new Bignum(value, base);
+			} catch (Exception ex2) {
+				throw new SchemeException("The string '" + value
+						+ "' can not be converted to a number in base " + base);
+			}
+		}
 	}
 }
