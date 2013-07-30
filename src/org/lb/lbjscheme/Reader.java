@@ -23,15 +23,10 @@ public final class Reader {
 	private static final Symbol _listEnd = Symbol.fromString(")");
 
 	private final java.io.Reader _input;
-	private int _nextChar = 0;
+	private int _nextChar = -2;
 
 	public Reader(java.io.Reader input) {
 		_input = input;
-		try {
-			readChar();
-		} catch (IOException ex) {
-			_nextChar = -1;
-		}
 	}
 
 	public SchemeObject read() throws IOException, SchemeException,
@@ -77,8 +72,14 @@ public final class Reader {
 			readChar();
 	}
 
-	private boolean isEof() {
+	private boolean isEof() throws IOException {
+		ensureAtLeastOneCharRead();
 		return _nextChar == -1;
+	}
+
+	private void ensureAtLeastOneCharRead() throws IOException {
+		if (_nextChar == -2)
+			_nextChar = _input.read();
 	}
 
 	private void assertNotEof() throws IOException {
