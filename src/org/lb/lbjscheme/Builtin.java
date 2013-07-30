@@ -26,7 +26,7 @@ public final class Builtin implements SchemeObject {
 	private static final False _false = False.getInstance();
 
 	public enum Type {
-		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, vectorp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInt, intToChar, write, makeString, stringLength, stringRef, stringSet, stringToSymbol, symbolToString, makeVector, vectorLength, vectorRef, vectorSet, numberToString, stringToNumber, display
+		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, vectorp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInt, intToChar, write, makeString, stringLength, stringRef, stringSet, stringToSymbol, symbolToString, makeVector, vectorLength, vectorRef, vectorSet, numberToString, stringToNumber, display, integerp, rationalp
 	};
 
 	public Builtin(Type type) {
@@ -59,6 +59,8 @@ public final class Builtin implements SchemeObject {
 			return ">=";
 		case gt:
 			return ">";
+		case integerp:
+			return "integer?";
 		case intToChar:
 			return "integer->char";
 		case listp:
@@ -87,6 +89,8 @@ public final class Builtin implements SchemeObject {
 			return "procedure?";
 		case quotient:
 			return "quotient";
+		case rationalp:
+			return "rational?";
 		case remainder:
 			return "remainder";
 		case setCar:
@@ -183,6 +187,10 @@ public final class Builtin implements SchemeObject {
 			return Builtins.ge(parameters);
 		case gt:
 			return Builtins.gt(parameters);
+		case integerp:
+			assertParameterCount(1, parameters);
+			return (parameters.get(0) instanceof Fixnum)
+					|| (parameters.get(0) instanceof Bignum) ? _true : _false;
 		case intToChar:
 			assertParameterCount(1, parameters);
 			return Builtins.intToChar(parameters.get(0));
@@ -221,6 +229,11 @@ public final class Builtin implements SchemeObject {
 		case quotient:
 			assertParameterCount(2, parameters);
 			return Builtins.quotient(parameters.get(0), parameters.get(1));
+		case rationalp:
+			assertParameterCount(1, parameters);
+			return (parameters.get(0) instanceof Fixnum)
+					|| (parameters.get(0) instanceof Bignum)
+					|| (parameters.get(0) instanceof Rational) ? _true : _false;
 		case remainder:
 			assertParameterCount(2, parameters);
 			return Builtins.remainder(parameters.get(0), parameters.get(1));
