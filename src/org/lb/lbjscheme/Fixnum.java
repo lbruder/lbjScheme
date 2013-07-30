@@ -19,10 +19,6 @@ package org.lb.lbjscheme;
 public final class Fixnum extends SchemeNumber {
 	private final int _value;
 
-	public Fixnum(String value, int base) {
-		_value = Integer.parseInt(value, base);
-	}
-
 	public Fixnum(int value) {
 		_value = value;
 	}
@@ -46,7 +42,11 @@ public final class Fixnum extends SchemeNumber {
 		return new Bignum(_value);
 	}
 
-	private static SchemeNumber valueOf(long value) {
+	public static Fixnum valueOf(String value, int base) {
+		return new Fixnum(Integer.parseInt(value, base));
+	}
+
+	public static SchemeNumber valueOf(long value) {
 		if (value > Integer.MAX_VALUE || value < Integer.MIN_VALUE)
 			return new Bignum(value);
 		return new Fixnum((int) value);
@@ -54,38 +54,32 @@ public final class Fixnum extends SchemeNumber {
 
 	@Override
 	protected SchemeNumber doAdd(SchemeNumber other) {
-		final long v = (long) _value + (long) ((Fixnum) other)._value;
-		return valueOf(v);
+		return valueOf((long) _value + (long) ((Fixnum) other)._value);
 	}
 
 	@Override
 	public SchemeNumber doSub(SchemeNumber other) {
-		final long v = (long) _value - (long) ((Fixnum) other)._value;
-		return valueOf(v);
+		return valueOf((long) _value - (long) ((Fixnum) other)._value);
 	}
 
 	@Override
 	public SchemeNumber doMul(SchemeNumber other) {
-		final long v = (long) _value * (long) ((Fixnum) other)._value;
-		return valueOf(v);
+		return valueOf((long) _value * (long) ((Fixnum) other)._value);
 	}
 
 	@Override
 	public SchemeNumber doDiv(SchemeNumber other) {
-		final long v = (long) _value / (long) ((Fixnum) other)._value;
-		return valueOf(v);
+		return new Rational(_value).div(other);
 	}
 
 	@Override
 	public SchemeNumber doIdiv(SchemeNumber other) {
-		final long v = (long) _value / (long) ((Fixnum) other)._value;
-		return valueOf(v);
+		return valueOf((long) _value / (long) ((Fixnum) other)._value);
 	}
 
 	@Override
 	public SchemeNumber doMod(SchemeNumber other) {
-		final long v = (long) _value % (long) ((Fixnum) other)._value;
-		return valueOf(v);
+		return valueOf((long) _value % (long) ((Fixnum) other)._value);
 	}
 
 	@Override

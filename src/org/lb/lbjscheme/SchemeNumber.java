@@ -19,12 +19,20 @@ package org.lb.lbjscheme;
 public abstract class SchemeNumber implements SchemeObject {
 	@Override
 	public String toString() {
-		return toString(false, 10);
+		try {
+			return toString(false, 10);
+		} catch (Exception ex) {
+			return "<internal error>";
+		}
 	}
 
 	@Override
 	public String toString(boolean forDisplay) {
-		return toString(forDisplay, 10);
+		try {
+			return toString(forDisplay, 10);
+		} catch (Exception ex) {
+			return "<internal error>";
+		}
 	}
 
 	public SchemeNumber add(SchemeNumber other) {
@@ -63,7 +71,7 @@ public abstract class SchemeNumber implements SchemeObject {
 			return div(other.promote());
 	}
 
-	public SchemeNumber idiv(SchemeNumber other) {
+	public SchemeNumber idiv(SchemeNumber other) throws SchemeException {
 		if (other.getLevel() == getLevel())
 			return doIdiv(other);
 		if (other.getLevel() > getLevel())
@@ -72,7 +80,7 @@ public abstract class SchemeNumber implements SchemeObject {
 			return idiv(other.promote());
 	}
 
-	public SchemeNumber mod(SchemeNumber other) {
+	public SchemeNumber mod(SchemeNumber other) throws SchemeException {
 		if (other.getLevel() == getLevel())
 			return doMod(other);
 		if (other.getLevel() > getLevel())
@@ -129,7 +137,8 @@ public abstract class SchemeNumber implements SchemeObject {
 
 	public abstract SchemeNumber promote();
 
-	public abstract String toString(boolean forDisplay, int base);
+	public abstract String toString(boolean forDisplay, int base)
+			throws SchemeException;
 
 	protected abstract SchemeNumber doAdd(SchemeNumber other);
 
@@ -139,9 +148,11 @@ public abstract class SchemeNumber implements SchemeObject {
 
 	protected abstract SchemeNumber doDiv(SchemeNumber other);
 
-	protected abstract SchemeNumber doIdiv(SchemeNumber other);
+	protected abstract SchemeNumber doIdiv(SchemeNumber other)
+			throws SchemeException;
 
-	protected abstract SchemeNumber doMod(SchemeNumber other);
+	protected abstract SchemeNumber doMod(SchemeNumber other)
+			throws SchemeException;
 
 	protected abstract boolean doEq(SchemeNumber other);
 
@@ -156,13 +167,18 @@ public abstract class SchemeNumber implements SchemeObject {
 	public static SchemeNumber fromString(String value, int base)
 			throws SchemeException {
 		try {
-			return new Fixnum(value, base);
+			return Fixnum.valueOf(value, base);
 		} catch (Exception ex) {
 			try {
-				return new Bignum(value, base);
+				return Bignum.valueOf(value, base);
 			} catch (Exception ex2) {
-				throw new SchemeException("The string '" + value
-						+ "' can not be converted to a number in base " + base);
+				try {
+					return Rational.valueOf(value, base);
+				} catch (Exception ex3) {
+					throw new SchemeException("The string '" + value
+							+ "' can not be converted to a number in base "
+							+ base);
+				}
 			}
 		}
 	}

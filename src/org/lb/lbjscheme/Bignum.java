@@ -18,14 +18,13 @@ package org.lb.lbjscheme;
 
 import java.math.BigInteger;
 
-// TODO: Automatic demotion to Fixnum if possible
-
 public final class Bignum extends SchemeNumber {
-	private final BigInteger _value;
+	private final static BigInteger MAX_INT = BigInteger
+			.valueOf(Integer.MAX_VALUE);
+	private final static BigInteger MIN_INT = BigInteger
+			.valueOf(Integer.MIN_VALUE);
 
-	public Bignum(String value, int base) {
-		_value = new BigInteger(value, base);
-	}
+	private final BigInteger _value;
 
 	public Bignum(long value) {
 		_value = BigInteger.valueOf(value);
@@ -47,37 +46,47 @@ public final class Bignum extends SchemeNumber {
 
 	@Override
 	public SchemeNumber promote() {
-		return null; // TODO
+		return new Rational(_value);
+	}
+
+	public static Bignum valueOf(String value, int base) {
+		return new Bignum(new BigInteger(value, base));
+	}
+
+	public static SchemeNumber valueOf(BigInteger value) {
+		if (value.compareTo(MAX_INT) > 0 || value.compareTo(MIN_INT) < 0)
+			return new Bignum(value);
+		return new Fixnum(value.intValue());
 	}
 
 	@Override
 	protected SchemeNumber doAdd(SchemeNumber other) {
-		return new Bignum(_value.add(((Bignum) other)._value));
+		return valueOf(_value.add(((Bignum) other)._value));
 	}
 
 	@Override
 	public SchemeNumber doSub(SchemeNumber other) {
-		return new Bignum(_value.subtract(((Bignum) other)._value));
+		return valueOf(_value.subtract(((Bignum) other)._value));
 	}
 
 	@Override
 	public SchemeNumber doMul(SchemeNumber other) {
-		return new Bignum(_value.multiply(((Bignum) other)._value));
+		return valueOf(_value.multiply(((Bignum) other)._value));
 	}
 
 	@Override
 	public SchemeNumber doDiv(SchemeNumber other) {
-		return new Bignum(_value.divide(((Bignum) other)._value));
+		return new Rational(_value).div(other);
 	}
 
 	@Override
 	public SchemeNumber doIdiv(SchemeNumber other) {
-		return new Bignum(_value.divide(((Bignum) other)._value));
+		return valueOf(_value.divide(((Bignum) other)._value));
 	}
 
 	@Override
 	public SchemeNumber doMod(SchemeNumber other) {
-		return new Bignum(_value.mod(((Bignum) other)._value));
+		return valueOf(_value.mod(((Bignum) other)._value));
 	}
 
 	@Override
