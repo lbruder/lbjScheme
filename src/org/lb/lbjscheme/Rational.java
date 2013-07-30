@@ -124,33 +124,9 @@ public final class Rational extends SchemeNumber {
 		throw new SchemeException("remainder: Integer expected");
 	}
 
-	public int compareTo(Rational other) {
-		BigInteger diff = _n.multiply(other._d).subtract(_d.multiply(other._n));
+	public int compareTo(SchemeNumber other) {
+		BigInteger diff = _n.multiply(((Rational) other)._d).subtract(
+				_d.multiply(((Rational) other)._n));
 		return diff.signum();
-	}
-
-	@Override
-	public boolean doEq(SchemeNumber other) {
-		return compareTo((Rational) other) == 0;
-	}
-
-	@Override
-	public boolean doLt(SchemeNumber other) {
-		return compareTo((Rational) other) < 0;
-	}
-
-	@Override
-	public boolean doLe(SchemeNumber other) {
-		return compareTo((Rational) other) <= 0;
-	}
-
-	@Override
-	public boolean doGt(SchemeNumber other) {
-		return compareTo((Rational) other) > 0;
-	}
-
-	@Override
-	public boolean doGe(SchemeNumber other) {
-		return compareTo((Rational) other) >= 0;
 	}
 }

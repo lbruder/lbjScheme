@@ -83,27 +83,7 @@ public final class Fixnum extends SchemeNumber {
 	}
 
 	@Override
-	public boolean doEq(SchemeNumber other) {
-		return _value == ((Fixnum) other)._value;
-	}
-
-	@Override
-	public boolean doLt(SchemeNumber other) {
-		return _value < ((Fixnum) other)._value;
-	}
-
-	@Override
-	public boolean doLe(SchemeNumber other) {
-		return _value <= ((Fixnum) other)._value;
-	}
-
-	@Override
-	public boolean doGt(SchemeNumber other) {
-		return _value > ((Fixnum) other)._value;
-	}
-
-	@Override
-	public boolean doGe(SchemeNumber other) {
-		return _value >= ((Fixnum) other)._value;
+	public int compareTo(SchemeNumber other) {
+		return Integer.compare(_value, ((Fixnum) other)._value);
 	}
 }

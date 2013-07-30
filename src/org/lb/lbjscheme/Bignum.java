@@ -90,27 +90,7 @@ public final class Bignum extends SchemeNumber {
 	}
 
 	@Override
-	public boolean doEq(SchemeNumber other) {
-		return _value.compareTo(((Bignum) other)._value) == 0;
-	}
-
-	@Override
-	public boolean doLt(SchemeNumber other) {
-		return _value.compareTo(((Bignum) other)._value) < 0;
-	}
-
-	@Override
-	public boolean doLe(SchemeNumber other) {
-		return _value.compareTo(((Bignum) other)._value) <= 0;
-	}
-
-	@Override
-	public boolean doGt(SchemeNumber other) {
-		return _value.compareTo(((Bignum) other)._value) > 0;
-	}
-
-	@Override
-	public boolean doGe(SchemeNumber other) {
-		return _value.compareTo(((Bignum) other)._value) >= 0;
+	public int compareTo(SchemeNumber other) {
+		return _value.compareTo(((Bignum) other)._value);
 	}
 }

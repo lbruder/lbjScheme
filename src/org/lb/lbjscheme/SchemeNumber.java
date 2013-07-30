@@ -90,16 +90,17 @@ public abstract class SchemeNumber implements SchemeObject {
 	}
 
 	public boolean eq(SchemeNumber other) {
+		if (other.getLevel() == getLevel())
+			return compareTo(other) == 0;
 		if (other.getLevel() > getLevel())
 			return promote().eq(other);
-		if (other.getLevel() < getLevel())
+		else
 			return eq(other.promote());
-		return doEq(other);
 	}
 
 	public boolean lt(SchemeNumber other) {
 		if (other.getLevel() == getLevel())
-			return doLt(other);
+			return compareTo(other) < 0;
 		if (other.getLevel() > getLevel())
 			return promote().lt(other);
 		else
@@ -108,7 +109,7 @@ public abstract class SchemeNumber implements SchemeObject {
 
 	public boolean le(SchemeNumber other) {
 		if (other.getLevel() == getLevel())
-			return doLe(other);
+			return compareTo(other) <= 0;
 		if (other.getLevel() > getLevel())
 			return promote().le(other);
 		else
@@ -117,7 +118,7 @@ public abstract class SchemeNumber implements SchemeObject {
 
 	public boolean gt(SchemeNumber other) {
 		if (other.getLevel() == getLevel())
-			return doGt(other);
+			return compareTo(other) > 0;
 		if (other.getLevel() > getLevel())
 			return promote().gt(other);
 		else
@@ -126,7 +127,7 @@ public abstract class SchemeNumber implements SchemeObject {
 
 	public boolean ge(SchemeNumber other) {
 		if (other.getLevel() == getLevel())
-			return doGe(other);
+			return compareTo(other) >= 0;
 		if (other.getLevel() > getLevel())
 			return promote().ge(other);
 		else
@@ -139,6 +140,8 @@ public abstract class SchemeNumber implements SchemeObject {
 
 	public abstract String toString(boolean forDisplay, int base)
 			throws SchemeException;
+
+	public abstract int compareTo(SchemeNumber other);
 
 	protected abstract SchemeNumber doAdd(SchemeNumber other);
 
@@ -153,16 +156,6 @@ public abstract class SchemeNumber implements SchemeObject {
 
 	protected abstract SchemeNumber doMod(SchemeNumber other)
 			throws SchemeException;
-
-	protected abstract boolean doEq(SchemeNumber other);
-
-	protected abstract boolean doLt(SchemeNumber other);
-
-	protected abstract boolean doLe(SchemeNumber other);
-
-	protected abstract boolean doGt(SchemeNumber other);
-
-	protected abstract boolean doGe(SchemeNumber other);
 
 	public static SchemeNumber fromString(String value, int base)
 			throws SchemeException {
