@@ -26,6 +26,8 @@ public final class Test {
 		// Our basic read-eval-print-loop:
 		while (true) {
 			try {
+				System.out.print("> ");
+				System.out.flush();
 				System.out.println(e.eval(r.read()));
 			} catch (EOFException ex) {
 				break;
@@ -37,15 +39,17 @@ public final class Test {
 
 		// TODO:
 		// - apply, error
+		// - Add real and complex numbers
 		// - Complete builtins and base library
 		// - Ports
 		// - Unit tests!
-		// - Gradually add full numeric tower to number data type
+
+		// - Continuations
+
 		// - Some kind of interface to native Java data types
 		// - Interface to javax.script
 		// - Line numbers in error messages (can of worms)
 		// - AnalyzingEvaluator
 		// - CompilingEvaluator
-		// - Continuations (can of worms)
 	}
 }
