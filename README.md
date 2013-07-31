@@ -4,8 +4,8 @@ lbjScheme
 Java version of my toy Scheme interpreter
 
 This will become my most complete Scheme implementation so far, striving for 100% R5RS compatibility when done.
-I'll implement the type system and builtins first, with a very basic evaluator (interpreter) to test it, then add a
-analyzing evaluator like the one describes in SICP for better performance, then I'll upgrade to a compiler with a
+I'll implement the type system and builtins first, with a very basic evaluator (interpreter) to test it, then add an
+analyzing evaluator like the one described in SICP for better performance, then I'll upgrade to a compiler with a
 VM backend that supports continuations. Let's see how it works out.
 
 Everything in this repo is published under the BSD license unless stated otherwise in the respective file.
