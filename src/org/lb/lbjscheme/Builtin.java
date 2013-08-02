@@ -22,112 +22,71 @@ import java.util.*;
 
 public final class Builtin implements SchemeObject {
 	private final Type _type;
+	private final String _name;
+
 	private static final True _true = True.getInstance();
 	private static final False _false = False.getInstance();
 
 	public enum Type {
-		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, vectorp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInt, intToChar, write, makeString, stringLength, stringRef, stringSet, stringToSymbol, symbolToString, makeVector, vectorLength, vectorRef, vectorSet, numberToString, stringToNumber, display, integerp, rationalp
+		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, vectorp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInteger, integerToChar, write, makeString, stringLength, stringRef, stringSet, stringToSymbol, symbolToString, makeVector, vectorLength, vectorRef, vectorSet, numberToString, stringToNumber, display, integerp, rationalp, numerator, denominator
 	};
 
 	public Builtin(Type type) {
 		_type = type;
+		_name = makeName(_type);
 	}
 
-	public String getName() {
-		switch (_type) {
+	private static String makeName(Type type) {
+		switch (type) {
 		case add:
 			return "+";
-		case booleanp:
-			return "boolean?";
-		case car:
-			return "car";
-		case cdr:
-			return "cdr";
-		case charp:
-			return "char?";
-		case charToInt:
-			return "char->integer";
-		case cons:
-			return "cons";
-		case display:
-			return "display";
 		case div:
 			return "/";
-		case eqp:
-			return "eq?";
 		case ge:
 			return ">=";
 		case gt:
 			return ">";
-		case integerp:
-			return "integer?";
-		case intToChar:
-			return "integer->char";
-		case listp:
-			return "list?";
 		case makeString:
 			return "make-string";
 		case makeVector:
 			return "make-vector";
 		case mul:
 			return "*";
-		case nullp:
-			return "null?";
 		case le:
 			return "<=";
 		case lt:
 			return "<";
-		case numberp:
-			return "number?";
-		case numberToString:
-			return "number->string";
 		case numeq:
 			return "=";
-		case pairp:
-			return "pair?";
-		case procedurep:
-			return "procedure?";
-		case quotient:
-			return "quotient";
-		case rationalp:
-			return "rational?";
-		case remainder:
-			return "remainder";
 		case setCar:
 			return "set-car!";
 		case setCdr:
 			return "set-cdr!";
 		case stringLength:
 			return "string-length";
-		case stringp:
-			return "string?";
 		case stringRef:
 			return "string-ref";
 		case stringSet:
 			return "string-set!";
-		case stringToNumber:
-			return "string->number";
-		case stringToSymbol:
-			return "string->symbol";
 		case sub:
 			return "-";
-		case symbolp:
-			return "symbol?";
-		case symbolToString:
-			return "symbol->string";
 		case vectorLength:
 			return "vector-length";
-		case vectorp:
-			return "vector?";
 		case vectorRef:
 			return "vector-ref";
 		case vectorSet:
 			return "vector-set!";
-		case write:
-			return "write";
 		default:
-			throw new RuntimeException("Unknown builtin type " + _type);
+			final String name = type.name().replace("To", "->").toLowerCase();
+			if (name.endsWith("p"))
+				return name.substring(0, name.length() - 1) + "?";
+			else
+				return name;
 		}
+	}
+
+	public String getName() {
+		return _name;
 	}
 
 	@Override
@@ -168,12 +127,15 @@ public final class Builtin implements SchemeObject {
 			assertParameterCount(1, parameters);
 			return parameters.get(0) instanceof SchemeCharacter ? _true
 					: _false;
-		case charToInt:
+		case charToInteger:
 			assertParameterCount(1, parameters);
 			return Builtins.charToInt(parameters.get(0));
 		case cons:
 			assertParameterCount(2, parameters);
 			return Builtins.cons(parameters.get(0), parameters.get(1));
+		case denominator:
+			assertParameterCount(1, parameters);
+			return Builtins.denominator(parameters.get(0));
 		case display:
 			assertParameterCount(1, parameters); // HACK: For now
 			System.out.print(parameters.get(0).toString(true));
@@ -191,7 +153,7 @@ public final class Builtin implements SchemeObject {
 			assertParameterCount(1, parameters);
 			return (parameters.get(0) instanceof Fixnum)
 					|| (parameters.get(0) instanceof Bignum) ? _true : _false;
-		case intToChar:
+		case integerToChar:
 			assertParameterCount(1, parameters);
 			return Builtins.intToChar(parameters.get(0));
 		case listp:
@@ -212,6 +174,9 @@ public final class Builtin implements SchemeObject {
 		case nullp:
 			assertParameterCount(1, parameters);
 			return parameters.get(0) instanceof Nil ? _true : _false;
+		case numerator:
+			assertParameterCount(1, parameters);
+			return Builtins.numerator(parameters.get(0));
 		case numberp:
 			assertParameterCount(1, parameters);
 			return parameters.get(0) instanceof SchemeNumber ? _true : _false;
