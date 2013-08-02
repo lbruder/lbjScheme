@@ -134,6 +134,14 @@ public abstract class SchemeNumber implements SchemeObject {
 			return ge(other.promote());
 	}
 
+	public SchemeNumber getNumerator() {
+		return this;
+	}
+
+	public SchemeNumber getDenominator() {
+		return Fixnum.valueOf(1);
+	}
+
 	public abstract int getLevel();
 
 	public abstract SchemeNumber promote();

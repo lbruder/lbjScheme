@@ -89,6 +89,16 @@ public final class Rational extends SchemeNumber {
 	}
 
 	@Override
+	public SchemeNumber getNumerator() {
+		return Bignum.valueOf(_n);
+	}
+
+	@Override
+	public SchemeNumber getDenominator() {
+		return Bignum.valueOf(_d);
+	}
+
+	@Override
 	protected SchemeNumber doAdd(SchemeNumber other) {
 		Rational o = (Rational) other;
 		return valueOf(_n.multiply(o._d).add(_d.multiply(o._n)),
