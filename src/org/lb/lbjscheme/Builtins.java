@@ -398,4 +398,21 @@ public final class Builtins {
 					"string->number: Value can not be converted");
 		}
 	}
+
+	public static SchemeObject numerator(SchemeObject o) throws SchemeException {
+		if (!(o instanceof SchemeNumber))
+			throw new SchemeException(
+					"numerator: Invalid parameter type; expected number, got "
+							+ o.getClass());
+		return ((SchemeNumber) o).getNumerator();
+	}
+
+	public static SchemeObject denominator(SchemeObject o)
+			throws SchemeException {
+		if (!(o instanceof SchemeNumber))
+			throw new SchemeException(
+					"denominator: Invalid parameter type; expected number, got "
+							+ o.getClass());
+		return ((SchemeNumber) o).getDenominator();
+	}
 }
