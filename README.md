@@ -38,13 +38,6 @@ Everything in this repo is published under the BSD license unless stated otherwi
 * read-char
 * with-input-from-file
 
-#### Environments and (eval ):
-* "Environment" data type
-* eval
-* interaction-environment
-* null-environment
-* scheme-report-environment
-
 #### System stuff and missing special forms:
 * apply
 * case

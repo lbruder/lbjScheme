@@ -93,10 +93,12 @@ public final class Environment implements SchemeObject {
 		}
 	}
 
-	public static Environment newInteractionEnvironment()
+	public static Environment newNullEnvironment(Fixnum version)
 			throws SchemeException {
-		Environment ret = newReportEnvironment(new Fixnum(5));
-		new InterpretingEvaluator(ret).eval(_interactionInitScript);
+		if (version.getValue() != 5)
+			throw new SchemeException(
+					"null-environment: Only version 5 supported");
+		Environment ret = new Environment();
 		return ret;
 	}
 
@@ -108,6 +110,13 @@ public final class Environment implements SchemeObject {
 		Environment ret = new Environment();
 		addBuiltinsToEnvironment(ret);
 		new InterpretingEvaluator(ret).eval(_reportInitScript);
+		return ret;
+	}
+
+	public static Environment newInteractionEnvironment()
+			throws SchemeException {
+		Environment ret = newReportEnvironment(new Fixnum(5));
+		new InterpretingEvaluator(ret).eval(_interactionInitScript);
 		return ret;
 	}
 

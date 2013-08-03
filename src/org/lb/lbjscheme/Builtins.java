@@ -415,4 +415,13 @@ public final class Builtins {
 							+ o.getClass());
 		return ((SchemeNumber) o).getDenominator();
 	}
+
+	public static SchemeObject eval(SchemeObject expr, SchemeObject env)
+			throws SchemeException {
+		if (!(env instanceof Environment))
+			throw new SchemeException(
+					"eval: Invalid parameter type; expected environment, got "
+							+ env.getClass());
+		return new InterpretingEvaluator((Environment) env).eval(expr);
+	}
 }

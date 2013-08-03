@@ -28,7 +28,7 @@ public final class Builtin implements SchemeObject {
 	private static final False _false = False.getInstance();
 
 	public enum Type {
-		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, vectorp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInteger, integerToChar, write, makeString, stringLength, stringRef, stringSet, stringToSymbol, symbolToString, makeVector, vectorLength, vectorRef, vectorSet, numberToString, stringToNumber, display, integerp, rationalp, numerator, denominator, nullEnvironment, schemeReportEnvironment, interactionEnvironment
+		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, vectorp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInteger, integerToChar, write, makeString, stringLength, stringRef, stringSet, stringToSymbol, symbolToString, makeVector, vectorLength, vectorRef, vectorSet, numberToString, stringToNumber, display, integerp, rationalp, numerator, denominator, nullEnvironment, schemeReportEnvironment, interactionEnvironment, eval
 	};
 
 	public Builtin(Type type) {
@@ -148,6 +148,9 @@ public final class Builtin implements SchemeObject {
 			return parameters.get(0);
 		case div:
 			return Builtins.div(parameters);
+		case eval:
+			assertParameterCount(2, parameters);
+			return Builtins.eval(parameters.get(0), parameters.get(1));
 		case eqp:
 			assertParameterCount(2, parameters);
 			return parameters.get(0) == parameters.get(1) ? _true : _false;
@@ -180,7 +183,8 @@ public final class Builtin implements SchemeObject {
 		case mul:
 			return Builtins.mul(parameters);
 		case nullEnvironment:
-			return new Environment();
+			assertParameterCount(1, parameters);
+			return Environment.newNullEnvironment((Fixnum) (parameters.get(0)));
 		case nullp:
 			assertParameterCount(1, parameters);
 			return parameters.get(0) instanceof Nil ? _true : _false;
