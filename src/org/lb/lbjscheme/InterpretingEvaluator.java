@@ -29,8 +29,8 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 	private static final Symbol _beginSymbol = Symbol.fromString("begin");
 	private static final Symbol _lambdaSymbol = Symbol.fromString("lambda");
 
-	public InterpretingEvaluator() throws SchemeException {
-		super();
+	public InterpretingEvaluator(Environment global) throws SchemeException {
+		super(global);
 	}
 
 	@Override

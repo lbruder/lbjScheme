@@ -21,7 +21,8 @@ import java.io.*;
 public final class Test {
 	public static void main(String[] args) throws IOException, SchemeException {
 		final Reader r = new Reader(new InputStreamReader(System.in));
-		final Evaluator e = new InterpretingEvaluator();
+		final Evaluator e = new InterpretingEvaluator(
+				Environment.newInteractionEnvironment());
 
 		// Our basic read-eval-print-loop:
 		while (true) {

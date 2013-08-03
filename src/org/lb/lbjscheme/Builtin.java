@@ -28,7 +28,7 @@ public final class Builtin implements SchemeObject {
 	private static final False _false = False.getInstance();
 
 	public enum Type {
-		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, vectorp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInteger, integerToChar, write, makeString, stringLength, stringRef, stringSet, stringToSymbol, symbolToString, makeVector, vectorLength, vectorRef, vectorSet, numberToString, stringToNumber, display, integerp, rationalp, numerator, denominator
+		cons, car, cdr, setCar, setCdr, eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, vectorp, add, sub, mul, div, lt, le, gt, ge, numeq, quotient, remainder, charToInteger, integerToChar, write, makeString, stringLength, stringRef, stringSet, stringToSymbol, symbolToString, makeVector, vectorLength, vectorRef, vectorSet, numberToString, stringToNumber, display, integerp, rationalp, numerator, denominator, nullEnvironment, schemeReportEnvironment, interactionEnvironment
 	};
 
 	public Builtin(Type type) {
@@ -46,18 +46,24 @@ public final class Builtin implements SchemeObject {
 			return ">=";
 		case gt:
 			return ">";
+		case interactionEnvironment:
+			return "interaction-environment";
+		case le:
+			return "<=";
+		case lt:
+			return "<";
 		case makeString:
 			return "make-string";
 		case makeVector:
 			return "make-vector";
 		case mul:
 			return "*";
-		case le:
-			return "<=";
-		case lt:
-			return "<";
+		case nullEnvironment:
+			return "null-environment";
 		case numeq:
 			return "=";
+		case schemeReportEnvironment:
+			return "scheme-report-environment";
 		case setCar:
 			return "set-car!";
 		case setCdr:
@@ -156,6 +162,8 @@ public final class Builtin implements SchemeObject {
 		case integerToChar:
 			assertParameterCount(1, parameters);
 			return Builtins.intToChar(parameters.get(0));
+		case interactionEnvironment:
+			return Environment.newInteractionEnvironment();
 		case listp:
 			assertParameterCount(1, parameters);
 			return (parameters.get(0) instanceof SchemeList)
@@ -171,6 +179,8 @@ public final class Builtin implements SchemeObject {
 			return Builtins.makeVector(parameters);
 		case mul:
 			return Builtins.mul(parameters);
+		case nullEnvironment:
+			return new Environment();
 		case nullp:
 			assertParameterCount(1, parameters);
 			return parameters.get(0) instanceof Nil ? _true : _false;
@@ -202,6 +212,10 @@ public final class Builtin implements SchemeObject {
 		case remainder:
 			assertParameterCount(2, parameters);
 			return Builtins.remainder(parameters.get(0), parameters.get(1));
+		case schemeReportEnvironment:
+			assertParameterCount(1, parameters);
+			return Environment
+					.newReportEnvironment((Fixnum) (parameters.get(0)));
 		case setCar:
 			assertParameterCount(2, parameters);
 			return Builtins.setCar(parameters.get(0), parameters.get(1));
