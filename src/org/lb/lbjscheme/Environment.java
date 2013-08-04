@@ -130,10 +130,15 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Gt());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Le());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Lt());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.MakeString());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.MakeVector());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Mul());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCar());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCdr());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.StringSet());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.StringToNumber());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Sub());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorSet());
 
 		for (OldStyleBuiltins.Type t : OldStyleBuiltins.Type.values())
 			addBuiltin(target, new OldStyleBuiltins(t));
@@ -178,7 +183,6 @@ public final class Environment implements SchemeObject {
 
 	private final static String _reportInitScript = "(define (newline) (display \"\\n\") 'undefined)"
 			+ "(define (complex? obj) #f)"
-			+ "(define (rational? obj) #f)"
 			+ "(define (caar x) (car (car x)))"
 			+ "(define (cadr x) (car (cdr x)))"
 			+ "(define (cdar x) (cdr (car x)))"

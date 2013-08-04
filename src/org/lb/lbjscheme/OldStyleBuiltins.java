@@ -25,7 +25,7 @@ public final class OldStyleBuiltins extends Builtin {
 	private final String _name;
 
 	public enum Type {
-		eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, vectorp, numeq, quotient, remainder, charToInteger, integerToChar, write, makeString, stringLength, stringRef, stringSet, stringToSymbol, symbolToString, makeVector, vectorLength, vectorRef, vectorSet, numberToString, stringToNumber, display, integerp, rationalp, numerator, denominator, nullEnvironment, schemeReportEnvironment, interactionEnvironment, eval
+		eqp, nullp, pairp, numberp, stringp, charp, booleanp, symbolp, procedurep, listp, vectorp, numeq, quotient, remainder, charToInteger, integerToChar, write, stringLength, stringRef, stringToSymbol, symbolToString, vectorLength, vectorRef, numberToString, display, integerp, rationalp, numerator, denominator, nullEnvironment, schemeReportEnvironment, interactionEnvironment, eval
 	};
 
 	public OldStyleBuiltins(Type type) {
@@ -57,10 +57,6 @@ public final class OldStyleBuiltins extends Builtin {
 		switch (type) {
 		case interactionEnvironment:
 			return "interaction-environment";
-		case makeString:
-			return "make-string";
-		case makeVector:
-			return "make-vector";
 		case nullEnvironment:
 			return "null-environment";
 		case numeq:
@@ -71,14 +67,10 @@ public final class OldStyleBuiltins extends Builtin {
 			return "string-length";
 		case stringRef:
 			return "string-ref";
-		case stringSet:
-			return "string-set!";
 		case vectorLength:
 			return "vector-length";
 		case vectorRef:
 			return "vector-ref";
-		case vectorSet:
-			return "vector-set!";
 		default:
 			final String name = type.name().replace("To", "->").toLowerCase();
 			if (name.endsWith("p"))
@@ -152,45 +144,6 @@ public final class OldStyleBuiltins extends Builtin {
 			return (parameters.get(0) instanceof SchemeList)
 					&& (!((SchemeList) parameters.get(0)).isDottedList()) ? _true
 					: _false;
-		case makeString:
-			switch (parameters.size()) {
-			case 1:
-				return new SchemeString(getFixnum("make-string",
-						parameters.get(0)));
-			case 2:
-				int length = getFixnum("make-string", parameters.get(0));
-				if (!(parameters.get(1) instanceof SchemeCharacter))
-					throw new SchemeException(
-							"make-string: Invalid parameter type; expected character as second parameter, got "
-									+ parameters.get(1).getClass());
-				char c = ((SchemeCharacter) parameters.get(1)).getValue();
-				SchemeString ret4 = new SchemeString(length);
-				for (int i = 0; i < length; ++i)
-					ret4.setAt(i, c);
-				return ret4;
-
-			default:
-				throw new SchemeException(
-						"make-string: Expected 1 or 2 parameters, got "
-								+ parameters.size());
-			}
-		case makeVector:
-			switch (parameters.size()) {
-			case 1:
-				return new Vector(getFixnum("make-vector", parameters.get(0)));
-			case 2:
-				int length1 = getFixnum("make-vector", parameters.get(0));
-				SchemeObject o11 = parameters.get(1);
-				Vector ret5 = new Vector(length1);
-				for (int i = 0; i < length1; ++i)
-					ret5.setAt(i, o11);
-				return ret5;
-
-			default:
-				throw new SchemeException(
-						"make-vector: Expected 1 or 2 parameters, got "
-								+ parameters.size());
-			}
 		case nullEnvironment:
 			assertParameterCount(1, parameters);
 			return Environment.newNullEnvironment((Fixnum) (parameters.get(0)));
@@ -278,52 +231,6 @@ public final class OldStyleBuiltins extends Builtin {
 								+ str.getClass());
 			return new SchemeCharacter(((SchemeString) str).getAt(getFixnum(
 					"string-ref", parameters.get(1))));
-		case stringSet:
-			assertParameterCount(3, parameters);
-			SchemeObject str1 = parameters.get(0);
-			SchemeObject charObj = parameters.get(2);
-			if (!(str1 instanceof SchemeString))
-				throw new SchemeException(
-						"string-set!: Invalid parameter type; expected string, got "
-								+ str1.getClass());
-			if (!(charObj instanceof SchemeCharacter))
-				throw new SchemeException(
-						"string-set!: Invalid parameter type; expected character, got "
-								+ charObj.getClass());
-			((SchemeString) str1).setAt(
-					getFixnum("string-set!", parameters.get(1)),
-					((SchemeCharacter) charObj).getValue());
-			return charObj;
-		case stringToNumber:
-			try {
-				switch (parameters.size()) {
-				case 1:
-					SchemeObject value = parameters.get(0);
-					if (!(value instanceof SchemeString))
-						throw new SchemeException(
-								"string->number: Invalid parameter type; expected string, got "
-										+ value.getClass());
-					return SchemeNumber.fromString(
-							((SchemeString) value).getValue(), 10);
-				case 2:
-					SchemeObject value_twoParams = parameters.get(0);
-					if (!(value_twoParams instanceof SchemeString))
-						throw new SchemeException(
-								"string->number: Invalid parameter type; expected string, got "
-										+ value_twoParams.getClass());
-					int base1 = getFixnum("string->number", parameters.get(1));
-					return SchemeNumber.fromString(
-							((SchemeString) value_twoParams).getValue(), base1);
-
-				default:
-					throw new SchemeException(
-							"string->number: Expected 1 or 2 parameters, got "
-									+ parameters.size());
-				}
-			} catch (NumberFormatException ex) {
-				throw new SchemeException(
-						"string->number: Value can not be converted");
-			}
 		case stringToSymbol:
 			assertParameterCount(1, parameters);
 			SchemeObject str2 = parameters.get(0);
@@ -363,17 +270,6 @@ public final class OldStyleBuiltins extends Builtin {
 								+ vec.getClass());
 			return ((Vector) vec).getAt(getFixnum("vector-ref",
 					parameters.get(1)));
-		case vectorSet:
-			assertParameterCount(3, parameters);
-			SchemeObject vec1 = parameters.get(0);
-			SchemeObject obj = parameters.get(2);
-			if (!(vec1 instanceof Vector))
-				throw new SchemeException(
-						"vector-set!: Invalid parameter type; expected vector, got "
-								+ vec1.getClass());
-			((Vector) vec1).setAt(getFixnum("vector-set!", parameters.get(1)),
-					obj);
-			return obj;
 		case write:
 			assertParameterCount(1, parameters);
 			System.out.print(parameters.get(0));
