@@ -98,8 +98,7 @@ public final class Environment implements SchemeObject {
 		if (version.getValue() != 5)
 			throw new SchemeException(
 					"null-environment: Only version 5 supported");
-		Environment ret = new Environment();
-		return ret;
+		return new Environment(); // TODO: Syntax transformers...
 	}
 
 	public static Environment newReportEnvironment(Fixnum version)
@@ -122,8 +121,14 @@ public final class Environment implements SchemeObject {
 
 	private static void addBuiltinsToEnvironment(Environment target)
 			throws SchemeException {
-		for (Builtin.Type t : Builtin.Type.values())
-			addBuiltin(target, new Builtin(t));
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Car());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Cdr());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Cons());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCar());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCdr());
+
+		for (OldStyleBuiltins.Type t : OldStyleBuiltins.Type.values())
+			addBuiltin(target, new OldStyleBuiltins(t));
 	}
 
 	private static void addBuiltin(Environment target, Builtin builtin)

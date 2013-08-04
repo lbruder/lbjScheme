@@ -54,7 +54,7 @@ public final class InterpretingEvaluator extends EvaluatorBase {
 					return defmacro(p.getCdr(), env);
 				final List<SchemeObject> form = p.toJavaList();
 				if (car == _quoteSymbol)
-					return Builtins.car(p.getCdr());
+					return ((Pair) p.getCdr()).getCar();
 				if (car == _setSymbol)
 					return set(form, env);
 				if (car == _ifSymbol) {
