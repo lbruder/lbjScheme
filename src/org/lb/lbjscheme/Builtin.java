@@ -30,6 +30,15 @@ public abstract class Builtin implements SchemeObject {
 					+ ", got: " + got);
 	}
 
+	protected void assertParameterCountMin(int expected,
+			List<SchemeObject> parameters) throws SchemeException {
+		final int got = parameters.size();
+		if (expected > got)
+			throw new SchemeException(getName()
+					+ ": Invalid parameter count; expected at least: "
+					+ expected + ", got: " + got);
+	}
+
 	protected void assertParameterType(SchemeObject o,
 			Class<? extends SchemeObject> expected) throws SchemeException {
 		final Class<? extends SchemeObject> got = o.getClass();
@@ -38,5 +47,23 @@ public abstract class Builtin implements SchemeObject {
 		throw new SchemeException(getName()
 				+ ": Invalid parameter type; expected: " + expected + ", got: "
 				+ got);
+	}
+
+	protected SchemeNumber asNumber(SchemeObject o) throws SchemeException {
+		if (o instanceof SchemeNumber)
+			return ((SchemeNumber) o);
+		else
+			throw new SchemeException(getName()
+					+ ": Invalid type conversion; expected Number, got "
+					+ o.getClass());
+	}
+
+	protected int getFixnum(SchemeObject o) throws SchemeException {
+		if (o instanceof Fixnum)
+			return ((Fixnum) o).getValue();
+		else
+			throw new SchemeException(getName()
+					+ ": Invalid type conversion; expected Fixnum, got "
+					+ o.getClass());
 	}
 }

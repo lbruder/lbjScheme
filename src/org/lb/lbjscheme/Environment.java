@@ -121,11 +121,19 @@ public final class Environment implements SchemeObject {
 
 	private static void addBuiltinsToEnvironment(Environment target)
 			throws SchemeException {
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Add());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Car());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Cdr());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Cons());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Div());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Ge());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Gt());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Le());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Lt());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Mul());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCar());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCdr());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Sub());
 
 		for (OldStyleBuiltins.Type t : OldStyleBuiltins.Type.values())
 			addBuiltin(target, new OldStyleBuiltins(t));
