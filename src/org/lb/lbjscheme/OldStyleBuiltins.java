@@ -18,7 +18,7 @@ package org.lb.lbjscheme;
 
 import java.util.*;
 
-// Class explosion or giant switch block. I'd rather have less classes for now.
+// TODO Refactor into class explosion under org.lb.lbjscheme.builtins 
 
 public final class OldStyleBuiltins extends Builtin {
 	private final Type _type;
