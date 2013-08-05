@@ -19,23 +19,19 @@ package org.lb.lbjscheme.builtins;
 import java.util.List;
 import org.lb.lbjscheme.*;
 
-public final class Gt extends Builtin {
+public final class Eval extends Builtin {
 	@Override
 	public String getName() {
-		return ">";
+		return "eval";
 	}
 
 	@Override
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
-		assertParameterCountMin(2, parameters);
-		SchemeNumber last = getNumber(parameters.get(0));
-		for (SchemeObject o : parameters.subList(1, parameters.size())) {
-			SchemeNumber now = getNumber(o);
-			if (last.le(now))
-				return _false;
-			last = now;
-		}
-		return _true;
+		assertParameterCount(2, parameters);
+		final SchemeObject env = parameters.get(1);
+		assertParameterType(env, Environment.class);
+		return new InterpretingEvaluator((Environment) env).eval(parameters
+				.get(0));
 	}
 }

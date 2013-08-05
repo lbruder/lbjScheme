@@ -93,17 +93,17 @@ public final class Environment implements SchemeObject {
 		}
 	}
 
-	public static Environment newNullEnvironment(Fixnum version)
+	public static Environment newNullEnvironment(final int version)
 			throws SchemeException {
-		if (version.getValue() != 5)
+		if (version != 5)
 			throw new SchemeException(
 					"null-environment: Only version 5 supported");
 		return new Environment(); // TODO: Syntax transformers...
 	}
 
-	public static Environment newReportEnvironment(Fixnum version)
+	public static Environment newReportEnvironment(final int version)
 			throws SchemeException {
-		if (version.getValue() != 5)
+		if (version != 5)
 			throw new SchemeException(
 					"scheme-report-environment: Only version 5 supported");
 		Environment ret = new Environment();
@@ -114,7 +114,7 @@ public final class Environment implements SchemeObject {
 
 	public static Environment newInteractionEnvironment()
 			throws SchemeException {
-		Environment ret = newReportEnvironment(new Fixnum(5));
+		final Environment ret = newReportEnvironment(5);
 		new InterpretingEvaluator(ret).eval(_interactionInitScript);
 		return ret;
 	}
@@ -122,31 +122,67 @@ public final class Environment implements SchemeObject {
 	private static void addBuiltinsToEnvironment(Environment target)
 			throws SchemeException {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Add());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.BooleanP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Car());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Cdr());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.CharP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.CharToInteger());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Cons());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Denominator());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Display());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Div());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.EqP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Eval());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Ge());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Gt());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.IntegerP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.IntegerToChar());
+		addBuiltin(target,
+				new org.lb.lbjscheme.builtins.InteractionEnvironment());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Le());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.ListP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Lt());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.MakeString());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.MakeVector());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Mul());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.NullEnvironment());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.NullP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.NumberP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.NumberToString());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.NumEq());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Numerator());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.PairP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.ProcedureP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Quotient());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.RationalP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Remainder());
+		addBuiltin(target,
+				new org.lb.lbjscheme.builtins.SchemeReportEnvironment());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCar());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCdr());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.StringLength());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.StringP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.StringRef());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.StringSet());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.StringToNumber());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.StringToSymbol());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Sub());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.SymbolP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.SymbolToString());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorLength());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorRef());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorSet());
-
-		for (OldStyleBuiltins.Type t : OldStyleBuiltins.Type.values())
-			addBuiltin(target, new OldStyleBuiltins(t));
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Write());
 	}
 
 	private static void addBuiltin(Environment target, Builtin builtin)
 			throws SchemeException {
-		target.define(Symbol.fromString(builtin.getName()), builtin);
+		final Symbol builtinSymbol = Symbol.fromString(builtin.getName());
+		if (target._values.containsKey(builtinSymbol))
+			throw new SchemeException("Internal error: Builtin '"
+					+ builtin.getName() + "' is being defined twice!");
+		target.define(builtinSymbol, builtin);
 	}
 
 	// HACK: Written in Scheme for simplicity. Re-write as builtins for
@@ -182,7 +218,7 @@ public final class Environment implements SchemeObject {
 			+ "(define (id x) x)";
 
 	private final static String _reportInitScript = "(define (newline) (display \"\\n\") 'undefined)"
-			+ "(define (complex? obj) #f)"
+			+ "(define complex? number?)"
 			+ "(define (caar x) (car (car x)))"
 			+ "(define (cadr x) (car (cdr x)))"
 			+ "(define (cdar x) (cdr (car x)))"

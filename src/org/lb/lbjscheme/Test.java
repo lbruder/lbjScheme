@@ -39,18 +39,15 @@ public final class Test {
 		}
 
 		// TODO:
+		// - Unit tests!
 		// - apply, error
 		// - Add real and complex numbers
 		// - Complete builtins and base library
-		// - Ports
-		// - Unit tests!
-
-		// - Continuations
-
 		// - Some kind of interface to native Java data types
 		// - Interface to javax.script
 		// - Line numbers in error messages (can of worms)
 		// - AnalyzingEvaluator
 		// - CompilingEvaluator
+		// - Continuations
 	}
 }

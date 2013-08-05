@@ -19,23 +19,18 @@ package org.lb.lbjscheme.builtins;
 import java.util.List;
 import org.lb.lbjscheme.*;
 
-public final class Gt extends Builtin {
+public final class NumberToString extends Builtin {
 	@Override
 	public String getName() {
-		return ">";
+		return "number->string";
 	}
 
 	@Override
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
+		assertParameterCountMin(1, parameters);
 		assertParameterCountMin(2, parameters);
-		SchemeNumber last = getNumber(parameters.get(0));
-		for (SchemeObject o : parameters.subList(1, parameters.size())) {
-			SchemeNumber now = getNumber(o);
-			if (last.le(now))
-				return _false;
-			last = now;
-		}
-		return _true;
+		return new SchemeString(getNumber(parameters.get(0)).toString(false,
+				parameters.size() == 1 ? 10 : getFixnum(parameters.get(1))));
 	}
 }

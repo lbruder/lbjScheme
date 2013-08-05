@@ -18,7 +18,7 @@ package org.lb.lbjscheme;
 
 import java.util.*;
 
-public final class InterpretingEvaluator extends EvaluatorBase {
+public final class InterpretingEvaluator extends Evaluator {
 	private static final Symbol _undefinedSymbol = Symbol
 			.fromString("undefined");
 	private static final Symbol _quoteSymbol = Symbol.fromString("quote");

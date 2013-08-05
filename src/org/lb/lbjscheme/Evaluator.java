@@ -16,15 +16,37 @@
 
 package org.lb.lbjscheme;
 
-public interface Evaluator {
+import java.io.*;
 
-	public abstract Environment getGlobalEnvironment();
+public abstract class Evaluator {
+	private final Environment _global;
 
-	public abstract SchemeObject eval(String commands) throws SchemeException;
+	public Evaluator(Environment globalEnv) {
+		_global = globalEnv;
+	}
 
-	public abstract SchemeObject eval(SchemeObject o) throws SchemeException;
+	public Environment getGlobalEnvironment() {
+		return _global;
+	}
+
+	public SchemeObject eval(String commands) throws SchemeException {
+		final Reader r = new Reader(new StringReader(commands));
+		SchemeObject ret = Symbol.fromString("undefined");
+		while (true) {
+			try {
+				ret = eval(r.read());
+			} catch (EOFException ex) {
+				return ret;
+			} catch (IOException ex) {
+				return ret;
+			}
+		}
+	}
+
+	public SchemeObject eval(SchemeObject o) throws SchemeException {
+		return eval(o, _global);
+	}
 
 	public abstract SchemeObject eval(SchemeObject o, Environment env)
 			throws SchemeException;
-
 }
