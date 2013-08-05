@@ -29,7 +29,7 @@ public final class NumberToString extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCountMin(1, parameters);
-		assertParameterCountMin(2, parameters);
+		assertParameterCountMax(2, parameters);
 		return new SchemeString(getNumber(parameters.get(0)).toString(false,
 				parameters.size() == 1 ? 10 : getFixnum(parameters.get(1))));
 	}
