@@ -16,6 +16,7 @@
 
 package org.lb.lbjscheme;
 
+import java.io.*;
 import java.util.*;
 
 public final class InterpretingEvaluator extends Evaluator {
@@ -34,8 +35,28 @@ public final class InterpretingEvaluator extends Evaluator {
 	}
 
 	@Override
+	public SchemeObject eval(String commands) throws SchemeException {
+		final Reader r = new Reader(new StringReader(commands));
+		SchemeObject ret = Symbol.fromString("undefined");
+		while (true) {
+			try {
+				ret = eval(r.read());
+			} catch (EOFException ex) {
+				return ret;
+			} catch (IOException ex) {
+				return ret;
+			}
+		}
+	}
+
+	@Override
 	public SchemeObject eval(SchemeObject o, Environment env)
 			throws SchemeException {
+		return eval(o, env, false);
+	}
+
+	public SchemeObject eval(SchemeObject o, Environment env,
+			boolean doNotExecuteExpandedMacros) throws SchemeException {
 		tailCall: for (;;) {
 			if (o instanceof Nil)
 				throw new SchemeException("Empty list can not be evaluated");
@@ -103,6 +124,9 @@ public final class InterpretingEvaluator extends Evaluator {
 					macroEnv.expand(m.getParameterNames(),
 							m.hasRestParameter(), parameters);
 					o = eval(new Pair(_beginSymbol, m.getForms()), macroEnv);
+
+					if (doNotExecuteExpandedMacros)
+						return o;
 					continue tailCall;
 				}
 
@@ -166,7 +190,7 @@ public final class InterpretingEvaluator extends Evaluator {
 				parameterNames.add((Symbol) o);
 			else
 				throw new SchemeException(
-						"Invalid lambda form: Only symbol allowed in parameter name list");
+						"Invalid lambda form: Only symbols allowed in parameter name list");
 		}
 		return new Lambda("lambda", parameterNames, hasRestParameter, forms,
 				env);
@@ -263,7 +287,7 @@ public final class InterpretingEvaluator extends Evaluator {
 					"Invalid defmacro form: Expected argument or argument list");
 		env.define(name, new Macro(name.toString(), parameterNames,
 				hasRestParameter, forms, env));
-		return _undefinedSymbol;
+		return name;
 	}
 
 	private SchemeObject set(List<SchemeObject> form, Environment env)

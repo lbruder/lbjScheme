@@ -71,6 +71,10 @@ public final class Environment implements SchemeObject {
 			throw new SchemeException("Unknown symbol " + name.toString());
 	}
 
+	public Set<Symbol> getDefinedSymbols() {
+		return _values.keySet();
+	}
+
 	public void expand(List<Symbol> parameterNames, boolean hasRestParameter,
 			List<SchemeObject> parameters) throws SchemeException {
 		if (hasRestParameter) {

@@ -21,7 +21,9 @@ import java.io.*;
 public final class Test {
 	public static void main(String[] args) throws IOException, SchemeException {
 		final Reader r = new Reader(new InputStreamReader(System.in));
-		final Evaluator e = new InterpretingEvaluator(
+		// final Evaluator e = new InterpretingEvaluator(
+		// Environment.newInteractionEnvironment());
+		final Evaluator e = new AnalyzingEvaluator(
 				Environment.newInteractionEnvironment());
 
 		// Our basic read-eval-print-loop:
@@ -46,7 +48,6 @@ public final class Test {
 		// - Some kind of interface to native Java data types
 		// - Interface to javax.script
 		// - Line numbers in error messages (can of worms)
-		// - AnalyzingEvaluator
 		// - CompilingEvaluator
 		// - Continuations
 	}
