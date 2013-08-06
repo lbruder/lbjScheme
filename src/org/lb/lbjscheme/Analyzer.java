@@ -71,7 +71,7 @@ public final class Analyzer {
 		if (car == _defineSymbol)
 			return analyzeDefineForm(p.getCdr());
 		if (car == _defmacroSymbol)
-			return defmacro(p.getCdr());
+			return defmacro(p);
 		if (car == _quoteSymbol)
 			return new SelfEvaluatingLiteral(form.get(1));
 		if (car == _setSymbol)
