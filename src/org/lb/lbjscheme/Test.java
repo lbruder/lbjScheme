@@ -17,28 +17,43 @@
 package org.lb.lbjscheme;
 
 import java.io.*;
+import java.util.*;
 
 public final class Test {
 	public static void main(String[] args) throws IOException, SchemeException {
-		final Reader r = new Reader(new InputStreamReader(System.in));
-		// final Evaluator e = new InterpretingEvaluator(
-		// Environment.newInteractionEnvironment());
-		final Evaluator e = new AnalyzingEvaluator(
-				Environment.newInteractionEnvironment());
 
-		// Our basic read-eval-print-loop:
-		while (true) {
-			try {
-				System.out.print("> ");
-				System.out.flush();
-				System.out.println(e.eval(r.read()));
-			} catch (EOFException ex) {
-				break;
-			} catch (SchemeException ex) {
-				System.out.println(ex.getMessage());
-				System.in.skip(System.in.available());
-			}
+		if (hasArgument(args, "-h") || hasArgument(args, "-?")) {
+			System.out.println("Command line switches:");
+			System.out.println("-a      Use analyzing evaluator (faster)");
+			System.out.println("-h, -?  Show this text");
+			System.out.println("-i      Use interpreting evaluator (default)");
+			System.out.println("-r      Enter REPL after executing files");
+			System.exit(0);
 		}
+
+		final boolean interactiveRepl = hasArgument(args, "-r")
+				|| getFileNames(args).size() == 0;
+		final boolean useAnalyzingEvaluator = hasArgument(args, "-a");
+		final boolean useInterpretingEvaluator = hasArgument(args, "-i")
+				|| !useAnalyzingEvaluator;
+
+		if (useAnalyzingEvaluator && useInterpretingEvaluator) {
+			System.out.println("Arguments -a and -i can not be used together");
+			System.exit(1);
+		}
+
+		final Environment globalEnv = Environment.newInteractionEnvironment();
+		final Evaluator e = useInterpretingEvaluator ? new InterpretingEvaluator(
+				globalEnv) : new AnalyzingEvaluator(globalEnv);
+
+		for (String fileName : getFileNames(args)) {
+			final FileReader r = new FileReader(fileName);
+			repl(new Reader(r), e, false);
+			r.close();
+		}
+
+		if (interactiveRepl)
+			repl(new Reader(new InputStreamReader(System.in)), e, true);
 
 		// TODO:
 		// - Unit tests!
@@ -50,5 +65,45 @@ public final class Test {
 		// - Line numbers in error messages (can of worms)
 		// - CompilingEvaluator
 		// - Continuations
+	}
+
+	private static boolean hasArgument(String[] args, String arg) {
+		for (String i : args)
+			if (i.equals(arg))
+				return true;
+		return false;
+	}
+
+	private static List<String> getFileNames(String[] args) {
+		final List<String> ret = new ArrayList<String>();
+		for (String i : args)
+			if (!i.startsWith("-"))
+				ret.add(i);
+		return ret;
+	}
+
+	private static void repl(final Reader r, final Evaluator e,
+			final boolean printPromptAndResults) throws IOException {
+		while (true) {
+			try {
+				if (printPromptAndResults) {
+					System.out.print("> ");
+					System.out.flush();
+				}
+				final SchemeObject result = e.eval(r.read());
+				if (printPromptAndResults)
+					System.out.println(result);
+			} catch (EOFException ex) {
+				break;
+			} catch (SchemeException ex) {
+				System.out.println(ex.getMessage());
+				System.in.skip(System.in.available());
+			} catch (Exception ex) {
+				System.out.println("Internal error:" + System.lineSeparator()
+						+ ex.getMessage());
+				ex.printStackTrace();
+				break;
+			}
+		}
 	}
 }
