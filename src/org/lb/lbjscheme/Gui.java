@@ -1,0 +1,129 @@
+package org.lb.lbjscheme;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
+
+// TODO: Fonts
+// TODO: Report runtime after evaluation of script or REPL input
+// TODO: REPL history via up/down keys
+// TODO: Load/Save script file
+// TODO: Allow changing the evaluator
+
+public final class Gui {
+	private final JFrame _mainForm;
+	private final JPanel _mainPanel;
+	private final JPanel _replPanel;
+	private final JPanel _scriptPanel;
+	private final JTextArea _scriptEditor;
+	private final JTextArea _replOutput;
+	private final JTextField _replInput;
+	private final JScrollPane _scriptScrollPane;
+	private final JScrollPane _outputScrollPane;
+
+	private final Evaluator _eval;
+	private String _output = "";
+
+	public Gui() throws SchemeException {
+		_eval = new AnalyzingEvaluator(Environment.newInteractionEnvironment());
+
+		_mainForm = new JFrame("Scheme REPL");
+		_mainPanel = new JPanel(new GridLayout(1, 2));
+		_replPanel = new JPanel(new BorderLayout());
+		_scriptPanel = new JPanel(new BorderLayout());
+		_scriptEditor = new JTextArea();
+		_replInput = new JTextField();
+		_replOutput = new JTextArea();
+		_scriptScrollPane = new JScrollPane(_scriptEditor);
+		_outputScrollPane = new JScrollPane(_replOutput);
+
+		_scriptEditor.setBorder(BorderFactory
+				.createBevelBorder(BevelBorder.LOWERED));
+		_scriptEditor.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_F5) {
+					println("Execute script");
+					try {
+						println(_eval.eval(_scriptEditor.getText()).toString(
+								false));
+					} catch (SchemeException e1) {
+						println(e1.getMessage());
+					}
+					print("> ");
+					_replInput.requestFocusInWindow();
+				}
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+			}
+		});
+
+		_scriptPanel.add(_scriptScrollPane);
+
+		_replOutput.setEditable(false);
+		_replOutput.setBackground(SystemColor.control);
+
+		_outputScrollPane.setBorder(BorderFactory
+				.createBevelBorder(BevelBorder.LOWERED));
+
+		_replOutput.setLineWrap(true);
+
+		_replInput.setBorder(BorderFactory
+				.createBevelBorder(BevelBorder.LOWERED));
+		_replInput.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				final String input = _replInput.getText();
+				println(input);
+				try {
+					println(_eval.eval(input).toString(false));
+					_replInput.setText("");
+				} catch (SchemeException e1) {
+					println(e1.getMessage());
+				}
+				print("> ");
+			}
+		});
+
+		_replPanel.add(_outputScrollPane, BorderLayout.CENTER);
+		_replPanel.add(_replInput, BorderLayout.SOUTH);
+
+		_mainPanel.add(_replPanel);
+		_mainPanel.add(_scriptPanel);
+
+		_mainForm.getContentPane().add(_mainPanel);
+		_mainForm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		_mainForm.setSize(new Dimension(800, 600));
+
+		print("> ");
+	}
+
+	public void show() {
+		_mainForm.setVisible(true);
+		_replInput.requestFocusInWindow();
+	}
+
+	private void println(String str) {
+		print(str + System.lineSeparator());
+	}
+
+	private void print(String str) {
+		_output += str;
+		_replOutput.setText(_output);
+
+		final int height = _replOutput.getSize().height;
+		final Rectangle lastLineRect = new Rectangle(0, height, 0, height);
+		_outputScrollPane.scrollRectToVisible(lastLineRect);
+	}
+
+	public static void main(String[] args) throws SchemeException {
+		new Gui().show();
+	}
+}
