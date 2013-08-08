@@ -20,6 +20,12 @@ import java.util.List;
 import org.lb.lbjscheme.*;
 
 public final class InteractionEnvironment extends Builtin {
+	private final Evaluator _eval;
+
+	public InteractionEnvironment(Evaluator eval) {
+		_eval = eval;
+	}
+
 	@Override
 	public String getName() {
 		return "interaction-environment";
@@ -29,6 +35,6 @@ public final class InteractionEnvironment extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCountMin(0, parameters);
-		return Environment.newInteractionEnvironment();
+		return Environment.newInteractionEnvironment(_eval);
 	}
 }

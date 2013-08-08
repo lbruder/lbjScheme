@@ -30,8 +30,14 @@ public final class InterpretingEvaluator extends Evaluator {
 	private static final Symbol _beginSymbol = Symbol.fromString("begin");
 	private static final Symbol _lambdaSymbol = Symbol.fromString("lambda");
 
-	public InterpretingEvaluator(Environment global) throws SchemeException {
-		super(global);
+	public InterpretingEvaluator(OutputPort defaultOutputPort)
+			throws SchemeException {
+		super(defaultOutputPort);
+	}
+
+	public InterpretingEvaluator(Environment global,
+			OutputPort defaultOutputPort) throws SchemeException {
+		super(global, defaultOutputPort);
 	}
 
 	@Override

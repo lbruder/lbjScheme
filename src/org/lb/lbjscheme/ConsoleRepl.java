@@ -42,9 +42,10 @@ public final class ConsoleRepl {
 			System.exit(1);
 		}
 
-		final Environment globalEnv = Environment.newInteractionEnvironment();
+		final OutputPort outputPort = new OutputPort(new OutputStreamWriter(
+				System.out));
 		final Evaluator e = useInterpretingEvaluator ? new InterpretingEvaluator(
-				globalEnv) : new AnalyzingEvaluator(globalEnv);
+				outputPort) : new AnalyzingEvaluator(outputPort);
 
 		for (String fileName : getFileNames(args)) {
 			final FileReader r = new FileReader(fileName);
@@ -91,8 +92,12 @@ public final class ConsoleRepl {
 					System.out.flush();
 				}
 				final SchemeObject result = e.eval(r.read());
-				if (printPromptAndResults)
-					System.out.println(result);
+				if (!printPromptAndResults)
+					continue;
+				if ((result instanceof Symbol)
+						&& result.toString(true).equals("undefined"))
+					continue;
+				System.out.println(result);
 			} catch (EOFException ex) {
 				break;
 			} catch (SchemeException ex) {

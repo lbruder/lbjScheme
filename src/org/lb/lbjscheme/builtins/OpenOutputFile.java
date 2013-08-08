@@ -16,34 +16,28 @@
 
 package org.lb.lbjscheme.builtins;
 
+import java.io.IOException;
 import java.util.List;
 import org.lb.lbjscheme.*;
 
-public final class Display extends Builtin {
-	private final Evaluator _eval;
-
-	public Display(Evaluator eval) {
-		_eval = eval;
-	}
-
+public final class OpenOutputFile extends Builtin {
 	@Override
 	public String getName() {
-		return "display";
+		return "open-output-file";
 	}
 
 	@Override
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
-		assertParameterCountMin(1, parameters);
-		assertParameterCountMax(2, parameters);
-		if (parameters.size() == 1) {
-			if (_eval != null)
-				_eval.getOutputPort().write(parameters.get(0).toString(true));
-		} else {
-			assertParameterType(parameters.get(1), OutputPort.class);
-			((OutputPort) parameters.get(1)).write(parameters.get(0).toString(
-					true));
+		assertParameterCount(1, parameters);
+		final SchemeObject o = parameters.get(0);
+		assertParameterType(o, SchemeString.class);
+		try {
+			return new OutputPort(new java.io.FileWriter(
+					((SchemeString) o).getValue()));
+		} catch (IOException e) {
+			throw new SchemeException(getName()
+					+ ": Error opening output file: " + e.getMessage());
 		}
-		return _undefined;
 	}
 }

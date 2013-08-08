@@ -2,6 +2,8 @@ package org.lb.lbjscheme;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
@@ -22,11 +24,29 @@ public final class Gui {
 	private final JScrollPane _scriptScrollPane;
 	private final JScrollPane _outputScrollPane;
 
+	private final Symbol _undefinedSymbol = Symbol.fromString("undefined");
+
+	private final OutputPort _defaultOutputPort;
 	private final Evaluator _eval;
 	private String _output = "";
 
 	public Gui() throws SchemeException {
-		_eval = new AnalyzingEvaluator(Environment.newInteractionEnvironment());
+		_defaultOutputPort = new OutputPort(new java.io.Writer() {
+			@Override
+			public void write(char[] cbuf, int off, int len) throws IOException {
+				_output += String.valueOf(cbuf, off, len);
+			}
+
+			@Override
+			public void flush() throws IOException {
+				flushOutput();
+			}
+
+			@Override
+			public void close() throws IOException {
+			}
+		});
+		_eval = new AnalyzingEvaluator(_defaultOutputPort);
 
 		_mainForm = new JFrame("Scheme REPL");
 		_mainPanel = new JPanel(new GridLayout(1, 2));
@@ -50,8 +70,7 @@ public final class Gui {
 				if (e.getKeyCode() == KeyEvent.VK_F5) {
 					println("Execute script");
 					try {
-						println(_eval.eval(_scriptEditor.getText()).toString(
-								false));
+						_eval.eval(_scriptEditor.getText());
 					} catch (SchemeException e1) {
 						println(e1.getMessage());
 					}
@@ -83,7 +102,9 @@ public final class Gui {
 				final String input = _replInput.getText();
 				println(input);
 				try {
-					println(_eval.eval(input).toString(false));
+					SchemeObject result = _eval.eval(input);
+					if (result != _undefinedSymbol)
+						println(result.toString(false));
 					_replInput.setText("");
 				} catch (SchemeException e1) {
 					println(e1.getMessage());
@@ -116,8 +137,11 @@ public final class Gui {
 
 	private void print(String str) {
 		_output += str;
-		_replOutput.setText(_output);
+		flushOutput();
+	}
 
+	private void flushOutput() {
+		_replOutput.setText(_output);
 		final int height = _replOutput.getSize().height;
 		final Rectangle lastLineRect = new Rectangle(0, height, 0, height);
 		_outputScrollPane.scrollRectToVisible(lastLineRect);

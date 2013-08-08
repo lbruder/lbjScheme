@@ -27,10 +27,11 @@ public final class AnalyzingEvaluator extends Evaluator {
 
 	private final Analyzer _analyzer;
 
-	public AnalyzingEvaluator(Environment global) throws SchemeException {
-		super(global);
+	public AnalyzingEvaluator(OutputPort defaultOutputPort)
+			throws SchemeException {
+		super(defaultOutputPort);
 		_analyzer = new Analyzer();
-		analyzeBuiltinLambdas(global);
+		analyzeBuiltinLambdas(getGlobalEnvironment());
 	}
 
 	private void analyzeBuiltinLambdas(Environment global)

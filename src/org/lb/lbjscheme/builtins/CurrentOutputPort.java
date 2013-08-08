@@ -19,31 +19,25 @@ package org.lb.lbjscheme.builtins;
 import java.util.List;
 import org.lb.lbjscheme.*;
 
-public final class Display extends Builtin {
+public final class CurrentOutputPort extends Builtin {
 	private final Evaluator _eval;
 
-	public Display(Evaluator eval) {
+	public CurrentOutputPort(Evaluator eval) {
 		_eval = eval;
 	}
 
 	@Override
 	public String getName() {
-		return "display";
+		return "current-output-port";
 	}
 
 	@Override
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
-		assertParameterCountMin(1, parameters);
-		assertParameterCountMax(2, parameters);
-		if (parameters.size() == 1) {
-			if (_eval != null)
-				_eval.getOutputPort().write(parameters.get(0).toString(true));
-		} else {
-			assertParameterType(parameters.get(1), OutputPort.class);
-			((OutputPort) parameters.get(1)).write(parameters.get(0).toString(
-					true));
-		}
-		return _undefined;
+		assertParameterCount(0, parameters);
+		if (_eval == null)
+			throw new SchemeException(getName()
+					+ ": Not possible in this environment");
+		return _eval.getOutputPort();
 	}
 }

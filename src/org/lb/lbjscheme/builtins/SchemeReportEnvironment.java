@@ -20,6 +20,12 @@ import java.util.List;
 import org.lb.lbjscheme.*;
 
 public final class SchemeReportEnvironment extends Builtin {
+	private final Evaluator _eval;
+
+	public SchemeReportEnvironment(Evaluator eval) {
+		_eval = eval;
+	}
+
 	@Override
 	public String getName() {
 		return "scheme-report-environment";
@@ -29,6 +35,7 @@ public final class SchemeReportEnvironment extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		return Environment.newReportEnvironment(getFixnum(parameters.get(0)));
+		return Environment.newReportEnvironment(getFixnum(parameters.get(0)),
+				_eval);
 	}
 }

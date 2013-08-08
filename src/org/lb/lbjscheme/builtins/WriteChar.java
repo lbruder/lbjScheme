@@ -19,16 +19,16 @@ package org.lb.lbjscheme.builtins;
 import java.util.List;
 import org.lb.lbjscheme.*;
 
-public final class Display extends Builtin {
+public final class WriteChar extends Builtin {
 	private final Evaluator _eval;
 
-	public Display(Evaluator eval) {
+	public WriteChar(Evaluator eval) {
 		_eval = eval;
 	}
 
 	@Override
 	public String getName() {
-		return "display";
+		return "write-char";
 	}
 
 	@Override
@@ -36,13 +36,15 @@ public final class Display extends Builtin {
 			throws SchemeException {
 		assertParameterCountMin(1, parameters);
 		assertParameterCountMax(2, parameters);
+		assertParameterType(parameters.get(0), SchemeCharacter.class);
+		final char c = ((SchemeCharacter) parameters.get(0)).getValue();
+
 		if (parameters.size() == 1) {
 			if (_eval != null)
-				_eval.getOutputPort().write(parameters.get(0).toString(true));
+				_eval.getOutputPort().write(Character.toString(c));
 		} else {
 			assertParameterType(parameters.get(1), OutputPort.class);
-			((OutputPort) parameters.get(1)).write(parameters.get(0).toString(
-					true));
+			((OutputPort) parameters.get(1)).write(Character.toString(c));
 		}
 		return _undefined;
 	}

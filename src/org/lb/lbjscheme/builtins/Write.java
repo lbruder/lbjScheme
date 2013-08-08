@@ -20,18 +20,30 @@ import java.util.List;
 import org.lb.lbjscheme.*;
 
 public final class Write extends Builtin {
+	private final Evaluator _eval;
+
+	public Write(Evaluator eval) {
+		_eval = eval;
+	}
+
 	@Override
 	public String getName() {
 		return "write";
 	}
 
-	// TODO: Allow 1 or 2 parameters, use current-output-port if only one given
-
 	@Override
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
-		assertParameterCount(1, parameters);
-		System.out.print(parameters.get(0));
+		assertParameterCountMin(1, parameters);
+		assertParameterCountMax(2, parameters);
+		if (parameters.size() == 1) {
+			if (_eval != null)
+				_eval.getOutputPort().write(parameters.get(0).toString(false));
+		} else {
+			assertParameterType(parameters.get(1), OutputPort.class);
+			((OutputPort) parameters.get(1)).write(parameters.get(0).toString(
+					false));
+		}
 		return _undefined;
 	}
 }
