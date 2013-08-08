@@ -14,16 +14,6 @@ Everything in this repo is published under the BSD license unless stated otherwi
 
 ### Missing stuff in the most probable order of my implementing it:
 
-#### Output Ports:
-* "Output Port" data type
-* call-with-output-file
-* close-output-port
-* current-output-port
-* open-output-file
-* output-port?
-* with-output-to-file
-* write-char
-
 #### Input Ports:
 * "Input Port" data type
 * call-with-input-file
