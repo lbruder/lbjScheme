@@ -112,14 +112,14 @@ public final class Environment implements SchemeObject {
 					"scheme-report-environment: Only version 5 supported");
 		Environment ret = new Environment();
 		addBuiltinsToEnvironment(ret, eval);
-		new InterpretingEvaluator(ret, null).eval(_reportInitScript);
+		new InterpretingEvaluator(ret, null, null).eval(_reportInitScript);
 		return ret;
 	}
 
 	public static Environment newInteractionEnvironment(Evaluator eval)
 			throws SchemeException {
 		final Environment ret = newReportEnvironment(5, eval);
-		new InterpretingEvaluator(ret, null).eval(_interactionInitScript);
+		new InterpretingEvaluator(ret, null, null).eval(_interactionInitScript);
 		return ret;
 	}
 
@@ -130,18 +130,23 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Car());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Cdr());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.CharP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.CharReadyP(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.CharToInteger());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.CloseInputPort());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.CloseOutputPort());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Cons());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.CurrentInputPort(eval));
 		addBuiltin(target,
 				new org.lb.lbjscheme.builtins.CurrentOutputPort(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Denominator());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Display(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Div());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.EofObjectP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.EqP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Eval());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Ge());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Gt());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.InputPortP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.IntegerP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.IntegerToChar());
 		addBuiltin(target,
@@ -158,12 +163,16 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.NumberToString());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.NumEq());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Numerator());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.OpenInputFile());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.OpenOutputFile());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.OutputPortP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.PairP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.PeekChar(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.ProcedureP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Quotient());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.RationalP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Read(eval));
+		addBuiltin(target, new org.lb.lbjscheme.builtins.ReadChar(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Remainder());
 		addBuiltin(target,
 				new org.lb.lbjscheme.builtins.SchemeReportEnvironment(eval));
@@ -178,6 +187,8 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Sub());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SymbolP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SymbolToString());
+		addBuiltin(target,
+				new org.lb.lbjscheme.builtins.SysSetCurrentInputPort(eval));
 		addBuiltin(target,
 				new org.lb.lbjscheme.builtins.SysSetCurrentOutputPort(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorLength());
@@ -338,6 +349,8 @@ public final class Environment implements SchemeObject {
 			+ "(define (list->vector lst) (define (iter v i vals) (vector-set! v i (car vals)) (if (zero? i) v (iter v (- i 1) (cdr vals)))) (let ((v (make-vector (length lst)))) (if (zero? (vector-length v)) v (iter v (- (vector-length v) 1) (reverse lst)))))"
 			+ "(define (vector->list v) (define (iter i acc) (if (< i 0) acc (iter (- i 1) (cons (vector-ref v i) acc)))) (iter (- (vector-length v) 1) '()))"
 			+ "(define (vector . lst) (list->vector lst))"
-			+ "(define (with-output-to-file filename thunk) (let* ((f (open-output-file filename)) (output (thunk f))) (close-output-port f) output))"
-			+ "(define (call-with-output-file filename proc) (let ((f (open-output-file filename)) (old-output (current-output-port))) (sys:set-current-output-port f) (let ((output (proc))) (sys:set-current-output-port old-output) (close-output-port f) output)))";
+			+ "(define (call-with-output-file filename thunk) (let* ((f (open-output-file filename)) (output (thunk f))) (close-output-port f) output))"
+			+ "(define (with-output-to-file filename proc) (let ((f (open-output-file filename)) (old-output (current-output-port))) (sys:set-current-output-port f) (let ((output (proc))) (sys:set-current-output-port old-output) (close-output-port f) output)))"
+			+ "(define (call-with-input-file filename thunk) (let* ((f (open-input-file filename)) (input (thunk f))) (close-input-port f) input))"
+			+ "(define (with-input-from-file filename proc) (let ((f (open-input-file filename)) (old-input (current-input-port))) (sys:set-current-input-port f) (let ((input (proc))) (sys:set-current-input-port old-input) (close-input-port f) input)))";
 }
