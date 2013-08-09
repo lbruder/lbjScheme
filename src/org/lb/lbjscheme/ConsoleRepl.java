@@ -42,19 +42,22 @@ public final class ConsoleRepl {
 			System.exit(1);
 		}
 
+		final InputPort inputPort = new InputPort(new InputStreamReader(
+				System.in));
 		final OutputPort outputPort = new OutputPort(new OutputStreamWriter(
 				System.out));
 		final Evaluator e = useInterpretingEvaluator ? new InterpretingEvaluator(
-				outputPort) : new AnalyzingEvaluator(outputPort);
+				inputPort, outputPort) : new AnalyzingEvaluator(inputPort,
+				outputPort);
 
 		for (String fileName : getFileNames(args)) {
 			final FileReader r = new FileReader(fileName);
-			repl(new Reader(r), e, false);
+			repl(r, e, false);
 			r.close();
 		}
 
 		if (interactiveRepl)
-			repl(new Reader(new InputStreamReader(System.in)), e, true);
+			repl(new InputStreamReader(System.in), e, true);
 
 		// TODO:
 		// - Unit tests!
@@ -83,8 +86,9 @@ public final class ConsoleRepl {
 		return ret;
 	}
 
-	private static void repl(final Reader r, final Evaluator e,
+	private static void repl(final java.io.Reader input, final Evaluator e,
 			final boolean printPromptAndResults) throws IOException {
+		final Reader r = new Reader(new InputPort(input));
 		while (true) {
 			try {
 				if (printPromptAndResults) {
@@ -104,8 +108,8 @@ public final class ConsoleRepl {
 				System.out.println(ex.getMessage());
 				System.in.skip(System.in.available());
 			} catch (Exception ex) {
-				System.out.println("Internal error:" + System.lineSeparator()
-						+ ex.getMessage());
+				System.out.println("Internal error:");
+				System.out.println(ex.getMessage());
 				ex.printStackTrace();
 				break;
 			}

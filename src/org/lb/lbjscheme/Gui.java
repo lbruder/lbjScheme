@@ -3,10 +3,11 @@ package org.lb.lbjscheme;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
+// TODO: Evaluate in separate thread to keep the GUI running and allow user to cancel a running script
+// TODO: Put REPL input into a queue to read from in the _defaultInputPort
 // TODO: Fonts
 // TODO: Report runtime after evaluation of script or REPL input
 // TODO: REPL history via up/down keys
@@ -26,11 +27,24 @@ public final class Gui {
 
 	private final Symbol _undefinedSymbol = Symbol.fromString("undefined");
 
+	private final InputPort _defaultInputPort;
 	private final OutputPort _defaultOutputPort;
 	private final Evaluator _eval;
 	private String _output = "";
 
 	public Gui() throws SchemeException {
+		_defaultInputPort = new InputPort(new java.io.Reader() {
+			@Override
+			public int read(char[] cbuf, int off, int len) throws IOException {
+				// TODO Read lines from REPL
+				return 0;
+			}
+
+			@Override
+			public void close() throws IOException {
+			}
+		});
+
 		_defaultOutputPort = new OutputPort(new java.io.Writer() {
 			@Override
 			public void write(char[] cbuf, int off, int len) throws IOException {
@@ -46,7 +60,7 @@ public final class Gui {
 			public void close() throws IOException {
 			}
 		});
-		_eval = new AnalyzingEvaluator(_defaultOutputPort);
+		_eval = new AnalyzingEvaluator(_defaultInputPort, _defaultOutputPort);
 
 		_mainForm = new JFrame("Scheme REPL");
 		_mainPanel = new JPanel(new GridLayout(1, 2));
@@ -132,7 +146,7 @@ public final class Gui {
 	}
 
 	private void println(String str) {
-		print(str + System.lineSeparator());
+		print(str + System.getProperty("line.separator"));
 	}
 
 	private void print(String str) {

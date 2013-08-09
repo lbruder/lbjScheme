@@ -35,7 +35,7 @@ public final class Analyzer {
 
 	public Analyzer() throws SchemeException {
 		_macroEvaluator = new InterpretingEvaluator(
-				Environment.newInteractionEnvironment(null), null);
+				Environment.newInteractionEnvironment(null), null, null);
 		_macroEnvironment = _macroEvaluator.getGlobalEnvironment();
 	}
 

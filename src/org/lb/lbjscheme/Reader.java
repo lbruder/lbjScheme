@@ -22,15 +22,14 @@ public final class Reader {
 	private static final Symbol _dot = Symbol.fromString(".");
 	private static final Symbol _listEnd = Symbol.fromString(")");
 
-	private final java.io.Reader _input;
+	private final InputPort _input;
 	private int _nextChar = -2;
 
-	public Reader(java.io.Reader input) {
+	public Reader(InputPort input) {
 		_input = input;
 	}
 
-	public SchemeObject read() throws IOException, SchemeException,
-			EOFException {
+	public SchemeObject read() throws SchemeException, EOFException {
 		skipWhitespace();
 		if (isEof())
 			throw new EOFException();
@@ -62,44 +61,44 @@ public final class Reader {
 		}
 	}
 
-	private void skipWhitespace() throws IOException {
+	private void skipWhitespace() throws SchemeException {
 		while (!isEof() && Character.isWhitespace(peekChar()))
 			readChar();
 	}
 
-	private void skipComment() throws IOException {
+	private void skipComment() throws SchemeException {
 		while (!isEof() && peekChar() != '\n')
 			readChar();
 	}
 
-	private boolean isEof() throws IOException {
+	private boolean isEof() throws SchemeException {
 		ensureAtLeastOneCharRead();
 		return _nextChar == -1;
 	}
 
-	private void ensureAtLeastOneCharRead() throws IOException {
+	private void ensureAtLeastOneCharRead() throws SchemeException {
 		if (_nextChar == -2)
-			_nextChar = _input.read();
+			_nextChar = _input.readChar();
 	}
 
-	private void assertNotEof() throws IOException {
+	private void assertNotEof() throws SchemeException {
 		if (isEof())
-			throw new IOException("Unexpected end of stream");
+			throw new SchemeException("Unexpected end of stream");
 	};
 
-	private char peekChar() throws IOException {
+	private char peekChar() throws SchemeException {
 		assertNotEof();
 		return (char) _nextChar;
 	}
 
-	private char readChar() throws IOException {
+	private char readChar() throws SchemeException {
 		assertNotEof();
 		final char ret = (char) _nextChar;
-		_nextChar = _input.read();
+		_nextChar = _input.readChar();
 		return ret;
 	}
 
-	private SchemeObject readList() throws IOException, SchemeException {
+	private SchemeObject readList() throws SchemeException, EOFException {
 		readChar(); // Opening parenthesis
 		Pair ret = null;
 		Pair current = null;
@@ -126,7 +125,7 @@ public final class Reader {
 		}
 	}
 
-	private SchemeObject readString() throws IOException {
+	private SchemeObject readString() throws SchemeException {
 		readChar(); // Opening quote
 		final StringBuilder sb = new StringBuilder();
 		while (peekChar() != '"') {
@@ -146,7 +145,7 @@ public final class Reader {
 		return new SchemeString(sb.toString());
 	}
 
-	private SchemeObject readSpecial() throws IOException, SchemeException {
+	private SchemeObject readSpecial() throws SchemeException, EOFException {
 		readChar(); // #
 		if (peekChar() == '(')
 			return new Vector((SchemeList) readList());
@@ -156,7 +155,7 @@ public final class Reader {
 		return readCharacter();
 	}
 
-	private SchemeObject readCharacter() throws IOException, SchemeException {
+	private SchemeObject readCharacter() throws SchemeException {
 		final char c = readChar();
 		if (!Character.isLetter(c))
 			return new SchemeCharacter(c);
@@ -183,8 +182,7 @@ public final class Reader {
 		}
 	}
 
-	private SchemeObject readSymbolOrNumber(String init) throws IOException,
-			SchemeException {
+	private SchemeObject readSymbolOrNumber(String init) throws SchemeException {
 		if (init == "" && peekChar() == ')') {
 			readChar();
 			return _listEnd;

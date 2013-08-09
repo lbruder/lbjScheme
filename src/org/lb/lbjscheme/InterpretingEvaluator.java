@@ -30,26 +30,25 @@ public final class InterpretingEvaluator extends Evaluator {
 	private static final Symbol _beginSymbol = Symbol.fromString("begin");
 	private static final Symbol _lambdaSymbol = Symbol.fromString("lambda");
 
-	public InterpretingEvaluator(OutputPort defaultOutputPort)
-			throws SchemeException {
-		super(defaultOutputPort);
+	public InterpretingEvaluator(InputPort defaultInputPort,
+			OutputPort defaultOutputPort) throws SchemeException {
+		super(defaultInputPort, defaultOutputPort);
 	}
 
 	public InterpretingEvaluator(Environment global,
-			OutputPort defaultOutputPort) throws SchemeException {
-		super(global, defaultOutputPort);
+			InputPort defaultInputPort, OutputPort defaultOutputPort)
+			throws SchemeException {
+		super(global, defaultInputPort, defaultOutputPort);
 	}
 
 	@Override
 	public SchemeObject eval(String commands) throws SchemeException {
-		final Reader r = new Reader(new StringReader(commands));
+		final Reader r = new Reader(new InputPort(new StringReader(commands)));
 		SchemeObject ret = Symbol.fromString("undefined");
 		while (true) {
 			try {
 				ret = eval(r.read());
 			} catch (EOFException ex) {
-				return ret;
-			} catch (IOException ex) {
 				return ret;
 			}
 		}

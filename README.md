@@ -4,29 +4,21 @@ lbjScheme
 Java version of my toy Scheme interpreter
 
 This will become my most complete Scheme implementation so far, striving for 100% R5RS compatibility when done.
-I'll implement the type system and builtins first, with a very basic evaluator (interpreter) to test it, then add an
-analyzing evaluator like the one described in SICP for better performance, then I'll upgrade to a compiler with a
-VM backend that supports continuations. Let's see how it works out.
+
+There will be (at least) three evaluators:
+
+* A very simple interpreter that even expands macros on the fly as they are encountered
+* An analyzing interpreter that performs an analyzer step before interpreting; macros are expanded during analysis
+* A compiler that uses the same analyzer, but instead of interpreting the AST will emit bytecode for a VM that is then used to run the program.
+
+Currently I plan for the first two to remain quite simple and incomplete, more as a test harness for the builtins, while the compiler
+will support first class continuations, (values) and so on. Let's see how it works out.
 
 Everything in this repo is published under the BSD license unless stated otherwise in the respective file.
 
 # TODO
 
 ### Missing stuff in the most probable order of my implementing it:
-
-#### Input Ports:
-* "Input Port" data type
-* call-with-input-file
-* char-ready?
-* close-input-port
-* current-input-port
-* eof-object?
-* input-port?
-* open-input-file
-* peek-char
-* read
-* read-char
-* with-input-from-file
 
 #### System stuff and missing special forms:
 * apply

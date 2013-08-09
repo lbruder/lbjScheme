@@ -27,9 +27,9 @@ public final class AnalyzingEvaluator extends Evaluator {
 
 	private final Analyzer _analyzer;
 
-	public AnalyzingEvaluator(OutputPort defaultOutputPort)
-			throws SchemeException {
-		super(defaultOutputPort);
+	public AnalyzingEvaluator(InputPort defaultInputPort,
+			OutputPort defaultOutputPort) throws SchemeException {
+		super(defaultInputPort, defaultOutputPort);
 		_analyzer = new Analyzer();
 		analyzeBuiltinLambdas(getGlobalEnvironment());
 	}
@@ -52,14 +52,12 @@ public final class AnalyzingEvaluator extends Evaluator {
 
 	@Override
 	public SchemeObject eval(String commands) throws SchemeException {
-		final Reader r = new Reader(new StringReader(commands));
+		final Reader r = new Reader(new InputPort(new StringReader(commands)));
 		SchemeObject ret = Symbol.fromString("undefined");
 		while (true) {
 			try {
 				ret = eval(r.read());
 			} catch (EOFException ex) {
-				return ret;
-			} catch (IOException ex) {
 				return ret;
 			}
 		}
