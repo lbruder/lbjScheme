@@ -49,7 +49,7 @@ public final class Read extends Builtin {
 				return new Reader(((InputPort) parameters.get(0))).read();
 			}
 		} catch (java.io.EOFException ex) {
-			throw new SchemeException(getName() + ": Unexpected end of data");
+			return EofObject.getInstance();
 		}
 	}
 }
