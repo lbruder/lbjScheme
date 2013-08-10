@@ -101,6 +101,16 @@ public final class AnalyzingEvaluator extends Evaluator {
 				if (procedure instanceof Builtin)
 					return ((Builtin) procedure).apply(parameters);
 
+				// Ugly hack: Can only happen on lambdas returned by (eval)
+				if (procedure instanceof Lambda) {
+					final Lambda l = (Lambda) procedure;
+					o = _analyzer.analyze(new Pair(_beginSymbol, l.getForms()));
+					env = new Environment(l.getCaptured());
+					env.expand(l.getParameterNames(), l.hasRestParameter(),
+							parameters);
+					continue tailCall;
+				}
+
 				if (procedure instanceof AnalyzedLambda) {
 					final AnalyzedLambda l = (AnalyzedLambda) procedure;
 
