@@ -30,6 +30,7 @@ public final class ProcedureP extends Builtin {
 			throws SchemeException {
 		assertParameterCount(1, parameters);
 		final SchemeObject o = parameters.get(0);
-		return (o instanceof Lambda) || (o instanceof Builtin) ? _true : _false;
+		return (o instanceof Lambda) || (o instanceof AnalyzedLambda)
+				|| (o instanceof Builtin) ? _true : _false;
 	}
 }
