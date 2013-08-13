@@ -144,8 +144,12 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.EofObjectP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.EqP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Eval());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.ExactP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.ExactToInexact());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Ge());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Gt());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.InexactP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.InexactToExact());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.InputPortP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.IntegerP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.IntegerToChar());
@@ -173,6 +177,7 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.RationalP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Read(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.ReadChar(eval));
+		addBuiltin(target, new org.lb.lbjscheme.builtins.RealP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Remainder());
 		addBuiltin(target,
 				new org.lb.lbjscheme.builtins.SchemeReportEnvironment(eval));

@@ -176,9 +176,13 @@ public abstract class SchemeNumber implements SchemeObject {
 				try {
 					return Rational.valueOf(value, base);
 				} catch (Exception ex3) {
-					throw new SchemeException("The string '" + value
-							+ "' can not be converted to a number in base "
-							+ base);
+					try {
+						return Real.valueOf(value, base);
+					} catch (Exception ex4) {
+						throw new SchemeException("The string '" + value
+								+ "' can not be converted to a number in base "
+								+ base);
+					}
 				}
 			}
 		}

@@ -21,6 +21,8 @@ Everything in this repo is published under the BSD license unless stated otherwi
 ### Missing stuff in the most probable order of my implementing it:
 
 #### System stuff and missing special forms:
+* Multiplying exact 0 with inexact n yields EXACT 0
+* inexact->exact, rationalize
 * apply
 * case
 * letrec
@@ -31,15 +33,8 @@ Everything in this repo is published under the BSD license unless stated otherwi
 * unquote-splicing
 
 #### Real numbers:
-* "Real" data type
-* exact->inexact
-* exact?
 * ceiling
 * floor
-* inexact->exact
-* inexact?
-* rationalize
-* real?
 * round
 * truncate
 

@@ -17,111 +17,87 @@
 package org.lb.lbjscheme;
 
 import java.math.BigInteger;
-import java.util.regex.*;
 
-public final class Rational extends SchemeNumber {
-	private final BigInteger _n;
-	private final BigInteger _d;
+public final class Real extends SchemeNumber {
+	private final double _value;
 
-	private static final Pattern _rationalRegex = Pattern
-			.compile("^([+-]?\\d+)/(\\d+)$");
-
-	public Rational(int value) {
-		_n = BigInteger.valueOf(value);
-		_d = BigInteger.ONE;
+	public Real(int value) {
+		_value = value;
 	}
 
-	public Rational(BigInteger value) {
-		_n = value;
-		_d = BigInteger.ONE;
+	public Real(BigInteger value) {
+		_value = value.doubleValue();
 	}
 
-	private Rational(BigInteger n, BigInteger d) {
-		_n = n;
-		_d = d;
+	public Real(double value) {
+		_value = value;
 	}
 
 	@Override
 	public int getLevel() {
-		return 3; // 1 = Fixnum, 2 = Bignum, 3 = Rational, 4 = Real, 5 = Complex
+		return 4; // 1 = Fixnum, 2 = Bignum, 3 = Rational, 4 = Real, 5 = Complex
 	}
 
 	@Override
 	public String toString(boolean forDisplay, int base) throws SchemeException {
 		assertBaseTen(base);
-		return _n.toString() + "/" + _d.toString();
+		return Double.toString(_value);
 	}
 
 	private static void assertBaseTen(int base) throws SchemeException {
 		if (base != 10)
 			throw new SchemeException(
-					"Rationals may only be converted from or to string in base 10");
+					"Real numbers may only be converted from or to string in base 10");
 	}
 
 	@Override
 	public SchemeNumber promote() {
-		return new Real(_n.doubleValue() / _d.doubleValue());
+		return null; // TODO
 	}
 
 	public static SchemeNumber valueOf(String value, int base)
 			throws SchemeException {
 		assertBaseTen(base);
-		Matcher m = _rationalRegex.matcher(value);
-		if (!m.matches())
-			throw new SchemeException(
-					"Value can not be converted to a rational");
-		BigInteger n = new BigInteger(m.group(1), 10);
-		BigInteger d = new BigInteger(m.group(2), 10);
-		return valueOf(n, d);
-	}
-
-	private static SchemeNumber valueOf(BigInteger n, BigInteger d) {
-		BigInteger gcd = n.gcd(d);
-		n = n.divide(gcd);
-		d = d.divide(gcd);
-
-		if (d.equals(BigInteger.ONE))
-			return Bignum.valueOf(n);
-		else if (d.signum() == -1)
-			return new Rational(n.negate(), d.negate());
-		else
-			return new Rational(n, d);
+		try {
+			return new Real(Double.parseDouble(value));
+		} catch (NumberFormatException ex) {
+			throw new SchemeException("Value '" + value
+					+ "' can not be parsed as a real number");
+		}
 	}
 
 	@Override
 	public SchemeNumber getNumerator() {
-		return Bignum.valueOf(_n);
+		return this;
 	}
 
 	@Override
 	public SchemeNumber getDenominator() {
-		return Bignum.valueOf(_d);
+		return new Real(1);
 	}
 
 	@Override
 	protected SchemeNumber doAdd(SchemeNumber other) {
-		Rational o = (Rational) other;
-		return valueOf(_n.multiply(o._d).add(_d.multiply(o._n)),
-				_d.multiply(o._d));
+		Real o = (Real) other;
+		return new Real(_value + o._value);
 	}
 
 	@Override
 	public SchemeNumber doSub(SchemeNumber other) {
-		Rational o = (Rational) other;
-		return valueOf(_n.multiply(o._d).subtract(_d.multiply(o._n)),
-				_d.multiply(o._d));
+		Real o = (Real) other;
+		return new Real(_value - o._value);
 	}
 
 	@Override
 	public SchemeNumber doMul(SchemeNumber other) {
-		Rational o = (Rational) other;
-		return valueOf(_n.multiply(o._n), _d.multiply(o._d));
+		Real o = (Real) other;
+		return new Real(_value * o._value);
 	}
 
 	@Override
 	public SchemeNumber doDiv(SchemeNumber other) {
-		Rational o = (Rational) other;
-		return valueOf(_n.multiply(o._d), _d.multiply(o._n));
+		Real o = (Real) other;
+		return new Real(_value / o._value);
 	}
 
 	@Override
@@ -135,8 +111,14 @@ public final class Rational extends SchemeNumber {
 	}
 
 	public int compareTo(SchemeNumber other) {
-		BigInteger diff = _n.multiply(((Rational) other)._d).subtract(
-				_d.multiply(((Rational) other)._n));
-		return diff.signum();
+		if (_value > ((Real) other)._value)
+			return 1;
+		if (_value < ((Real) other)._value)
+			return -1;
+		return 0;
+	}
+
+	public SchemeObject makeExact() throws SchemeException {
+		throw new SchemeException("TODO...");
 	}
 }
