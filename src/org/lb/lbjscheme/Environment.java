@@ -125,7 +125,10 @@ public final class Environment implements SchemeObject {
 
 	private static void addBuiltinsToEnvironment(Environment target,
 			Evaluator eval) throws SchemeException {
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Acos());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Add());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Asin());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Atan());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.BooleanP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Car());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Cdr());
@@ -135,6 +138,7 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.CloseInputPort());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.CloseOutputPort());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Cons());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Cos());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.CurrentInputPort(eval));
 		addBuiltin(target,
 				new org.lb.lbjscheme.builtins.CurrentOutputPort(eval));
@@ -183,6 +187,7 @@ public final class Environment implements SchemeObject {
 				new org.lb.lbjscheme.builtins.SchemeReportEnvironment(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCar());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCdr());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Sin());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.StringLength());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.StringP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.StringRef());
@@ -196,6 +201,7 @@ public final class Environment implements SchemeObject {
 				new org.lb.lbjscheme.builtins.SysSetCurrentInputPort(eval));
 		addBuiltin(target,
 				new org.lb.lbjscheme.builtins.SysSetCurrentOutputPort(eval));
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Tan());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorLength());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorRef());

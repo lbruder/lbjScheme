@@ -121,4 +121,8 @@ public final class Real extends SchemeNumber {
 	public SchemeObject makeExact() throws SchemeException {
 		throw new SchemeException("TODO...");
 	}
+
+	public double getValue() {
+		return _value;
+	}
 }

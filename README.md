@@ -21,7 +21,8 @@ Everything in this repo is published under the BSD license unless stated otherwi
 ### Missing stuff in the most probable order of my implementing it:
 
 #### System stuff and missing special forms:
-* Multiplying exact 0 with inexact n yields EXACT 0
+* Operations that normally return inexact numbers may return exact numbers
+  in certain cases (e.g. sin "exact 0")
 * inexact->exact, rationalize
 * apply
 * case
@@ -39,16 +40,10 @@ Everything in this repo is published under the BSD license unless stated otherwi
 * truncate
 
 #### Math:
-* acos
-* asin
-* atan
-* cos
 * exp
 * expt
 * log
-* sin
 * sqrt
-* tan
 
 #### Complex numbers:
 * "Complex" data type
