@@ -150,6 +150,8 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Eval());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.ExactP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.ExactToInexact());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Exp());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Expt());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Ge());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Gt());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.InexactP());
@@ -161,6 +163,7 @@ public final class Environment implements SchemeObject {
 				new org.lb.lbjscheme.builtins.InteractionEnvironment(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Le());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.ListP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Log());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Lt());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.MakeString());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.MakeVector());
@@ -188,6 +191,7 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCar());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCdr());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Sin());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Sqrt());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.StringLength());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.StringP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.StringRef());

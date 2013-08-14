@@ -20,10 +20,17 @@ Everything in this repo is published under the BSD license unless stated otherwi
 
 ### Missing stuff in the most probable order of my implementing it:
 
-#### System stuff and missing special forms:
+#### Real numbers:
 * Operations that normally return inexact numbers may return exact numbers
-  in certain cases (e.g. sin "exact 0")
-* inexact->exact, rationalize
+  in certain cases (e.g. sin "exact 0" => exact 0, sqrt 9/4 => exact 3/2)
+* inexact->exact
+* rationalize
+* ceiling
+* floor
+* round
+* truncate
+
+#### System stuff and missing special forms:
 * apply
 * case
 * letrec
@@ -32,18 +39,6 @@ Everything in this repo is published under the BSD license unless stated otherwi
 * transcript-on
 * transcript-off
 * unquote-splicing
-
-#### Real numbers:
-* ceiling
-* floor
-* round
-* truncate
-
-#### Math:
-* exp
-* expt
-* log
-* sqrt
 
 #### Complex numbers:
 * "Complex" data type
