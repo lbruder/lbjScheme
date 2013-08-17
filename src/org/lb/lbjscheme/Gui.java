@@ -15,6 +15,8 @@ import javax.swing.border.BevelBorder;
 // TODO: Allow changing the evaluator
 
 public final class Gui {
+	private final Font _courierFont;
+
 	private final JFrame _mainForm;
 	private final JPanel _mainPanel;
 	private final JPanel _replPanel;
@@ -62,6 +64,8 @@ public final class Gui {
 		});
 		_eval = new AnalyzingEvaluator(_defaultInputPort, _defaultOutputPort);
 
+		_courierFont = new Font(Font.MONOSPACED, Font.PLAIN, 12);
+
 		_mainForm = new JFrame("Scheme REPL");
 		_mainPanel = new JPanel(new GridLayout(1, 2));
 		_replPanel = new JPanel(new BorderLayout());
@@ -72,6 +76,7 @@ public final class Gui {
 		_scriptScrollPane = new JScrollPane(_scriptEditor);
 		_outputScrollPane = new JScrollPane(_replOutput);
 
+		_scriptEditor.setFont(_courierFont);
 		_scriptEditor.setBorder(BorderFactory
 				.createBevelBorder(BevelBorder.LOWERED));
 		_scriptEditor.addKeyListener(new KeyListener() {
@@ -100,6 +105,7 @@ public final class Gui {
 
 		_scriptPanel.add(_scriptScrollPane);
 
+		_replOutput.setFont(_courierFont);
 		_replOutput.setEditable(false);
 		_replOutput.setBackground(SystemColor.control);
 
@@ -108,6 +114,7 @@ public final class Gui {
 
 		_replOutput.setLineWrap(true);
 
+		_replInput.setFont(_courierFont);
 		_replInput.setBorder(BorderFactory
 				.createBevelBorder(BevelBorder.LOWERED));
 		_replInput.addActionListener(new ActionListener() {
