@@ -19,16 +19,16 @@ package org.lb.lbjscheme.builtins;
 import java.util.List;
 import org.lb.lbjscheme.*;
 
-public final class InexactP extends Builtin {
+public final class ZeroP extends Builtin {
 	@Override
 	public String getName() {
-		return "inexact?";
+		return "zero?";
 	}
 
 	@Override
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		return getNumber(parameters.get(0)).isExact() ? _false : _true;
+		return getNumber(parameters.get(0)).isZero() ? _true : _false;
 	}
 }

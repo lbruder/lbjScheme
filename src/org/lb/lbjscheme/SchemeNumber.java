@@ -142,6 +142,12 @@ public abstract class SchemeNumber implements SchemeObject {
 		return Fixnum.valueOf(1);
 	}
 
+	public boolean isExact() {
+		return true;
+	}
+
+	public abstract boolean isZero();
+
 	public abstract int getLevel();
 
 	public abstract SchemeNumber promote();

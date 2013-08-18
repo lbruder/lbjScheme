@@ -90,6 +90,13 @@ public final class Bignum extends SchemeNumber {
 	}
 
 	@Override
+	public boolean isZero() {
+		// No Bignum can ever be zero, as it would be converted to a Fixnum
+		// on the fly. Using this implementation for reference purposes.
+		return _value.compareTo(BigInteger.ZERO) == 0;
+	}
+
+	@Override
 	public int compareTo(SchemeNumber other) {
 		return _value.compareTo(((Bignum) other)._value);
 	}

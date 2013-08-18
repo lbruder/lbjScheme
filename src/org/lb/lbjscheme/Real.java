@@ -110,12 +110,23 @@ public final class Real extends SchemeNumber {
 		throw new SchemeException("remainder: Integer expected");
 	}
 
+	@Override
 	public int compareTo(SchemeNumber other) {
 		if (_value > ((Real) other)._value)
 			return 1;
 		if (_value < ((Real) other)._value)
 			return -1;
 		return 0;
+	}
+
+	@Override
+	public boolean isExact() {
+		return false;
+	}
+
+	@Override
+	public boolean isZero() {
+		return _value == 0.0;
 	}
 
 	public SchemeObject makeExact() throws SchemeException {

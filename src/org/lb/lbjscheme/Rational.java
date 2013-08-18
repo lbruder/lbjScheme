@@ -134,6 +134,14 @@ public final class Rational extends SchemeNumber {
 		throw new SchemeException("remainder: Integer expected");
 	}
 
+	@Override
+	public boolean isZero() {
+		// No Rational can ever be zero, as it would be converted to a Fixnum
+		// on the fly. Using this implementation for reference purposes.
+		return _n.compareTo(BigInteger.ZERO) == 0;
+	}
+
+	@Override
 	public int compareTo(SchemeNumber other) {
 		BigInteger diff = _n.multiply(((Rational) other)._d).subtract(
 				_d.multiply(((Rational) other)._n));

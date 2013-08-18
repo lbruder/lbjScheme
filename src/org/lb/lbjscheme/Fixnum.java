@@ -83,6 +83,11 @@ public final class Fixnum extends SchemeNumber {
 	}
 
 	@Override
+	public boolean isZero() {
+		return _value == 0;
+	}
+
+	@Override
 	public int compareTo(SchemeNumber other) {
 		if (_value > ((Fixnum) other)._value)
 			return 1;

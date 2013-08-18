@@ -212,6 +212,7 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorSet());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Write(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.WriteChar(eval));
+		addBuiltin(target, new org.lb.lbjscheme.builtins.ZeroP());
 	}
 
 	private static void addBuiltin(Environment target, Builtin builtin)
@@ -286,7 +287,6 @@ public final class Environment implements SchemeObject {
 			+ "(define (cdddar x) (cdr (cdr (cdr (car x)))))"
 			+ "(define (cddddr x) (cdr (cdr (cdr (cdr x)))))"
 			+ "(define (list . lst) lst)"
-			+ "(define (zero? x) (= x 0))"
 			+ "(define (positive? x) (> x 0))"
 			+ "(define (negative? x) (< x 0))"
 			+ "(define (abs x) (if (positive? x) x (- 0 x)))"
