@@ -20,9 +20,14 @@ Everything in this repo is published under the BSD license unless stated otherwi
 
 ### Missing stuff in the most probable order of my implementing it:
 
+#### Unit tests
+
+* 'nuff said.
+
 #### Real numbers:
 * Operations that normally return inexact numbers may return exact numbers
   in certain cases (e.g. sin "exact 0" => exact 0, sqrt 9/4 => exact 3/2)
+
 * inexact->exact
 * rationalize
 * ceiling
@@ -30,7 +35,7 @@ Everything in this repo is published under the BSD license unless stated otherwi
 * round
 * truncate
 
-#### System stuff and missing special forms:
+#### System stuff:
 * apply
 * case
 * letrec
@@ -39,6 +44,10 @@ Everything in this repo is published under the BSD license unless stated otherwi
 * transcript-on
 * transcript-off
 * unquote-splicing
+* Some kind of interface to native Java data types
+* Interface to javax.script
+* Line numbers in error messages (can of worms)
+* CompilingEvaluator that supports continuations and multiple value returns
 
 #### Complex numbers:
 * "Complex" data type
@@ -72,3 +81,4 @@ Everything in this repo is published under the BSD license unless stated otherwi
 * syntax
 * syntax-rules
 * unwrap-syntax
+
