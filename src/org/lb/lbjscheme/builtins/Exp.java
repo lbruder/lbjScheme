@@ -29,9 +29,9 @@ public final class Exp extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		final SchemeObject o = parameters.get(0);
-		assertParameterType(o, SchemeNumber.class);
-		SchemeNumber n = (SchemeNumber) o;
+		SchemeNumber n = getNumber(parameters.get(0));
+		if (n.isExact() && n.isZero())
+			return new Fixnum(1);
 		while (!(n instanceof Real))
 			n = n.promote();
 		return new Real(Math.exp(((Real) n).getValue()));

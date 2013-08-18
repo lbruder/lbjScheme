@@ -29,9 +29,7 @@ public final class Log extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		final SchemeObject o = parameters.get(0);
-		assertParameterType(o, SchemeNumber.class);
-		SchemeNumber n = (SchemeNumber) o;
+		SchemeNumber n = getNumber(parameters.get(0));
 		while (!(n instanceof Real))
 			n = n.promote();
 		return new Real(Math.log(((Real) n).getValue()));

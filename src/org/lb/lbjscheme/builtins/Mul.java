@@ -29,8 +29,12 @@ public final class Mul extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		SchemeNumber ret = new Fixnum(1);
-		for (SchemeObject o : parameters)
-			ret = ret.mul(getNumber(o));
+		for (SchemeObject o : parameters) {
+			final SchemeNumber number = getNumber(o);
+			if (number.isZero() && number.isExact())
+				return number;
+			ret = ret.mul(number);
+		}
 		return ret;
 	}
 }

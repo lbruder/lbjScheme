@@ -29,12 +29,13 @@ public final class Expt extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(2, parameters);
-		final SchemeObject o1 = parameters.get(0);
-		final SchemeObject o2 = parameters.get(1);
-		assertParameterType(o1, SchemeNumber.class);
-		assertParameterType(o2, SchemeNumber.class);
-		SchemeNumber n1 = (SchemeNumber) o1;
-		SchemeNumber n2 = (SchemeNumber) o2;
+		SchemeNumber n1 = getNumber(parameters.get(0));
+		SchemeNumber n2 = getNumber(parameters.get(1));
+		if (n2.isExact() && n2.isZero())
+			return new Fixnum(1);
+		if (n1.isExact() && n2.isExact()) {
+			// TODO: Can we return an exact value?
+		}
 		while (!(n1 instanceof Real))
 			n1 = n1.promote();
 		while (!(n2 instanceof Real))
