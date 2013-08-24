@@ -25,10 +25,7 @@ Everything in this repo is published under the BSD license unless stated otherwi
 * 'nuff said.
 
 #### Real numbers:
-* Operations that normally return inexact numbers may return exact numbers
-  in certain cases (e.g. sin "exact 0" => exact 0, sqrt 9/4 => exact 3/2)
-
-* inexact->exact
+* (sin n) and (expt n) may return exact numbers in certain cases, such as (sqrt 9/4) => exact 3/2
 * rationalize
 * ceiling
 * floor
@@ -72,13 +69,7 @@ Everything in this repo is published under the BSD license unless stated otherwi
 
 #### Hygienic macros:
 * define-syntax
-* free-identifier=?
-* generate-identifier
-* identifier->symbol
-* identifier?
 * let-syntax
 * letrec-syntax
-* syntax
 * syntax-rules
-* unwrap-syntax
 
