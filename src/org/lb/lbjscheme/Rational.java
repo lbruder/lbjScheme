@@ -16,12 +16,11 @@
 
 package org.lb.lbjscheme;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.regex.*;
 
 public final class Rational extends SchemeNumber {
-	private final static BigDecimal _oneHalf = BigDecimal.valueOf(5, 1);
+	private final static BigInteger _two = BigInteger.valueOf(2);
 
 	private final BigInteger _n;
 	private final BigInteger _d;
@@ -153,7 +152,14 @@ public final class Rational extends SchemeNumber {
 
 	@Override
 	public SchemeNumber roundToInteger() {
-		return Bignum.valueOf(new BigDecimal(_n).divide(new BigDecimal(_d))
-				.add(_oneHalf).toBigInteger());
+		BigInteger n = _n;
+		BigInteger d = _d;
+		if (_d.testBit(0)) {
+			// make sure denominator is divisible by 2
+			n = n.multiply(_two);
+			d = d.multiply(_two);
+		}
+
+		return Bignum.valueOf(n.add(d.divide(_two)).divide(d));
 	}
 }
