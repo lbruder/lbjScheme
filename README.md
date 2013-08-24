@@ -25,8 +25,7 @@ Everything in this repo is published under the BSD license unless stated otherwi
 * 'nuff said.
 
 #### Real numbers:
-* (sin n) and (expt n) may return exact numbers in certain cases, such as (sqrt 9/4) => exact 3/2
-* rationalize
+* (sqrt n) and (expt n) may return exact numbers in certain cases, such as (sqrt 9/4) => exact 3/2
 * ceiling
 * floor
 * round
