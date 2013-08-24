@@ -30,9 +30,8 @@ public final class Atan extends Builtin {
 			throws SchemeException {
 		assertParameterCount(1, parameters);
 		SchemeNumber n = getNumber(parameters.get(0));
-		if (n.isExact()) {
-			// TODO: Can we return an exact value?
-		}
+		if (n.isExact() && n.isZero())
+			return Fixnum.valueOf(0);
 		while (!(n instanceof Real))
 			n = n.promote();
 		return new Real(Math.atan(((Real) n).getValue()));
