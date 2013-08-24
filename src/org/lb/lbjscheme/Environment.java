@@ -181,6 +181,7 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.PeekChar(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.ProcedureP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Quotient());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Rationalize());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.RationalP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Read(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.ReadChar(eval));
