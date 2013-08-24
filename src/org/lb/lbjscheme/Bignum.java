@@ -97,7 +97,12 @@ public final class Bignum extends SchemeNumber {
 	}
 
 	@Override
-	public int compareTo(SchemeNumber other) {
+	protected int doCompareTo(SchemeNumber other) {
 		return _value.compareTo(((Bignum) other)._value);
+	}
+
+	@Override
+	public SchemeNumber roundToInteger() {
+		return this;
 	}
 }

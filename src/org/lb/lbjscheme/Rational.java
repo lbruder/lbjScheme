@@ -16,10 +16,13 @@
 
 package org.lb.lbjscheme;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.regex.*;
 
 public final class Rational extends SchemeNumber {
+	private final static BigDecimal _oneHalf = BigDecimal.valueOf(5, 1);
+
 	private final BigInteger _n;
 	private final BigInteger _d;
 
@@ -142,9 +145,15 @@ public final class Rational extends SchemeNumber {
 	}
 
 	@Override
-	public int compareTo(SchemeNumber other) {
+	protected int doCompareTo(SchemeNumber other) {
 		BigInteger diff = _n.multiply(((Rational) other)._d).subtract(
 				_d.multiply(((Rational) other)._n));
 		return diff.signum();
+	}
+
+	@Override
+	public SchemeNumber roundToInteger() {
+		return Bignum.valueOf(new BigDecimal(_n).divide(new BigDecimal(_d))
+				.add(_oneHalf).toBigInteger());
 	}
 }

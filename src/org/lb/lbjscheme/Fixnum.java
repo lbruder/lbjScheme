@@ -88,11 +88,16 @@ public final class Fixnum extends SchemeNumber {
 	}
 
 	@Override
-	public int compareTo(SchemeNumber other) {
+	protected int doCompareTo(SchemeNumber other) {
 		if (_value > ((Fixnum) other)._value)
 			return 1;
 		if (_value < ((Fixnum) other)._value)
 			return -1;
 		return 0;
+	}
+
+	@Override
+	public SchemeNumber roundToInteger() {
+		return this;
 	}
 }

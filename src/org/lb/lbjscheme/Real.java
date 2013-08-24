@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public final class Real extends SchemeNumber {
+	private final static BigDecimal _oneHalf = BigDecimal.valueOf(5, 1);
 	private final double _value;
 
 	public Real(int value) {
@@ -112,7 +113,7 @@ public final class Real extends SchemeNumber {
 	}
 
 	@Override
-	public int compareTo(SchemeNumber other) {
+	protected int doCompareTo(SchemeNumber other) {
 		if (_value > ((Real) other)._value)
 			return 1;
 		if (_value < ((Real) other)._value)
@@ -141,5 +142,11 @@ public final class Real extends SchemeNumber {
 
 	public double getValue() {
 		return _value;
+	}
+
+	@Override
+	public SchemeNumber roundToInteger() {
+		return Bignum.valueOf(new BigDecimal(Double.toString(_value)).add(
+				_oneHalf).toBigInteger());
 	}
 }

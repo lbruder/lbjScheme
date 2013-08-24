@@ -90,48 +90,23 @@ public abstract class SchemeNumber implements SchemeObject {
 	}
 
 	public boolean eq(SchemeNumber other) {
-		if (other.getLevel() == getLevel())
-			return compareTo(other) == 0;
-		if (other.getLevel() > getLevel())
-			return promote().eq(other);
-		else
-			return eq(other.promote());
+		return compareTo(other) == 0;
 	}
 
 	public boolean lt(SchemeNumber other) {
-		if (other.getLevel() == getLevel())
-			return compareTo(other) < 0;
-		if (other.getLevel() > getLevel())
-			return promote().lt(other);
-		else
-			return lt(other.promote());
+		return compareTo(other) < 0;
 	}
 
 	public boolean le(SchemeNumber other) {
-		if (other.getLevel() == getLevel())
-			return compareTo(other) <= 0;
-		if (other.getLevel() > getLevel())
-			return promote().le(other);
-		else
-			return le(other.promote());
+		return compareTo(other) <= 0;
 	}
 
 	public boolean gt(SchemeNumber other) {
-		if (other.getLevel() == getLevel())
-			return compareTo(other) > 0;
-		if (other.getLevel() > getLevel())
-			return promote().gt(other);
-		else
-			return gt(other.promote());
+		return compareTo(other) > 0;
 	}
 
 	public boolean ge(SchemeNumber other) {
-		if (other.getLevel() == getLevel())
-			return compareTo(other) >= 0;
-		if (other.getLevel() > getLevel())
-			return promote().ge(other);
-		else
-			return ge(other.promote());
+		return compareTo(other) >= 0;
 	}
 
 	public SchemeNumber getNumerator() {
@@ -146,6 +121,15 @@ public abstract class SchemeNumber implements SchemeObject {
 		return true;
 	}
 
+	public int compareTo(SchemeNumber other) {
+		if (other.getLevel() == getLevel())
+			return doCompareTo(other);
+		if (other.getLevel() > getLevel())
+			return promote().compareTo(other);
+		else
+			return compareTo(other.promote());
+	}
+
 	public abstract boolean isZero();
 
 	public abstract int getLevel();
@@ -155,7 +139,9 @@ public abstract class SchemeNumber implements SchemeObject {
 	public abstract String toString(boolean forDisplay, int base)
 			throws SchemeException;
 
-	public abstract int compareTo(SchemeNumber other);
+	public abstract SchemeNumber roundToInteger();
+
+	protected abstract int doCompareTo(SchemeNumber other);
 
 	protected abstract SchemeNumber doAdd(SchemeNumber other);
 
