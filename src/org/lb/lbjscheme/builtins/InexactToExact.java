@@ -29,8 +29,7 @@ public final class InexactToExact extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		final SchemeObject o = parameters.get(0);
-		assertParameterType(o, SchemeNumber.class);
+		final SchemeNumber o = getNumber(parameters.get(0));
 		if (!(o instanceof Real))
 			return o; // If number is already exact, just return it
 		Real r = (Real) o;

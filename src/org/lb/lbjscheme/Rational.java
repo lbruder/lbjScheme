@@ -75,7 +75,7 @@ public final class Rational extends SchemeNumber {
 		return valueOf(n, d);
 	}
 
-	private static SchemeNumber valueOf(BigInteger n, BigInteger d) {
+	public static SchemeNumber valueOf(BigInteger n, BigInteger d) {
 		BigInteger gcd = n.gcd(d);
 		n = n.divide(gcd);
 		d = d.divide(gcd);

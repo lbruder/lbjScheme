@@ -16,6 +16,7 @@
 
 package org.lb.lbjscheme;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public final class Real extends SchemeNumber {
@@ -130,7 +131,12 @@ public final class Real extends SchemeNumber {
 	}
 
 	public SchemeObject makeExact() throws SchemeException {
-		throw new SchemeException("TODO...");
+		final BigDecimal number = new BigDecimal(Double.toString(_value));
+		final int scale = number.scale();
+		final BigInteger numerator = number.movePointRight(scale)
+				.toBigInteger();
+		final BigInteger denominator = BigInteger.TEN.pow(scale);
+		return Rational.valueOf(numerator, denominator);
 	}
 
 	public double getValue() {
