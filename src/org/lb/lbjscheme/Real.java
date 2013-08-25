@@ -145,8 +145,13 @@ public final class Real extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber roundToInteger() {
-		return Bignum.valueOf(new BigDecimal(Double.toString(_value)).add(
-				_oneHalf).toBigInteger());
+	public SchemeNumber roundToNearestInteger() {
+		BigDecimal n = new BigDecimal(Double.toString(_value));
+		if (n.signum() == 1)
+			n = n.add(_oneHalf);
+		if (n.signum() == -1)
+			n = n.subtract(_oneHalf);
+
+		return Bignum.valueOf(n.toBigInteger());
 	}
 }

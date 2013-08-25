@@ -97,7 +97,7 @@ public final class Fixnum extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber roundToInteger() {
+	public SchemeNumber roundToNearestInteger() {
 		return this;
 	}
 }

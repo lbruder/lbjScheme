@@ -151,7 +151,7 @@ public final class Rational extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber roundToInteger() {
+	public SchemeNumber roundToNearestInteger() {
 		BigInteger n = _n;
 		BigInteger d = _d;
 		if (_d.testBit(0)) {
@@ -160,6 +160,11 @@ public final class Rational extends SchemeNumber {
 			d = d.multiply(_two);
 		}
 
-		return Bignum.valueOf(n.add(d.divide(_two)).divide(d));
+		if (_n.signum() == 1)
+			n = n.add(d.divide(_two));
+		if (_n.signum() == -1)
+			n = n.subtract(d.divide(_two));
+
+		return Bignum.valueOf(n.divide(d));
 	}
 }

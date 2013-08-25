@@ -139,7 +139,7 @@ public abstract class SchemeNumber implements SchemeObject {
 	public abstract String toString(boolean forDisplay, int base)
 			throws SchemeException;
 
-	public abstract SchemeNumber roundToInteger();
+	public abstract SchemeNumber roundToNearestInteger();
 
 	protected abstract int doCompareTo(SchemeNumber other);
 

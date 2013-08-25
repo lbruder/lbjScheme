@@ -102,7 +102,7 @@ public final class Bignum extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber roundToInteger() {
+	public SchemeNumber roundToNearestInteger() {
 		return this;
 	}
 }

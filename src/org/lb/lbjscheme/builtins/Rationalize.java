@@ -36,7 +36,7 @@ public final class Rationalize extends Builtin {
 		final SchemeNumber maxDiff = getNumber(parameters.get(1));
 
 		for (SchemeNumber d = _one;; d = d.add(_one)) {
-			final SchemeNumber n = number.mul(d).roundToInteger();
+			final SchemeNumber n = number.mul(d).roundToNearestInteger();
 			final SchemeNumber asRational = n.div(d);
 			if (abs(asRational.sub(number)).le(maxDiff)) {
 				if (number.isExact())
