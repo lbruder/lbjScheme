@@ -1,3 +1,19 @@
+// lbjScheme
+// An experimental Scheme subset interpreter in Java, based on SchemeNet.cs
+// Copyright (c) 2013, Leif Bruder <leifbruder@gmail.com>
+//
+// Permission to use, copy, modify, and/or distribute this software for any
+// purpose with or without fee is hereby granted, provided that the above
+// copyright notice and this permission notice appear in all copies.
+//
+// THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+// WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+// ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+// WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+// ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
 package org.lb.lbjscheme;
 
 import java.awt.*;
@@ -142,9 +158,73 @@ public final class Gui {
 
 		_mainForm.getContentPane().add(_mainPanel);
 		_mainForm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		_mainForm.setSize(new Dimension(800, 600));
+		_mainForm.setSize(new Dimension(1000, 700));
 
 		print("> ");
+
+		String crlf = System.getProperty("line.separator");
+		_scriptEditor
+				.setText("; lbjScheme V0.1"
+						+ crlf
+						+ "; A Scheme subset interpreter in Java, based on SchemeNet.cs"
+						+ crlf
+						+ "; Copyright (c) 2013, Leif Bruder <leifbruder@gmail.com>"
+						+ crlf
+						+ ";"
+						+ crlf
+						+ "; Permission to use, copy, modify, and/or distribute this software"
+						+ crlf
+						+ "; for any purpose with or without fee is hereby granted, provided"
+						+ crlf
+						+ "; that the above copyright notice and this permission notice"
+						+ crlf
+						+ "; appear in all copies."
+						+ crlf
+						+ ";"
+						+ crlf
+						+ "; THE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL"
+						+ crlf
+						+ "; WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED"
+						+ crlf
+						+ "; WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE"
+						+ crlf
+						+ "; AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR"
+						+ crlf
+						+ "; CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM"
+						+ crlf
+						+ "; LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,"
+						+ crlf
+						+ "; NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN"
+						+ crlf
+						+ "; CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE."
+						+ crlf
+						+ ";"
+						+ crlf
+						+ "; Usage: Enter a Scheme script in this window, then press F5"
+						+ crlf
+						+ "; to execute. On the left you see an output window and, below"
+						+ crlf
+						+ "; it, a REPL input. Press ENTER to execute any Scheme statements"
+						+ crlf
+						+ "; entered there."
+						+ crlf
+						+ ";"
+						+ crlf
+						+ "; BEWARE: This is experimental code. I'm striving for full R5RS"
+						+ crlf
+						+ "; compliance when done, but at the moment there are several parts"
+						+ crlf
+						+ "; missing, such as continuations, complex numbers and multiple value"
+						+ crlf
+						+ "; returns. Visit github.com/lbruder/lbjScheme for more information"
+						+ crlf + "; and updates. Bug reports are welcome ;)"
+						+ crlf + crlf + "(define (factors n)" + crlf
+						+ "  (filter (lambda (i) (zero? (remainder n i)))"
+						+ crlf + "          (range 1 n)))" + crlf + crlf
+						+ "(define (prime? n)" + crlf
+						+ "  (= 2 (length (factors n))))" + crlf + crlf
+						+ "(define (primes upto)" + crlf
+						+ "  (filter prime? (range 1 upto)))");
 	}
 
 	public void show() {

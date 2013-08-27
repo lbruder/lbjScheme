@@ -3,7 +3,7 @@ lbjScheme
 
 Java version of my toy Scheme interpreter
 
-This will become my most complete Scheme implementation so far, striving for 100% R5RS compatibility when done.
+This will become my most complete Scheme implementation so far, striving for 100% R5RS compliance when done.
 
 There will be (at least) three evaluators:
 
