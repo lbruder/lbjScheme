@@ -157,6 +157,8 @@ public abstract class SchemeNumber implements SchemeObject {
 	protected abstract SchemeNumber doMod(SchemeNumber other)
 			throws SchemeException;
 
+	public abstract SchemeNumber sqrt() throws SchemeException;
+
 	public static SchemeNumber fromString(String value, int base)
 			throws SchemeException {
 		try {

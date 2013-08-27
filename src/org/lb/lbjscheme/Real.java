@@ -154,4 +154,9 @@ public final class Real extends SchemeNumber {
 
 		return Bignum.valueOf(n.toBigInteger());
 	}
+
+	@Override
+	public SchemeNumber sqrt() {
+		return new Real(Math.sqrt(_value));
+	}
 }

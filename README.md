@@ -25,7 +25,7 @@ Everything in this repo is published under the BSD license unless stated otherwi
 * 'nuff said.
 
 #### Real numbers:
-* (sqrt n) and (expt n) may return exact numbers in certain cases, such as (sqrt 9/4) => exact 3/2
+* (expt n) must return exact numbers if possible
 * ceiling
 * floor
 * round

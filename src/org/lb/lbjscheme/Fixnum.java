@@ -100,4 +100,9 @@ public final class Fixnum extends SchemeNumber {
 	public SchemeNumber roundToNearestInteger() {
 		return this;
 	}
+
+	@Override
+	public SchemeNumber sqrt() throws SchemeException {
+		return promote().sqrt();
+	}
 }

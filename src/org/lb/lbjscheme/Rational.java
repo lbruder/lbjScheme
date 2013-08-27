@@ -62,6 +62,7 @@ public final class Rational extends SchemeNumber {
 
 	@Override
 	public SchemeNumber promote() {
+		// TODO: Infinity => Exception!
 		return new Real(_n.doubleValue() / _d.doubleValue());
 	}
 
@@ -166,5 +167,23 @@ public final class Rational extends SchemeNumber {
 			n = n.subtract(d.divide(_two));
 
 		return Bignum.valueOf(n.divide(d));
+	}
+
+	@Override
+	public SchemeNumber sqrt() throws SchemeException {
+		SchemeNumber newN = Bignum.valueOf(_n).sqrt();
+		if (!(newN.isExact()))
+			return promote().sqrt();
+		SchemeNumber newD = Bignum.valueOf(_d).sqrt();
+		if (!(newN.isExact()))
+			return promote().sqrt();
+
+		if (newN instanceof Fixnum)
+			newN = newN.promote();
+		if (newD instanceof Fixnum)
+			newD = newD.promote();
+
+		return valueOf(((Bignum) newN).getRawValue(),
+				((Bignum) newD).getRawValue());
 	}
 }

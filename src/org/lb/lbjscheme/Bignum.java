@@ -16,7 +16,7 @@
 
 package org.lb.lbjscheme;
 
-import java.math.BigInteger;
+import java.math.*;
 
 public final class Bignum extends SchemeNumber {
 	private final static BigInteger MAX_INT = BigInteger
@@ -104,5 +104,23 @@ public final class Bignum extends SchemeNumber {
 	@Override
 	public SchemeNumber roundToNearestInteger() {
 		return this;
+	}
+
+	public BigInteger getRawValue() {
+		return _value;
+	}
+
+	@Override
+	public SchemeNumber sqrt() throws SchemeException {
+		if (_value.signum() == -1)
+			throw new SchemeException("sqrt: No complex numbers yet!");
+
+		final double root = Math.sqrt(_value.doubleValue());
+
+		final BigInteger test = new BigDecimal(root).toBigInteger();
+		if (test.multiply(test).equals(_value))
+			return valueOf(test);
+
+		return new Real(root);
 	}
 }
