@@ -132,6 +132,7 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.BooleanP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Car());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Cdr());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Ceiling());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.CharP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.CharReadyP(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.CharToInteger());
@@ -152,6 +153,7 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.ExactToInexact());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Exp());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Expt());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Floor());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Ge());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Gt());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.InexactP());
@@ -187,6 +189,7 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.ReadChar(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.RealP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Remainder());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Round());
 		addBuiltin(target,
 				new org.lb.lbjscheme.builtins.SchemeReportEnvironment(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCar());
@@ -207,6 +210,7 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target,
 				new org.lb.lbjscheme.builtins.SysSetCurrentOutputPort(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Tan());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.Truncate());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorLength());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorRef());

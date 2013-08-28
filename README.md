@@ -20,25 +20,14 @@ Everything in this repo is published under the BSD license unless stated otherwi
 
 ### Missing stuff in the most probable order of my implementing it:
 
-#### Unit tests
-
-* 'nuff said.
-
-#### Real numbers:
+#### High prio:
+* Unit tests
 * (expt n) must return exact numbers if possible
-* ceiling
-* floor
-* round
-* truncate
-
-#### System stuff:
 * apply
 * case
 * letrec
 * load
 * named let
-* transcript-on
-* transcript-off
 * unquote-splicing
 * Some kind of interface to native Java data types
 * Interface to javax.script

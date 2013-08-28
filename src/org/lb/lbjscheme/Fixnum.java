@@ -105,4 +105,24 @@ public final class Fixnum extends SchemeNumber {
 	public SchemeNumber sqrt() throws SchemeException {
 		return promote().sqrt();
 	}
+
+	@Override
+	public SchemeNumber floor() {
+		return this;
+	}
+
+	@Override
+	public SchemeNumber ceiling() {
+		return this;
+	}
+
+	@Override
+	public SchemeNumber truncate() {
+		return this;
+	}
+
+	@Override
+	public SchemeNumber round() {
+		return this;
+	}
 }

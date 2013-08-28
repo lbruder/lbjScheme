@@ -159,4 +159,36 @@ public final class Real extends SchemeNumber {
 	public SchemeNumber sqrt() {
 		return new Real(Math.sqrt(_value));
 	}
+
+	@Override
+	public SchemeNumber floor() {
+		return Bignum.valueOf(
+				BigDecimal.valueOf(_value).setScale(0, BigDecimal.ROUND_FLOOR)
+						.toBigInteger()).mul(new Real(1.0));
+	}
+
+	@Override
+	public SchemeNumber ceiling() {
+		return Bignum.valueOf(
+				BigDecimal.valueOf(_value)
+						.setScale(0, BigDecimal.ROUND_CEILING).toBigInteger())
+				.mul(new Real(1.0));
+	}
+
+	@Override
+	public SchemeNumber truncate() {
+		return Bignum.valueOf(
+				BigDecimal.valueOf(_value).setScale(0, BigDecimal.ROUND_DOWN)
+						.toBigInteger()).mul(new Real(1.0));
+
+	}
+
+	@Override
+	public SchemeNumber round() {
+		return Bignum
+				.valueOf(
+						BigDecimal.valueOf(_value)
+								.setScale(0, BigDecimal.ROUND_HALF_EVEN)
+								.toBigInteger()).mul(new Real(1.0));
+	}
 }

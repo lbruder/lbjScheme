@@ -16,6 +16,7 @@
 
 package org.lb.lbjscheme;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.regex.*;
 
@@ -185,5 +186,27 @@ public final class Rational extends SchemeNumber {
 
 		return valueOf(((Bignum) newN).getRawValue(),
 				((Bignum) newD).getRawValue());
+	}
+
+	@Override
+	public SchemeNumber floor() {
+		return Bignum.valueOf(_n.subtract(_n.mod(_d)).divide(_d));
+	}
+
+	@Override
+	public SchemeNumber ceiling() {
+		return Bignum.valueOf(_n.subtract(_n.mod(_d)).divide(_d)
+				.add(BigInteger.ONE));
+	}
+
+	@Override
+	public SchemeNumber truncate() {
+		return Bignum.valueOf(_n.divide(_d));
+	}
+
+	@Override
+	public SchemeNumber round() {
+		return Bignum.valueOf(new BigDecimal(_n).divide(new BigDecimal(_d))
+				.setScale(0, BigDecimal.ROUND_HALF_EVEN).toBigInteger());
 	}
 }

@@ -159,6 +159,14 @@ public abstract class SchemeNumber implements SchemeObject {
 
 	public abstract SchemeNumber sqrt() throws SchemeException;
 
+	public abstract SchemeNumber floor();
+
+	public abstract SchemeNumber ceiling();
+
+	public abstract SchemeNumber truncate();
+
+	public abstract SchemeNumber round();
+
 	public static SchemeNumber fromString(String value, int base)
 			throws SchemeException {
 		try {

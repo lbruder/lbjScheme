@@ -123,4 +123,24 @@ public final class Bignum extends SchemeNumber {
 
 		return new Real(root);
 	}
+
+	@Override
+	public SchemeNumber floor() {
+		return this;
+	}
+
+	@Override
+	public SchemeNumber ceiling() {
+		return this;
+	}
+
+	@Override
+	public SchemeNumber truncate() {
+		return this;
+	}
+
+	@Override
+	public SchemeNumber round() {
+		return this;
+	}
 }
