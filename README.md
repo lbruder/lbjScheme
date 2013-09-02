@@ -25,9 +25,7 @@ Everything in this repo is published under the BSD license unless stated otherwi
 * (expt n) must return exact numbers if possible
 * apply
 * case
-* letrec
 * load
-* named let
 * unquote-splicing
 * Some kind of interface to native Java data types
 * Interface to javax.script
