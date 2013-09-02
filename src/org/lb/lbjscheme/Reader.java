@@ -208,6 +208,12 @@ public final class Reader {
 
 		if (symbol.startsWith("#x"))
 			return SchemeNumber.fromString(symbol.substring(2), 16);
+		if (symbol.startsWith("#d"))
+			return SchemeNumber.fromString(symbol.substring(2), 10);
+		if (symbol.startsWith("#o"))
+			return SchemeNumber.fromString(symbol.substring(2), 8);
+		if (symbol.startsWith("#b"))
+			return SchemeNumber.fromString(symbol.substring(2), 2);
 		return Symbol.fromString(symbol);
 	}
 }

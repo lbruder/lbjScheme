@@ -30,7 +30,6 @@ Everything in this repo is published under the BSD license unless stated otherwi
 * Some kind of interface to native Java data types
 * Interface to javax.script
 * Line numbers in error messages (can of worms)
-* CompilingEvaluator that supports continuations and multiple value returns
 
 #### Complex numbers:
 * "Complex" data type
@@ -43,10 +42,12 @@ Everything in this repo is published under the BSD license unless stated otherwi
 * real-part
 
 #### Reading numerical constants:
-* Prefixes #b #o, #d, #e, #i
+* Prefixes #e, #i
 * Suffixes s, f, d, l
 
-#### Other stuff:
+#### Compiling evaluator:
+* class CompilingEvaluator
+* virtual machine to run the compiled code
 * call-with-values
 * dynamic-wind
 * values
