@@ -20,26 +20,23 @@ Everything in this repo is published under the BSD license unless stated otherwi
 
 ### Missing stuff in the most probable order of my implementing it:
 
-#### High prio:
-* Unit tests
-* (expt n) must return exact numbers if possible
-* apply
-* case
-* load
-* unquote-splicing
-* Some kind of interface to native Java data types
-* Interface to javax.script
-* Line numbers in error messages (can of worms)
-
 #### Complex numbers:
-* "Complex" data type
+* Complete implementation of "Complex" data type, preserving exactness (!)
 * angle
-* complex?
-* imag-part
 * magnitude
 * make-polar
 * make-rectangular
-* real-part
+
+#### Other high prio stuff:
+* case
+* (expt n) must return exact numbers if possible
+* Tests, tests, tests!
+* apply
+* load
+* unquote-splicing
+* Line numbers in error messages (can of worms)
+* Some kind of interface to native Java data types
+* Interface to javax.script
 
 #### Reading numerical constants:
 * Prefixes #e, #i

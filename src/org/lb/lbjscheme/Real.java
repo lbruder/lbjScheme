@@ -54,7 +54,7 @@ public final class Real extends SchemeNumber {
 
 	@Override
 	public SchemeNumber promote() {
-		return null; // TODO
+		return new Complex(this);
 	}
 
 	public static SchemeNumber valueOf(String value, int base)

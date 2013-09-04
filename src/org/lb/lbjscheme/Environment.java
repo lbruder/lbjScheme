@@ -156,6 +156,7 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Floor());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Ge());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Gt());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.ImagPart());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.InexactP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.InexactToExact());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.InputPortP());
@@ -188,6 +189,7 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Read(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.ReadChar(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.RealP());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.RealPart());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Remainder());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Round());
 		addBuiltin(target,
