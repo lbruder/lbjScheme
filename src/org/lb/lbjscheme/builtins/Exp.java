@@ -33,7 +33,7 @@ public final class Exp extends Builtin {
 		if (n.isExact() && n.isZero())
 			return new Fixnum(1);
 		while (!(n instanceof Real))
-			n = n.promote();
+			n = n.promoteToLevel(4);
 		return new Real(Math.exp(((Real) n).getValue()));
 	}
 }

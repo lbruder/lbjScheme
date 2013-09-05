@@ -38,7 +38,7 @@ public final class Fixnum extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber promote() {
+	public SchemeNumber promoteToLevel(int targetLevel) {
 		return new Bignum(_value);
 	}
 
@@ -68,7 +68,7 @@ public final class Fixnum extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber doDiv(SchemeNumber other) {
+	public SchemeNumber doDiv(SchemeNumber other) throws SchemeException {
 		return new Rational(_value).div(other);
 	}
 
@@ -103,7 +103,7 @@ public final class Fixnum extends SchemeNumber {
 
 	@Override
 	public SchemeNumber sqrt() throws SchemeException {
-		return promote().sqrt();
+		return promoteToLevel(2).sqrt();
 	}
 
 	@Override

@@ -37,9 +37,9 @@ public final class Expt extends Builtin {
 			// TODO: Can we return an exact value?
 		}
 		while (!(n1 instanceof Real))
-			n1 = n1.promote();
+			n1 = n1.promoteToLevel(4);
 		while (!(n2 instanceof Real))
-			n2 = n2.promote();
+			n2 = n2.promoteToLevel(4);
 		return new Real(
 				Math.pow(((Real) n1).getValue(), ((Real) n2).getValue()));
 	}

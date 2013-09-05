@@ -39,7 +39,9 @@ public final class Rational extends SchemeNumber {
 		_d = BigInteger.ONE;
 	}
 
-	private Rational(BigInteger n, BigInteger d) {
+	private Rational(BigInteger n, BigInteger d) throws SchemeException {
+		if (d.equals(BigInteger.ZERO))
+			throw new SchemeException("Division by zero");
 		_n = n;
 		_d = d;
 	}
@@ -62,9 +64,12 @@ public final class Rational extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber promote() {
+	public SchemeNumber promoteToLevel(int targetLevel) {
 		// TODO: Infinity => Exception!
-		return new Real(_n.doubleValue() / _d.doubleValue());
+		if (targetLevel == 5) // promote to complex
+			return new Complex(this);
+		else
+			return new Real(_n.doubleValue() / _d.doubleValue());
 	}
 
 	public static SchemeNumber valueOf(String value, int base)
@@ -79,7 +84,8 @@ public final class Rational extends SchemeNumber {
 		return valueOf(n, d);
 	}
 
-	public static SchemeNumber valueOf(BigInteger n, BigInteger d) {
+	public static SchemeNumber valueOf(BigInteger n, BigInteger d)
+			throws SchemeException {
 		BigInteger gcd = n.gcd(d);
 		n = n.divide(gcd);
 		d = d.divide(gcd);
@@ -103,27 +109,27 @@ public final class Rational extends SchemeNumber {
 	}
 
 	@Override
-	protected SchemeNumber doAdd(SchemeNumber other) {
+	protected SchemeNumber doAdd(SchemeNumber other) throws SchemeException {
 		Rational o = (Rational) other;
 		return valueOf(_n.multiply(o._d).add(_d.multiply(o._n)),
 				_d.multiply(o._d));
 	}
 
 	@Override
-	public SchemeNumber doSub(SchemeNumber other) {
+	public SchemeNumber doSub(SchemeNumber other) throws SchemeException {
 		Rational o = (Rational) other;
 		return valueOf(_n.multiply(o._d).subtract(_d.multiply(o._n)),
 				_d.multiply(o._d));
 	}
 
 	@Override
-	public SchemeNumber doMul(SchemeNumber other) {
+	public SchemeNumber doMul(SchemeNumber other) throws SchemeException {
 		Rational o = (Rational) other;
 		return valueOf(_n.multiply(o._n), _d.multiply(o._d));
 	}
 
 	@Override
-	public SchemeNumber doDiv(SchemeNumber other) {
+	public SchemeNumber doDiv(SchemeNumber other) throws SchemeException {
 		Rational o = (Rational) other;
 		return valueOf(_n.multiply(o._d), _d.multiply(o._n));
 	}
@@ -172,17 +178,18 @@ public final class Rational extends SchemeNumber {
 
 	@Override
 	public SchemeNumber sqrt() throws SchemeException {
+		// TODO: Return Complex if necessary
 		SchemeNumber newN = Bignum.valueOf(_n).sqrt();
 		if (!(newN.isExact()))
-			return promote().sqrt();
+			return promoteToLevel(4).sqrt();
 		SchemeNumber newD = Bignum.valueOf(_d).sqrt();
 		if (!(newN.isExact()))
-			return promote().sqrt();
+			return promoteToLevel(4).sqrt();
 
 		if (newN instanceof Fixnum)
-			newN = newN.promote();
+			newN = newN.promoteToLevel(2);
 		if (newD instanceof Fixnum)
-			newD = newD.promote();
+			newD = newD.promoteToLevel(2);
 
 		return valueOf(((Bignum) newN).getRawValue(),
 				((Bignum) newD).getRawValue());

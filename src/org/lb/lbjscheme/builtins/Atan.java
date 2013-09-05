@@ -33,7 +33,7 @@ public final class Atan extends Builtin {
 		if (n.isExact() && n.isZero())
 			return Fixnum.valueOf(0);
 		while (!(n instanceof Real))
-			n = n.promote();
+			n = n.promoteToLevel(4);
 		return new Real(Math.atan(((Real) n).getValue()));
 	}
 }

@@ -25,8 +25,8 @@ public final class Complex extends SchemeNumber {
 		_imag = imag;
 	}
 
-	public Complex(Real real) {
-		_real = real;
+	public Complex(SchemeNumber realPart) {
+		_real = realPart;
 		_imag = Fixnum.valueOf(0);
 	}
 
@@ -50,7 +50,7 @@ public final class Complex extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber promote() {
+	public SchemeNumber promoteToLevel(int targetLevel) {
 		return null; // Not possible
 	}
 
@@ -91,33 +91,30 @@ public final class Complex extends SchemeNumber {
 	}
 
 	@Override
-	protected SchemeNumber doAdd(SchemeNumber other) {
+	protected SchemeNumber doAdd(SchemeNumber other) throws SchemeException {
 		Complex o = (Complex) other;
-		// TODO: (+ 1+2i 100+200i) => 101+202i. Can of worms: If both real and
-		// imag are exact, don't use promote() that way...
-		// Better: promoteToLevel(5)? Or something entirely different? Think!
 		return valueOf(_real.add(o._real), _imag.add(o._imag));
 	}
 
 	@Override
-	public SchemeNumber doSub(SchemeNumber other) {
+	public SchemeNumber doSub(SchemeNumber other) throws SchemeException {
 		Complex o = (Complex) other;
 		return valueOf(_real.sub(o._real), _imag.sub(o._imag));
 	}
 
 	@Override
-	public SchemeNumber doMul(SchemeNumber other) {
+	public SchemeNumber doMul(SchemeNumber other) throws SchemeException {
 		Complex o = (Complex) other;
 		return valueOf(_real.mul(o._real).sub(_imag.mul(o._imag)),
 				_real.mul(o._imag).add(_imag.mul(o._real)));
 	}
 
 	@Override
-	public SchemeNumber doDiv(SchemeNumber other) {
+	public SchemeNumber doDiv(SchemeNumber other) throws SchemeException {
 		return mul(((Complex) other).recip());
 	}
 
-	private SchemeNumber recip() {
+	private SchemeNumber recip() throws SchemeException {
 		final SchemeNumber realSq = _real.mul(_real);
 		final SchemeNumber imagSq = _imag.mul(_imag);
 		final SchemeNumber commonDenominator = realSq.add(imagSq);

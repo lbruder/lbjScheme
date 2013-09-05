@@ -35,58 +35,58 @@ public abstract class SchemeNumber implements SchemeObject {
 		}
 	}
 
-	public SchemeNumber add(SchemeNumber other) {
+	public SchemeNumber add(SchemeNumber other) throws SchemeException {
 		if (other.getLevel() == getLevel())
 			return doAdd(other);
 		if (other.getLevel() > getLevel())
-			return promote().add(other);
+			return promoteToLevel(other.getLevel()).add(other);
 		else
-			return add(other.promote());
+			return add(other.promoteToLevel(getLevel()));
 	}
 
-	public SchemeNumber sub(SchemeNumber other) {
+	public SchemeNumber sub(SchemeNumber other) throws SchemeException {
 		if (other.getLevel() == getLevel())
 			return doSub(other);
 		if (other.getLevel() > getLevel())
-			return promote().sub(other);
+			return promoteToLevel(other.getLevel()).sub(other);
 		else
-			return sub(other.promote());
+			return sub(other.promoteToLevel(getLevel()));
 	}
 
-	public SchemeNumber mul(SchemeNumber other) {
+	public SchemeNumber mul(SchemeNumber other) throws SchemeException {
 		if (other.getLevel() == getLevel())
 			return doMul(other);
 		if (other.getLevel() > getLevel())
-			return promote().mul(other);
+			return promoteToLevel(other.getLevel()).mul(other);
 		else
-			return mul(other.promote());
+			return mul(other.promoteToLevel(getLevel()));
 	}
 
-	public SchemeNumber div(SchemeNumber other) {
+	public SchemeNumber div(SchemeNumber other) throws SchemeException {
 		if (other.getLevel() == getLevel())
 			return doDiv(other);
 		if (other.getLevel() > getLevel())
-			return promote().div(other);
+			return promoteToLevel(other.getLevel()).div(other);
 		else
-			return div(other.promote());
+			return div(other.promoteToLevel(getLevel()));
 	}
 
 	public SchemeNumber idiv(SchemeNumber other) throws SchemeException {
 		if (other.getLevel() == getLevel())
 			return doIdiv(other);
 		if (other.getLevel() > getLevel())
-			return promote().idiv(other);
+			return promoteToLevel(other.getLevel()).idiv(other);
 		else
-			return idiv(other.promote());
+			return idiv(other.promoteToLevel(getLevel()));
 	}
 
 	public SchemeNumber mod(SchemeNumber other) throws SchemeException {
 		if (other.getLevel() == getLevel())
 			return doMod(other);
 		if (other.getLevel() > getLevel())
-			return promote().mod(other);
+			return promoteToLevel(other.getLevel()).mod(other);
 		else
-			return mod(other.promote());
+			return mod(other.promoteToLevel(getLevel()));
 	}
 
 	public boolean eq(SchemeNumber other) {
@@ -125,16 +125,16 @@ public abstract class SchemeNumber implements SchemeObject {
 		if (other.getLevel() == getLevel())
 			return doCompareTo(other);
 		if (other.getLevel() > getLevel())
-			return promote().compareTo(other);
+			return promoteToLevel(other.getLevel()).compareTo(other);
 		else
-			return compareTo(other.promote());
+			return compareTo(other.promoteToLevel(getLevel()));
 	}
 
 	public abstract boolean isZero();
 
 	public abstract int getLevel();
 
-	public abstract SchemeNumber promote();
+	public abstract SchemeNumber promoteToLevel(int targetLevel);
 
 	public abstract String toString(boolean forDisplay, int base)
 			throws SchemeException;
@@ -143,13 +143,17 @@ public abstract class SchemeNumber implements SchemeObject {
 
 	protected abstract int doCompareTo(SchemeNumber other);
 
-	protected abstract SchemeNumber doAdd(SchemeNumber other);
+	protected abstract SchemeNumber doAdd(SchemeNumber other)
+			throws SchemeException;
 
-	protected abstract SchemeNumber doSub(SchemeNumber other);
+	protected abstract SchemeNumber doSub(SchemeNumber other)
+			throws SchemeException;
 
-	protected abstract SchemeNumber doMul(SchemeNumber other);
+	protected abstract SchemeNumber doMul(SchemeNumber other)
+			throws SchemeException;
 
-	protected abstract SchemeNumber doDiv(SchemeNumber other);
+	protected abstract SchemeNumber doDiv(SchemeNumber other)
+			throws SchemeException;
 
 	protected abstract SchemeNumber doIdiv(SchemeNumber other)
 			throws SchemeException;

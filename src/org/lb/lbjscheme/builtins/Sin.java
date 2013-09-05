@@ -33,7 +33,7 @@ public final class Sin extends Builtin {
 		if (n.isExact() && n.isZero())
 			return Fixnum.valueOf(0);
 		while (!(n instanceof Real))
-			n = n.promote();
+			n = n.promoteToLevel(4);
 		return new Real(Math.sin(((Real) n).getValue()));
 	}
 }

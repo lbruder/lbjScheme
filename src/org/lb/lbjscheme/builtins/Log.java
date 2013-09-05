@@ -31,7 +31,7 @@ public final class Log extends Builtin {
 		assertParameterCount(1, parameters);
 		SchemeNumber n = getNumber(parameters.get(0));
 		while (!(n instanceof Real))
-			n = n.promote();
+			n = n.promoteToLevel(4);
 		return new Real(Math.log(((Real) n).getValue()));
 	}
 }

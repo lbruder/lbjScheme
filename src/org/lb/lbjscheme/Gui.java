@@ -24,7 +24,6 @@ import javax.swing.border.BevelBorder;
 
 // TODO: Evaluate in separate thread to keep the GUI running and allow user to cancel a running script
 // TODO: Put REPL input into a queue to read from in the _defaultInputPort
-// TODO: Fonts
 // TODO: Report runtime after evaluation of script or REPL input
 // TODO: REPL history via up/down keys
 // TODO: Load/Save script file
@@ -55,7 +54,7 @@ public final class Gui {
 			@Override
 			public int read(char[] cbuf, int off, int len) throws IOException {
 				// TODO Read lines from REPL
-				return 0;
+				throw new IOException("No REPL input yet!");
 			}
 
 			@Override
@@ -92,10 +91,7 @@ public final class Gui {
 		_scriptScrollPane = new JScrollPane(_scriptEditor);
 		_outputScrollPane = new JScrollPane(_replOutput);
 
-		_scriptEditor.setFont(_courierFont);
-		_scriptEditor.setBorder(BorderFactory
-				.createBevelBorder(BevelBorder.LOWERED));
-		_scriptEditor.addKeyListener(new KeyListener() {
+		final KeyListener f5Listener = new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
 			}
@@ -106,7 +102,7 @@ public final class Gui {
 					println("Execute script");
 					try {
 						_eval.eval(_scriptEditor.getText());
-					} catch (SchemeException e1) {
+					} catch (Exception e1) {
 						println(e1.getMessage());
 					}
 					print("> ");
@@ -117,7 +113,12 @@ public final class Gui {
 			@Override
 			public void keyPressed(KeyEvent e) {
 			}
-		});
+		};
+
+		_scriptEditor.setFont(_courierFont);
+		_scriptEditor.setBorder(BorderFactory
+				.createBevelBorder(BevelBorder.LOWERED));
+		_scriptEditor.addKeyListener(f5Listener);
 
 		_scriptPanel.add(_scriptScrollPane);
 
@@ -133,6 +134,7 @@ public final class Gui {
 		_replInput.setFont(_courierFont);
 		_replInput.setBorder(BorderFactory
 				.createBevelBorder(BevelBorder.LOWERED));
+		_replInput.addKeyListener(f5Listener);
 		_replInput.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -143,7 +145,7 @@ public final class Gui {
 					if (result != _undefinedSymbol)
 						println(result.toString(false));
 					_replInput.setText("");
-				} catch (SchemeException e1) {
+				} catch (Exception e1) {
 					println(e1.getMessage());
 				}
 				print("> ");
@@ -164,7 +166,7 @@ public final class Gui {
 
 		String crlf = System.getProperty("line.separator");
 		_scriptEditor
-				.setText("; lbjScheme V0.1"
+				.setText("; lbjScheme V0.2"
 						+ crlf
 						+ "; A Scheme subset interpreter in Java, based on SchemeNet.cs"
 						+ crlf
@@ -200,13 +202,11 @@ public final class Gui {
 						+ crlf
 						+ ";"
 						+ crlf
-						+ "; Usage: Enter a Scheme script in this window, then press F5"
+						+ "; Usage: Enter a Scheme script in this window, then press F5 to run."
 						+ crlf
-						+ "; to execute. On the left you see an output window and, below"
+						+ "; On the left you see an output window and, below it, a REPL input."
 						+ crlf
-						+ "; it, a REPL input. Press ENTER to execute any Scheme statements"
-						+ crlf
-						+ "; entered there."
+						+ "; Press ENTER to execute any Scheme statements entered there."
 						+ crlf
 						+ ";"
 						+ crlf
@@ -214,17 +214,18 @@ public final class Gui {
 						+ crlf
 						+ "; compliance when done, but at the moment there are several parts"
 						+ crlf
-						+ "; missing, such as continuations, complex numbers and multiple value"
+						+ "; missing, such as continuations and multiple value returns. Visit"
 						+ crlf
-						+ "; returns. Visit github.com/lbruder/lbjScheme for more information"
-						+ crlf + "; and updates. Bug reports are welcome ;)"
-						+ crlf + crlf + "(define (factors n)" + crlf
+						+ "; github.com/lbruder/lbjScheme for more information and updates."
+						+ crlf + "; Bug reports are welcome ;)" + crlf + crlf
+						+ "(define (factors n)" + crlf
 						+ "  (filter (lambda (i) (zero? (remainder n i)))"
 						+ crlf + "          (range 1 n)))" + crlf + crlf
 						+ "(define (prime? n)" + crlf
 						+ "  (= 2 (length (factors n))))" + crlf + crlf
 						+ "(define (primes upto)" + crlf
-						+ "  (filter prime? (range 1 upto)))");
+						+ "  (filter prime? (range 1 upto)))" + crlf + crlf
+						+ "(display (primes 1000))");
 	}
 
 	public void show() {

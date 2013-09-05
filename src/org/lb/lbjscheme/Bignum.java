@@ -45,7 +45,7 @@ public final class Bignum extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber promote() {
+	public SchemeNumber promoteToLevel(int targetLevel) {
 		return new Rational(_value);
 	}
 
@@ -75,7 +75,7 @@ public final class Bignum extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber doDiv(SchemeNumber other) {
+	public SchemeNumber doDiv(SchemeNumber other) throws SchemeException {
 		return new Rational(_value).div(other);
 	}
 

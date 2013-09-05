@@ -53,7 +53,7 @@ public final class Real extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber promote() {
+	public SchemeNumber promoteToLevel(int targetLevel) {
 		return new Complex(this);
 	}
 
@@ -161,14 +161,14 @@ public final class Real extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber floor() {
+	public SchemeNumber floor() throws SchemeException {
 		return Bignum.valueOf(
 				BigDecimal.valueOf(_value).setScale(0, BigDecimal.ROUND_FLOOR)
 						.toBigInteger()).mul(new Real(1.0));
 	}
 
 	@Override
-	public SchemeNumber ceiling() {
+	public SchemeNumber ceiling() throws SchemeException {
 		return Bignum.valueOf(
 				BigDecimal.valueOf(_value)
 						.setScale(0, BigDecimal.ROUND_CEILING).toBigInteger())
@@ -176,7 +176,7 @@ public final class Real extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber truncate() {
+	public SchemeNumber truncate() throws SchemeException {
 		return Bignum.valueOf(
 				BigDecimal.valueOf(_value).setScale(0, BigDecimal.ROUND_DOWN)
 						.toBigInteger()).mul(new Real(1.0));
@@ -184,7 +184,7 @@ public final class Real extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber round() {
+	public SchemeNumber round() throws SchemeException {
 		return Bignum
 				.valueOf(
 						BigDecimal.valueOf(_value)

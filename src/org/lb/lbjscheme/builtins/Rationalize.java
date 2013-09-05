@@ -47,7 +47,7 @@ public final class Rationalize extends Builtin {
 		}
 	}
 
-	private SchemeNumber abs(SchemeNumber n) {
+	private SchemeNumber abs(SchemeNumber n) throws SchemeException {
 		if (n.compareTo(_zero) >= 0)
 			return n;
 		else

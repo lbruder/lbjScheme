@@ -21,12 +21,10 @@ Everything in this repo is published under the BSD license unless stated otherwi
 ### Missing stuff in the most probable order of my implementing it:
 
 #### High prio:
-* Preserve exactness on Complex operations
 * angle, magnitude, make-polar, make-rectangular
 * case
 * (sqrt n) must return complex for negative n, and work on complex numbers too
 * (expt n) must return exact numbers if possible
-* Tests, tests, tests!
 * apply
 * load
 * unquote-splicing
