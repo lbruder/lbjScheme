@@ -20,23 +20,18 @@ Everything in this repo is published under the BSD license unless stated otherwi
 
 ### Missing stuff in the most probable order of my implementing it:
 
-#### Complex numbers:
-* Complete implementation of "Complex" data type, preserving exactness (!)
-* angle
-* magnitude
-* make-polar
-* make-rectangular
-
-#### Other high prio stuff:
+#### High prio:
+* Preserve exactness on Complex operations
+* angle, magnitude, make-polar, make-rectangular
 * case
+* (sqrt n) must return complex for negative n, and work on complex numbers too
 * (expt n) must return exact numbers if possible
 * Tests, tests, tests!
 * apply
 * load
 * unquote-splicing
 * Line numbers in error messages (can of worms)
-* Some kind of interface to native Java data types
-* Interface to javax.script
+* Some kind of interface to native Java data types, javax.script
 
 #### Reading numerical constants:
 * Prefixes #e, #i
@@ -45,11 +40,9 @@ Everything in this repo is published under the BSD license unless stated otherwi
 #### Compiling evaluator:
 * class CompilingEvaluator
 * virtual machine to run the compiled code
-* call-with-values
-* dynamic-wind
-* values
 * call-with-current-continuation
-* call/cc
+* values, call-with-values
+* dynamic-wind
 
 #### Hygienic macros:
 * define-syntax

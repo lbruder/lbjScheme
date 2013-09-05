@@ -81,13 +81,13 @@ public final class Complex extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber getNumerator() {
-		return null; // TODO: Throw exception: Rational expected
+	public SchemeNumber getNumerator() throws SchemeException {
+		throw new SchemeException("Real number expected");
 	}
 
 	@Override
-	public SchemeNumber getDenominator() {
-		return null; // TODO: Throw exception: Rational expected
+	public SchemeNumber getDenominator() throws SchemeException {
+		throw new SchemeException("Real number expected");
 	}
 
 	@Override
@@ -139,46 +139,69 @@ public final class Complex extends SchemeNumber {
 
 	@Override
 	public boolean isZero() {
-		// No Complex can ever be zero, as it would be converted to a Fixnum
-		// on the fly.
-		return false;
+		return _real.isZero() && _imag.isZero();
+	}
+
+	@Override
+	public boolean eq(SchemeNumber other) {
+		Complex o = (Complex) other;
+		return _real.eq(o._real) && _imag.eq(o._imag);
+	}
+
+	@Override
+	public boolean lt(SchemeNumber other) throws SchemeException {
+		throw new SchemeException("Real number expected");
+	}
+
+	@Override
+	public boolean le(SchemeNumber other) throws SchemeException {
+		throw new SchemeException("Real number expected");
+	}
+
+	@Override
+	public boolean gt(SchemeNumber other) throws SchemeException {
+		throw new SchemeException("Real number expected");
+	}
+
+	@Override
+	public boolean ge(SchemeNumber other) throws SchemeException {
+		throw new SchemeException("Real number expected");
 	}
 
 	@Override
 	protected int doCompareTo(SchemeNumber other) {
-		// BigInteger diff = _n.multiply(((Complex) other)._d).subtract(
-		// _d.multiply(((Complex) other)._n));
-		return 0; // TODO
+		return 0;
 	}
 
 	@Override
-	public SchemeNumber roundToNearestInteger() {
-		return this; // TODO: Throw exception: Rational expected
+	public SchemeNumber roundToNearestInteger() throws SchemeException {
+		throw new SchemeException("Real number expected");
 	}
 
 	@Override
 	public SchemeNumber sqrt() throws SchemeException {
-		return this; // TODO
+		throw new SchemeException(
+				"Taking the square root of a complex number is not supported yet");
 	}
 
 	@Override
-	public SchemeNumber floor() {
-		return this; // TODO: Throw exception: Rational expected
+	public SchemeNumber floor() throws SchemeException {
+		throw new SchemeException("Real number expected");
 	}
 
 	@Override
-	public SchemeNumber ceiling() {
-		return this; // TODO: Throw exception: Rational expected
+	public SchemeNumber ceiling() throws SchemeException {
+		throw new SchemeException("Real number expected");
 	}
 
 	@Override
-	public SchemeNumber truncate() {
-		return this; // TODO: Throw exception: Rational expected
+	public SchemeNumber truncate() throws SchemeException {
+		throw new SchemeException("Real number expected");
 	}
 
 	@Override
-	public SchemeNumber round() {
-		return this; // TODO: Throw exception: Rational expected
+	public SchemeNumber round() throws SchemeException {
+		throw new SchemeException("Real number expected");
 	}
 
 	public SchemeNumber getRealPart() {

@@ -93,27 +93,27 @@ public abstract class SchemeNumber implements SchemeObject {
 		return compareTo(other) == 0;
 	}
 
-	public boolean lt(SchemeNumber other) {
+	public boolean lt(SchemeNumber other) throws SchemeException {
 		return compareTo(other) < 0;
 	}
 
-	public boolean le(SchemeNumber other) {
+	public boolean le(SchemeNumber other) throws SchemeException {
 		return compareTo(other) <= 0;
 	}
 
-	public boolean gt(SchemeNumber other) {
+	public boolean gt(SchemeNumber other) throws SchemeException {
 		return compareTo(other) > 0;
 	}
 
-	public boolean ge(SchemeNumber other) {
+	public boolean ge(SchemeNumber other) throws SchemeException {
 		return compareTo(other) >= 0;
 	}
 
-	public SchemeNumber getNumerator() {
+	public SchemeNumber getNumerator() throws SchemeException {
 		return this;
 	}
 
-	public SchemeNumber getDenominator() {
+	public SchemeNumber getDenominator() throws SchemeException {
 		return Fixnum.valueOf(1);
 	}
 
@@ -139,7 +139,7 @@ public abstract class SchemeNumber implements SchemeObject {
 	public abstract String toString(boolean forDisplay, int base)
 			throws SchemeException;
 
-	public abstract SchemeNumber roundToNearestInteger();
+	public abstract SchemeNumber roundToNearestInteger() throws SchemeException;
 
 	protected abstract int doCompareTo(SchemeNumber other);
 
@@ -159,13 +159,13 @@ public abstract class SchemeNumber implements SchemeObject {
 
 	public abstract SchemeNumber sqrt() throws SchemeException;
 
-	public abstract SchemeNumber floor();
+	public abstract SchemeNumber floor() throws SchemeException;
 
-	public abstract SchemeNumber ceiling();
+	public abstract SchemeNumber ceiling() throws SchemeException;
 
-	public abstract SchemeNumber truncate();
+	public abstract SchemeNumber truncate() throws SchemeException;
 
-	public abstract SchemeNumber round();
+	public abstract SchemeNumber round() throws SchemeException;
 
 	public static SchemeNumber fromString(String value, int base)
 			throws SchemeException {
