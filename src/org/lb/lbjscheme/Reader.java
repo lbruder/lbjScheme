@@ -48,8 +48,13 @@ public final class Reader {
 					Nil.getInstance()));
 		case ',':
 			readChar();
-			return new Pair(Symbol.fromString("unquote"), new Pair(read(),
-					Nil.getInstance()));
+			if (peekChar() == '@') {
+				readChar();
+				return new Pair(Symbol.fromString("unquote-splicing"),
+						new Pair(read(), Nil.getInstance()));
+			} else
+				return new Pair(Symbol.fromString("unquote"), new Pair(read(),
+						Nil.getInstance()));
 		case '(':
 			return readList();
 		case '"':
