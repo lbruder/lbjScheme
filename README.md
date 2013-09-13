@@ -18,32 +18,21 @@ Everything in this repo is published under the BSD license unless stated otherwi
 
 # TODO
 
-### Missing stuff in the most probable order of my implementing it:
+### As far as I'm aware, this is what is missing from R5RS at the moment:
 
-#### High prio:
-* angle, magnitude, make-polar, make-rectangular
-* case
+#### Incomplete features:
+* Suffixes s, f, d, l for numerical constants
 * (sqrt n) must return complex for negative n, and work on complex numbers too
 * (expt n) must return exact numbers if possible
+
+#### Missing builtins:
 * apply
 * load
+* Complex numbers: angle, magnitude, make-polar, make-rectangular
+* Continuations: call-with-current-continuation, values, call-with-values, dynamic-wind
+* Macros: define-syntax, let-syntax, letrec-syntax, syntax-rules
+
+#### Ideas for the future
 * Line numbers in error messages (can of worms)
-* Some kind of interface to native Java data types, javax.script
-
-#### Reading numerical constants:
-* Prefixes #e, #i
-* Suffixes s, f, d, l
-
-#### Compiling evaluator:
-* class CompilingEvaluator
-* virtual machine to run the compiled code
-* call-with-current-continuation
-* values, call-with-values
-* dynamic-wind
-
-#### Hygienic macros:
-* define-syntax
-* let-syntax
-* letrec-syntax
-* syntax-rules
+* Interface to Java types and code
 
