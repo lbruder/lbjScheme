@@ -21,7 +21,6 @@ Everything in this repo is published under the BSD license unless stated otherwi
 ### As far as I'm aware, this is what is missing from R5RS at the moment:
 
 #### Incomplete features:
-* exact->inexact should work with "really big" bignum rationals too
 * Suffixes s, f, d, l for numerical constants
 * (expt n) must return exact numbers if possible
 * Some builtins break if other builtins are re-defined
@@ -29,7 +28,7 @@ Everything in this repo is published under the BSD license unless stated otherwi
 #### Missing builtins:
 * apply
 * load
-* Complex numbers: angle, magnitude, make-polar, make-rectangular
+* Complex numbers: angle, make-polar
 * Continuations: call-with-current-continuation, values, call-with-values, dynamic-wind
 * Macros: define-syntax, let-syntax, letrec-syntax, syntax-rules
 

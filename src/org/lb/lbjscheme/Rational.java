@@ -18,6 +18,7 @@ package org.lb.lbjscheme;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 import java.util.regex.*;
 
 public final class Rational extends SchemeNumber {
@@ -69,7 +70,8 @@ public final class Rational extends SchemeNumber {
 		if (targetLevel == 5) // promote to complex
 			return new Complex(this);
 		else
-			return new Real(_n.doubleValue() / _d.doubleValue());
+			return new Real(new BigDecimal(_n).divide(new BigDecimal(_d),
+					MathContext.DECIMAL64).doubleValue());
 	}
 
 	public static SchemeNumber valueOf(String value, int base)
