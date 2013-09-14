@@ -20,8 +20,8 @@ import java.io.*;
 import java.util.*;
 
 public final class ConsoleRepl {
-	public static void main(String[] args) throws IOException, SchemeException {
-
+	public void run(String[] args) throws SchemeException,
+			FileNotFoundException, IOException {
 		if (hasArgument(args, "-h") || hasArgument(args, "-?")) {
 			System.out.println("Command line switches:");
 			System.out.println("-a      Use analyzing evaluator (faster)");

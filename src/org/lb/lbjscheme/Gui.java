@@ -248,8 +248,4 @@ public final class Gui {
 		final Rectangle lastLineRect = new Rectangle(0, height, 0, height);
 		_outputScrollPane.scrollRectToVisible(lastLineRect);
 	}
-
-	public static void main(String[] args) throws SchemeException {
-		new Gui().show();
-	}
 }
