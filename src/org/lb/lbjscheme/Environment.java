@@ -197,7 +197,6 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCar());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCdr());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Sin());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Sqrt());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.StringLength());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.StringP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.StringRef());
@@ -376,5 +375,6 @@ public final class Environment implements SchemeObject {
 			+ "(define (call-with-output-file filename thunk) (let* ((f (open-output-file filename)) (output (thunk f))) (close-output-port f) output))"
 			+ "(define (with-output-to-file filename proc) (let ((f (open-output-file filename)) (old-output (current-output-port))) (sys:set-current-output-port f) (let ((output (proc))) (sys:set-current-output-port old-output) (close-output-port f) output)))"
 			+ "(define (call-with-input-file filename thunk) (let* ((f (open-input-file filename)) (input (thunk f))) (close-input-port f) input))"
-			+ "(define (with-input-from-file filename proc) (let ((f (open-input-file filename)) (old-input (current-input-port))) (sys:set-current-input-port f) (let ((input (proc))) (sys:set-current-input-port old-input) (close-input-port f) input)))";
+			+ "(define (with-input-from-file filename proc) (let ((f (open-input-file filename)) (old-input (current-input-port))) (sys:set-current-input-port f) (let ((input (proc))) (sys:set-current-input-port old-input) (close-input-port f) input)))"
+			+ "(define (sqrt n) (define (isqrt n) (if (negative? n) (* 0+1i (isqrt (- 0 n))) (let loop ((guess 1)) (if (< (abs (- (* guess guess) n)) 1/10000000000) (let ((guess_f (floor guess)) (guess_c (ceiling guess))) (cond ((= n (* guess_c guess_c)) guess_c) ((= n (* guess_f guess_f)) guess_f) (else (exact->inexact guess)))) (loop (/ (+ guess (/ n guess)) 2)))))) (cond ((integer? n) (isqrt n)) ((rational? n) (/ (isqrt (numerator n)) (isqrt (denominator n)))) (else (let* ((a (real-part n)) (b (imag-part n)) (m (sqrt (+ (* a a) (* b b)))) (l (sqrt (/ (+ m a) 2))) (sgn (lambda (x) (if (positive? x) 1 (if (negative? x) -1 0)))) (d (* (sgn b) (sqrt (/ (- m a) 2))))) (+ l (* 0+1i d))))))";
 }

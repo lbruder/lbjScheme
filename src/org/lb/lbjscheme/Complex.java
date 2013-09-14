@@ -176,12 +176,6 @@ public final class Complex extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber sqrt() throws SchemeException {
-		throw new SchemeException(
-				"Taking the square root of a complex number is not supported yet");
-	}
-
-	@Override
 	public SchemeNumber floor() throws SchemeException {
 		throw new SchemeException("Real number expected");
 	}

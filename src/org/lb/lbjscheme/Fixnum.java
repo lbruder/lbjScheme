@@ -102,11 +102,6 @@ public final class Fixnum extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber sqrt() throws SchemeException {
-		return promoteToLevel(2).sqrt();
-	}
-
-	@Override
 	public SchemeNumber floor() {
 		return this;
 	}

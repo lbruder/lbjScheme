@@ -29,10 +29,21 @@ public final class InexactToExact extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		final SchemeNumber o = getNumber(parameters.get(0));
-		if (!(o instanceof Real))
-			return o; // If number is already exact, just return it
-		Real r = (Real) o;
-		return r.makeExact();
+		return makeNumberExact(getNumber(parameters.get(0)));
+	}
+
+	// HACK: Turn into a method of SchemeNumber and its derivates
+	private SchemeNumber makeNumberExact(final SchemeNumber o)
+			throws SchemeException {
+		if (o instanceof Complex) {
+			final Complex c = (Complex) o;
+			return Complex.valueOf(makeNumberExact(c.getRealPart()),
+					makeNumberExact(c.getImagPart()));
+		}
+
+		if (o instanceof Real)
+			return ((Real) o).makeExact();
+
+		return o; // If number is already exact, just return it
 	}
 }

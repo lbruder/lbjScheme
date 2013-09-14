@@ -131,7 +131,7 @@ public final class Real extends SchemeNumber {
 		return _value == 0.0;
 	}
 
-	public SchemeObject makeExact() throws SchemeException {
+	public SchemeNumber makeExact() throws SchemeException {
 		final BigDecimal number = new BigDecimal(Double.toString(_value));
 		final int scale = number.scale();
 		final BigInteger numerator = number.movePointRight(scale)
@@ -153,11 +153,6 @@ public final class Real extends SchemeNumber {
 			n = n.subtract(_oneHalf);
 
 		return Bignum.valueOf(n.toBigInteger());
-	}
-
-	@Override
-	public SchemeNumber sqrt() {
-		return new Real(Math.sqrt(_value));
 	}
 
 	@Override

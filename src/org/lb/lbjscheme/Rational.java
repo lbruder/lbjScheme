@@ -177,25 +177,6 @@ public final class Rational extends SchemeNumber {
 	}
 
 	@Override
-	public SchemeNumber sqrt() throws SchemeException {
-		// TODO: Return Complex if necessary
-		SchemeNumber newN = Bignum.valueOf(_n).sqrt();
-		if (!(newN.isExact()))
-			return promoteToLevel(4).sqrt();
-		SchemeNumber newD = Bignum.valueOf(_d).sqrt();
-		if (!(newN.isExact()))
-			return promoteToLevel(4).sqrt();
-
-		if (newN instanceof Fixnum)
-			newN = newN.promoteToLevel(2);
-		if (newD instanceof Fixnum)
-			newD = newD.promoteToLevel(2);
-
-		return valueOf(((Bignum) newN).getRawValue(),
-				((Bignum) newD).getRawValue());
-	}
-
-	@Override
 	public SchemeNumber floor() {
 		return Bignum.valueOf(_n.subtract(_n.mod(_d)).divide(_d));
 	}

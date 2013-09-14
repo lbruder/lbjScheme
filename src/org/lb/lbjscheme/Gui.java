@@ -160,13 +160,13 @@ public final class Gui {
 
 		_mainForm.getContentPane().add(_mainPanel);
 		_mainForm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		_mainForm.setSize(new Dimension(1000, 700));
+		_mainForm.setSize(new Dimension(1000, 720));
 
 		print("> ");
 
 		String crlf = System.getProperty("line.separator");
 		_scriptEditor
-				.setText("; lbjScheme V0.2"
+				.setText("; lbjScheme V0.3"
 						+ crlf
 						+ "; A Scheme subset interpreter in Java, based on SchemeNet.cs"
 						+ crlf
