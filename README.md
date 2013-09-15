@@ -18,21 +18,21 @@ Everything in this repo is published under the BSD license unless stated otherwi
 
 # TODO
 
-### As far as I'm aware, this is what is missing from R5RS at the moment:
+As far as I'm aware, this is what is missing from R5RS at the moment:
 
-#### Incomplete features:
+## Incomplete features:
 * Suffixes s, f, d, l for numerical constants
 * (expt n) must return exact numbers if possible
 * Some builtins break if other builtins are re-defined
 
-#### Missing builtins:
+## Missing builtins:
 * apply
 * load
 * make-polar
 * call-with-current-continuation, values, call-with-values, dynamic-wind
 * define-syntax, let-syntax, letrec-syntax, syntax-rules
 
-#### Ideas for the future
+## Ideas for the future
 * Line numbers in error messages (can of worms)
 * Interface to Java types and code
 
