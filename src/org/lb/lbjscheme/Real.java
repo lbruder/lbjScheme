@@ -16,8 +16,7 @@
 
 package org.lb.lbjscheme;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.math.*;
 
 public final class Real extends SchemeNumber {
 	private final static BigDecimal _oneHalf = BigDecimal.valueOf(5, 1);
@@ -60,6 +59,9 @@ public final class Real extends SchemeNumber {
 	public static SchemeNumber valueOf(String value, int base)
 			throws SchemeException {
 		assertBaseTen(base);
+
+		value = value.replaceAll("[sfdl]", "e");
+
 		try {
 			return new Real(Double.parseDouble(value));
 		} catch (NumberFormatException ex) {

@@ -16,22 +16,15 @@ will support first class continuations, (values) and so on. Let's see how it wor
 
 Everything in this repo is published under the BSD license unless stated otherwise in the respective file.
 
-# TODO
+## TODO
 
-As far as I'm aware, this is what is missing from R5RS at the moment:
+As far as I'm aware (!), this is what's left to do to reach full R5RS compliance:
 
-## Incomplete features:
-* Suffixes s, f, d, l for numerical constants
-* (expt n) must return exact numbers if possible
+* Make (expt n) return exact numbers if possible
+* Speed up (sqrt n)
 * Some builtins break if other builtins are re-defined
-
-## Missing builtins:
-* apply
-* load
-* call-with-current-continuation, values, call-with-values, dynamic-wind
-* define-syntax, let-syntax, letrec-syntax, syntax-rules
-
-## Ideas for the future
-* Line numbers in error messages (can of worms)
-* Interface to Java types and code
+* Add (apply)
+* Add (load)
+* Add call-with-current-continuation, values, call-with-values, dynamic-wind
+* Add define-syntax, let-syntax, letrec-syntax, syntax-rules
 
