@@ -60,9 +60,9 @@ public final class Complex extends SchemeNumber {
 
 		if (!value.endsWith("i"))
 			throw new SchemeException("Value can not be converted to a complex");
-		int pos = value.indexOf('+');
+		int pos = value.lastIndexOf('+');
 		if (pos == -1)
-			pos = value.indexOf('-');
+			pos = value.lastIndexOf('-');
 		if (pos == -1)
 			throw new SchemeException("Value can not be converted to a complex");
 
