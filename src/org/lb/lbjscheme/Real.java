@@ -75,7 +75,7 @@ public final class Real extends SchemeNumber {
 
 	@Override
 	public SchemeNumber getDenominator() {
-		return new Real(1);
+		return new Fixnum(1);
 	}
 
 	@Override
