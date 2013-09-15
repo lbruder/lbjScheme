@@ -28,9 +28,9 @@ Everything in this repo is published under the BSD license unless stated otherwi
 #### Missing builtins:
 * apply
 * load
-* Complex numbers: angle, make-polar
-* Continuations: call-with-current-continuation, values, call-with-values, dynamic-wind
-* Macros: define-syntax, let-syntax, letrec-syntax, syntax-rules
+* make-polar
+* call-with-current-continuation, values, call-with-values, dynamic-wind
+* define-syntax, let-syntax, letrec-syntax, syntax-rules
 
 #### Ideas for the future
 * Line numbers in error messages (can of worms)
