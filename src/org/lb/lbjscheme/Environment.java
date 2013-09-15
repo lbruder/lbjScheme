@@ -379,5 +379,6 @@ public final class Environment implements SchemeObject {
 			+ "(define (sqrt n) (define (isqrt n) (if (negative? n) (* 0+1i (isqrt (- 0 n))) (let loop ((guess 1)) (if (< (abs (- (* guess guess) n)) 1/10000000000) (let ((guess_f (floor guess)) (guess_c (ceiling guess))) (cond ((= n (* guess_c guess_c)) guess_c) ((= n (* guess_f guess_f)) guess_f) (else (exact->inexact guess)))) (loop (/ (+ guess (/ n guess)) 2)))))) (cond ((integer? n) (isqrt n)) ((rational? n) (/ (isqrt (numerator n)) (isqrt (denominator n)))) (else (let* ((a (real-part n)) (b (imag-part n)) (m (sqrt (+ (* a a) (* b b)))) (l (sqrt (/ (+ m a) 2))) (sgn (lambda (x) (if (positive? x) 1 (if (negative? x) -1 0)))) (d (* (sgn b) (sqrt (/ (- m a) 2))))) (+ l (* 0+1i d))))))"
 			+ "(define (magnitude n) (if (real? n) (abs n) (let ((square (lambda (x) (* x x)))) (sqrt (+ (square (real-part n)) (square (imag-part n)))))))"
 			+ "(define (make-rectangular x1 x2) (+ x1 (* 0+1i x2)))"
-			+ "(define (angle n) (let* ((r (real-part n)) (i (imag-part n)) (pi 3.1415926535897932384626433) (a (atan (/ (abs i) (abs r))))) (if (positive? r) (if (positive? i) a (- a)) (if (positive? i) (- pi a) (- a pi)))))";
+			+ "(define (angle n) (let* ((r (real-part n)) (i (imag-part n)) (pi 3.1415926535897932384626433) (a (atan (/ (abs i) (abs r))))) (if (positive? r) (if (positive? i) a (- a)) (if (positive? i) (- pi a) (- a pi)))))"
+			+ "(define (make-polar r a) (+ (* r (cos a)) (* r (sin a) 0+1i)))";
 }

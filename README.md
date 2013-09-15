@@ -28,7 +28,6 @@ As far as I'm aware, this is what is missing from R5RS at the moment:
 ## Missing builtins:
 * apply
 * load
-* make-polar
 * call-with-current-continuation, values, call-with-values, dynamic-wind
 * define-syntax, let-syntax, letrec-syntax, syntax-rules
 
