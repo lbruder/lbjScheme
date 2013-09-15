@@ -32,6 +32,8 @@ public final class Div extends Builtin {
 		SchemeNumber ret = getNumber(parameters.get(0));
 		if (parameters.size() == 1)
 			return new Fixnum(1).div(ret);
+		if (ret.isExact() && ret.isZero())
+			return ret; // Short-circuit
 		for (SchemeObject o : parameters.subList(1, parameters.size()))
 			ret = ret.div(getNumber(o));
 		return ret;
