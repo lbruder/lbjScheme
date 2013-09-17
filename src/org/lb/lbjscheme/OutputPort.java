@@ -22,6 +22,7 @@ public class OutputPort implements SchemeObject {
 	public void write(String string) throws SchemeException {
 		try {
 			_writer.write(string);
+			_writer.flush();
 		} catch (IOException e) {
 			throw new SchemeException("Error writing to output port: "
 					+ e.getMessage());
