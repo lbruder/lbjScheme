@@ -210,6 +210,7 @@ public final class Environment implements SchemeObject {
 				new org.lb.lbjscheme.builtins.SysSetCurrentInputPort(eval));
 		addBuiltin(target,
 				new org.lb.lbjscheme.builtins.SysSetCurrentOutputPort(eval));
+		addBuiltin(target, new org.lb.lbjscheme.builtins.SysSqrt());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Tan());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Truncate());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorLength());
@@ -376,7 +377,7 @@ public final class Environment implements SchemeObject {
 			+ "(define (with-output-to-file filename proc) (let ((f (open-output-file filename)) (old-output (current-output-port))) (sys:set-current-output-port f) (let ((output (proc))) (sys:set-current-output-port old-output) (close-output-port f) output)))"
 			+ "(define (call-with-input-file filename thunk) (let* ((f (open-input-file filename)) (input (thunk f))) (close-input-port f) input))"
 			+ "(define (with-input-from-file filename proc) (let ((f (open-input-file filename)) (old-input (current-input-port))) (sys:set-current-input-port f) (let ((input (proc))) (sys:set-current-input-port old-input) (close-input-port f) input)))"
-			+ "(define (sqrt n) (define (isqrt n) (if (negative? n) (* 0+1i (isqrt (- 0 n))) (let loop ((guess 1)) (if (< (abs (- (* guess guess) n)) 1/10000000000) (let ((guess_f (floor guess)) (guess_c (ceiling guess))) (cond ((= n (* guess_c guess_c)) guess_c) ((= n (* guess_f guess_f)) guess_f) (else (exact->inexact guess)))) (loop (/ (+ guess (/ n guess)) 2)))))) (cond ((integer? n) (isqrt n)) ((rational? n) (/ (isqrt (numerator n)) (isqrt (denominator n)))) (else (let* ((a (real-part n)) (b (imag-part n)) (m (sqrt (+ (* a a) (* b b)))) (l (sqrt (/ (+ m a) 2))) (sgn (lambda (x) (if (positive? x) 1 (if (negative? x) -1 0)))) (d (* (sgn b) (sqrt (/ (- m a) 2))))) (+ l (* 0+1i d))))))"
+			+ "(define (sqrt n) (define (isqrt n) (if (negative? n) (* 0+1i (isqrt (- 0 n))) (let* ((guess (inexact->exact (sys:sqrt n))) (guess_f (floor guess)) (guess_c (ceiling guess))) (cond ((= n (* guess_c guess_c)) guess_c) ((= n (* guess_f guess_f)) guess_f) (else (exact->inexact guess)))))) (cond ((integer? n) (isqrt n)) ((rational? n) (/ (isqrt (numerator n)) (isqrt (denominator n)))) ((real? n) (exact->inexact (isqrt n))) (else (let* ((a (real-part n)) (b (imag-part n)) (m (sqrt (+ (* a a) (* b b)))) (l (sqrt (/ (+ m a) 2))) (sgn (lambda (x) (if (positive? x) 1 (if (negative? x) -1 0)))) (d (* (sgn b) (sqrt (/ (- m a) 2))))) (+ l (* 0+1i d))))))"
 			+ "(define (magnitude n) (if (real? n) (abs n) (let ((square (lambda (x) (* x x)))) (sqrt (+ (square (real-part n)) (square (imag-part n)))))))"
 			+ "(define (make-rectangular x1 x2) (+ x1 (* 0+1i x2)))"
 			+ "(define (angle n) (let* ((r (real-part n)) (i (imag-part n)) (pi 3.1415926535897932384626433) (a (atan (/ (abs i) (abs r))))) (if (positive? r) (if (positive? i) a (- a)) (if (positive? i) (- pi a) (- a pi)))))"

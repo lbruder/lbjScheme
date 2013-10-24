@@ -21,10 +21,9 @@ Everything in this repo is published under the BSD license unless stated otherwi
 As far as I'm aware (!), this is what's left to do to reach full R5RS compliance:
 
 * Make (expt n) return exact numbers if possible
-* Speed up (sqrt n)
 * Some builtins break if other builtins are re-defined
 * Add (apply)
 * Add (load)
 * Add call-with-current-continuation, values, call-with-values, dynamic-wind
-* Add define-syntax, let-syntax, letrec-syntax, syntax-rules
+* Add Scheme macros: define-syntax, let-syntax, letrec-syntax, syntax-rules
 

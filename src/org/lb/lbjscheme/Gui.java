@@ -166,7 +166,7 @@ public final class Gui {
 
 		String crlf = System.getProperty("line.separator");
 		_scriptEditor
-				.setText("; lbjScheme V0.3"
+				.setText("; lbjScheme V0.4"
 						+ crlf
 						+ "; A Scheme subset interpreter in Java, based on SchemeNet.cs"
 						+ crlf

@@ -135,9 +135,12 @@ public final class Real extends SchemeNumber {
 
 	public SchemeNumber makeExact() throws SchemeException {
 		final BigDecimal number = new BigDecimal(Double.toString(_value));
-		final int scale = number.scale();
-		final BigInteger numerator = number.movePointRight(scale)
-				.toBigInteger();
+		int scale = number.scale();
+		BigInteger numerator = number.movePointRight(scale).toBigInteger();
+		while (scale < 0) {
+			numerator = numerator.multiply(BigInteger.TEN);
+			scale++;
+		}
 		final BigInteger denominator = BigInteger.TEN.pow(scale);
 		return Rational.valueOf(numerator, denominator);
 	}
