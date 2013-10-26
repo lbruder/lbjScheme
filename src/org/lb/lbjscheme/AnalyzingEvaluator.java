@@ -130,6 +130,52 @@ public final class AnalyzingEvaluator extends Evaluator {
 								+ procedure.getClass());
 			}
 
+			if (o instanceof Apply) {
+				final Apply form = (Apply) o;
+				final SchemeObject procedure = eval(form.getProcedure(), env);
+				if (procedure instanceof Nil)
+					throw new SchemeException("Empty list can not be applied");
+				final SchemeObject parameterList = eval(form.getParameters(),
+						env);
+				if (!(parameterList instanceof SchemeList))
+					throw new SchemeException(
+							"Invalid apply form: Expected argument list, got "
+									+ parameterList.getClass());
+				final List<SchemeObject> parameters = ((SchemeList) parameterList)
+						.toJavaList();
+
+				if (procedure instanceof Builtin)
+					return ((Builtin) procedure).apply(parameters);
+
+				// Ugly hack: Can only happen on lambdas returned by (eval)
+				if (procedure instanceof Lambda) {
+					final Lambda l = (Lambda) procedure;
+					o = _analyzer.analyze(new Pair(_beginSymbol, l.getForms()));
+					env = new Environment(l.getCaptured());
+					env.expand(l.getParameterNames(), l.hasRestParameter(),
+							parameters);
+					continue tailCall;
+				}
+
+				if (procedure instanceof AnalyzedLambda) {
+					final AnalyzedLambda l = (AnalyzedLambda) procedure;
+
+					env = new Environment(l.getCaptured());
+					env.expand(l.getParameterNames(), l.hasRestParameter(),
+							parameters);
+
+					for (SyntaxTreeObject i : l.getForms()
+							.getFormsWithoutLast())
+						eval(i, env);
+					o = l.getForms().getLastForm();
+					continue tailCall;
+				}
+
+				throw new SchemeException(
+						"Don't know how to call object of type "
+								+ procedure.getClass());
+			}
+
 			if (o instanceof IfForm) {
 				final IfForm form = (IfForm) o;
 				o = eval(form.getCondition(), env) != False.getInstance() ? form

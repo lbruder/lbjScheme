@@ -14,17 +14,22 @@
 // ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 // OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-package tests.unittests;
+package org.lb.lbjscheme.ast;
 
-import junit.framework.TestCase;
-import org.lb.lbjscheme.*;
+public final class Apply extends SyntaxTreeObject {
+	private final SyntaxTreeObject _procedure;
+	private final SyntaxTreeObject _parameters;
 
-public class TrueTest extends TestCase {
-	public void testDisplay() {
-		assertEquals("#t", True.getInstance().toString(true));
+	public Apply(SyntaxTreeObject procedure, SyntaxTreeObject parameters) {
+		_procedure = procedure;
+		_parameters = parameters;
 	}
 
-	public void testWrite() {
-		assertEquals("#t", True.getInstance().toString(false));
+	public SyntaxTreeObject getProcedure() {
+		return _procedure;
+	}
+
+	public SyntaxTreeObject getParameters() {
+		return _parameters;
 	}
 }

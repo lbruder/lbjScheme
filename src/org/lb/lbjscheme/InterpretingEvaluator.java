@@ -29,6 +29,7 @@ public final class InterpretingEvaluator extends Evaluator {
 	private static final Symbol _ifSymbol = Symbol.fromString("if");
 	private static final Symbol _beginSymbol = Symbol.fromString("begin");
 	private static final Symbol _lambdaSymbol = Symbol.fromString("lambda");
+	private static final Symbol _applySymbol = Symbol.fromString("sys:apply");
 
 	public InterpretingEvaluator(InputPort defaultInputPort,
 			OutputPort defaultOutputPort) throws SchemeException {
@@ -83,6 +84,36 @@ public final class InterpretingEvaluator extends Evaluator {
 					return ((Pair) p.getCdr()).getCar();
 				if (car == _setSymbol)
 					return set(form, env);
+				if (car == _applySymbol) {
+					if (form.size() != 3)
+						throw new SchemeException(
+								"Invalid apply form: Expected 3 parameters, got "
+										+ (form.size() - 1));
+					final SchemeObject procedure = eval(form.get(1), env);
+					final SchemeObject argsList = eval(form.get(2), env);
+					if (!(argsList instanceof SchemeList))
+						throw new SchemeException(
+								"Invalid apply form: Expected argument list, got "
+										+ argsList.getClass());
+					final List<SchemeObject> parameters = ((SchemeList) argsList)
+							.toJavaList();
+
+					if (procedure instanceof Builtin)
+						return ((Builtin) procedure).apply(parameters);
+
+					if (procedure instanceof Lambda) {
+						final Lambda l = (Lambda) procedure;
+						o = new Pair(_beginSymbol, l.getForms());
+						env = new Environment(l.getCaptured());
+						env.expand(l.getParameterNames(), l.hasRestParameter(),
+								parameters);
+						continue tailCall;
+					}
+
+					throw new SchemeException(
+							"Don't know how to call object of type "
+									+ car.getClass());
+				}
 				if (car == _ifSymbol) {
 					SchemeObject condition;
 					SchemeObject thenPart;

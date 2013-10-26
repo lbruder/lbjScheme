@@ -29,6 +29,7 @@ public final class Analyzer {
 	private static final Symbol _ifSymbol = Symbol.fromString("if");
 	private static final Symbol _beginSymbol = Symbol.fromString("begin");
 	private static final Symbol _lambdaSymbol = Symbol.fromString("lambda");
+	private static final Symbol _applySymbol = Symbol.fromString("sys:apply");
 
 	private final InterpretingEvaluator _macroEvaluator;
 	private final Environment _macroEnvironment;
@@ -76,6 +77,8 @@ public final class Analyzer {
 			return new SelfEvaluatingLiteral(form.get(1));
 		if (car == _setSymbol)
 			return analyzeSetForm(form);
+		if (car == _applySymbol)
+			return analyzeApplyForm(p);
 		if (car == _ifSymbol)
 			return analyzeIfForm(form);
 		if (car == _beginSymbol)
@@ -194,6 +197,21 @@ public final class Analyzer {
 					"Invalid set! form: Expected symbol as target");
 
 		return new SetForm((Symbol) form.get(1), analyze(form.get(2)));
+	}
+
+	private SyntaxTreeObject analyzeApplyForm(Pair rawForm)
+			throws SchemeException {
+		final List<SchemeObject> form = rawForm.toJavaList();
+
+		if (form.size() != 3)
+			throw new SchemeException(
+					"Invalid apply form: Expected 3 parameters, got "
+							+ (form.size() - 1));
+
+		final SyntaxTreeObject procedure = analyze(form.get(1));
+		final SyntaxTreeObject parameterList = analyze(form.get(2));
+
+		return new Apply(procedure, parameterList);
 	}
 
 	private IfForm analyzeIfForm(final List<SchemeObject> form)

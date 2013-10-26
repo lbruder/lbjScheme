@@ -22,7 +22,6 @@ As far as I'm aware (!), this is what's left to do to reach full R5RS compliance
 
 * Make (expt n) return exact numbers if possible
 * Some builtins break if other builtins are re-defined
-* Add (apply)
 * Add (load)
 * Add call-with-current-continuation, values, call-with-values, dynamic-wind
 * Add Scheme macros: define-syntax, let-syntax, letrec-syntax, syntax-rules

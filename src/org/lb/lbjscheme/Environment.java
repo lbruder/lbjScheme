@@ -381,5 +381,6 @@ public final class Environment implements SchemeObject {
 			+ "(define (magnitude n) (if (real? n) (abs n) (let ((square (lambda (x) (* x x)))) (sqrt (+ (square (real-part n)) (square (imag-part n)))))))"
 			+ "(define (make-rectangular x1 x2) (+ x1 (* 0+1i x2)))"
 			+ "(define (angle n) (let* ((r (real-part n)) (i (imag-part n)) (pi 3.1415926535897932384626433) (a (atan (/ (abs i) (abs r))))) (if (positive? r) (if (positive? i) a (- a)) (if (positive? i) (- pi a) (- a pi)))))"
-			+ "(define (make-polar r a) (+ (* r (cos a)) (* r (sin a) 0+1i)))";
+			+ "(define (make-polar r a) (+ (* r (cos a)) (* r (sin a) 0+1i)))"
+			+ "(define (apply f arglist) (sys:apply f arglist))";
 }
