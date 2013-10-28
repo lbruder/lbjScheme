@@ -16,7 +16,9 @@
 
 package org.lb.lbjscheme;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 public final class Environment implements SchemeObject {
 	private final Environment _outer;
@@ -384,5 +386,7 @@ public final class Environment implements SchemeObject {
 			+ "(define (make-polar r a) (+ (* r (cos a)) (* r (sin a) 0+1i)))"
 			+ "(define (apply f arglist) (sys:apply f arglist))"
 			+ "(define values list)"
-			+ "(define (call-with-values generator consumer) (let ((v (generator))) (if (list? v) (apply consumer v) (consumer v))))";
+			+ "(define (call-with-values generator consumer) (let ((v (generator))) (if (list? v) (apply consumer v) (consumer v))))"
+			+ "(define (call-with-current-continuation f) (sys:call/cc f))"
+			+ "(define (call/cc f) (sys:call/cc f))";
 }

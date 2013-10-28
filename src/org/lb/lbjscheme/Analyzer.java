@@ -19,7 +19,17 @@ package org.lb.lbjscheme;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lb.lbjscheme.ast.*;
+import org.lb.lbjscheme.ast.Apply;
+import org.lb.lbjscheme.ast.BeginForm;
+import org.lb.lbjscheme.ast.CallccForm;
+import org.lb.lbjscheme.ast.DefineForm;
+import org.lb.lbjscheme.ast.Funcall;
+import org.lb.lbjscheme.ast.IfForm;
+import org.lb.lbjscheme.ast.LambdaForm;
+import org.lb.lbjscheme.ast.LiteralSymbol;
+import org.lb.lbjscheme.ast.SelfEvaluatingLiteral;
+import org.lb.lbjscheme.ast.SetForm;
+import org.lb.lbjscheme.ast.SyntaxTreeObject;
 
 public final class Analyzer {
 	private static final Symbol _quoteSymbol = Symbol.fromString("quote");
@@ -30,6 +40,8 @@ public final class Analyzer {
 	private static final Symbol _beginSymbol = Symbol.fromString("begin");
 	private static final Symbol _lambdaSymbol = Symbol.fromString("lambda");
 	private static final Symbol _applySymbol = Symbol.fromString("sys:apply");
+	private static final Symbol _callccSymbol = Symbol
+			.fromString("sys:call/cc");
 
 	private final InterpretingEvaluator _macroEvaluator;
 	private final Environment _macroEnvironment;
@@ -77,6 +89,8 @@ public final class Analyzer {
 			return new SelfEvaluatingLiteral(form.get(1));
 		if (car == _setSymbol)
 			return analyzeSetForm(form);
+		if (car == _callccSymbol)
+			return analyzeCallccForm(form);
 		if (car == _applySymbol)
 			return analyzeApplyForm(p);
 		if (car == _ifSymbol)
@@ -190,7 +204,7 @@ public final class Analyzer {
 			throws SchemeException {
 		if (form.size() != 3)
 			throw new SchemeException(
-					"Invalid set! form: Expected 3 parameters, got "
+					"Invalid set! form: Expected 2 parameters, got "
 							+ (form.size() - 1));
 		if (!(form.get(1) instanceof Symbol))
 			throw new SchemeException(
@@ -199,13 +213,22 @@ public final class Analyzer {
 		return new SetForm((Symbol) form.get(1), analyze(form.get(2)));
 	}
 
+	private SyntaxTreeObject analyzeCallccForm(List<SchemeObject> form)
+			throws SchemeException {
+		if (form.size() != 2)
+			throw new SchemeException(
+					"Invalid call/cc form: Expected 1 parameter, got "
+							+ (form.size() - 1));
+		return new CallccForm(analyze(form.get(1)));
+	}
+
 	private SyntaxTreeObject analyzeApplyForm(Pair rawForm)
 			throws SchemeException {
 		final List<SchemeObject> form = rawForm.toJavaList();
 
 		if (form.size() != 3)
 			throw new SchemeException(
-					"Invalid apply form: Expected 3 parameters, got "
+					"Invalid apply form: Expected 2 parameters, got "
 							+ (form.size() - 1));
 
 		final SyntaxTreeObject procedure = analyze(form.get(1));

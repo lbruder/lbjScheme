@@ -127,7 +127,7 @@ public abstract class EvaluatorTest extends TestCase {
 			assertTrue(true);
 		}
 	}
-	
+
 	public void testValues() throws SchemeException {
 		evalTest("(call-with-values (lambda () (values 1 2)) +)", "3");
 		evalTest("(call-with-values * -)", "-1");

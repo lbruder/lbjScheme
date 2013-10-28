@@ -30,6 +30,8 @@ public final class InterpretingEvaluator extends Evaluator {
 	private static final Symbol _beginSymbol = Symbol.fromString("begin");
 	private static final Symbol _lambdaSymbol = Symbol.fromString("lambda");
 	private static final Symbol _applySymbol = Symbol.fromString("sys:apply");
+	private static final Symbol _callccSymbol = Symbol
+			.fromString("sys:call/cc");
 
 	public InterpretingEvaluator(InputPort defaultInputPort,
 			OutputPort defaultOutputPort) throws SchemeException {
@@ -84,6 +86,9 @@ public final class InterpretingEvaluator extends Evaluator {
 					return ((Pair) p.getCdr()).getCar();
 				if (car == _setSymbol)
 					return set(form, env);
+				if (car == _callccSymbol)
+					throw new SchemeException(
+							"InterpretingEvaluator doesn't support continuations");
 				if (car == _applySymbol) {
 					if (form.size() != 3)
 						throw new SchemeException(
