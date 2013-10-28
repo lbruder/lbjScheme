@@ -20,11 +20,10 @@ There will be (at least) three evaluators:
 
 The first two will remain quite simple and incomplete, more as a test
 harness for the builtins, while the compiler will support first class
-continuations, (values) and so on. Let's see how it works out. In the
-future there might even be a compiler that generates Java or .NET
-bytecode, or C sources or whatever. Focus is on keeping this thing
-embeddable though, as there are lots of great Scheme-to-something
-compilers out there already.
+continuations. Let's see how it works out. In the future there might
+even be a compiler that generates Java or .NET bytecode, or C sources
+or whatever. Focus is on keeping this thing embeddable though, as there
+are lots of great Scheme-to-something compilers out there already.
 
 Everything in this repo is published under the BSD license unless stated
 otherwise in the respective file.
@@ -59,8 +58,7 @@ compliance:
 
 * Make (expt n) return exact numbers if possible
 * Some builtins break if other builtins are re-defined
-* Add (load) builtin (optional)
-* Add (values) and (call-with-values)
-* Add call-with-current-continuation, dynamic-wind
+* Add (load) builtin (optional in R5RS)
+* Add continuations, (dynamic-wind)
 * Add Scheme macros: define-syntax, let-syntax, letrec-syntax, syntax-rules
 

@@ -67,7 +67,7 @@ public final class ConsoleRepl {
 			System.out
 					.println("compliance when done, but at the moment there are several parts");
 			System.out
-					.println("missing, such as continuations and multiple value returns. Visit");
+					.println("missing, such as continuations and hygienic macros. Visit");
 			System.out
 					.println("github.com/lbruder/lbjScheme for more information and updates.");
 			System.out.println("Bug reports are welcome ;)");

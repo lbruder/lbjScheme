@@ -214,7 +214,7 @@ public final class Gui {
 						+ crlf
 						+ "; compliance when done, but at the moment there are several parts"
 						+ crlf
-						+ "; missing, such as continuations and multiple value returns. Visit"
+						+ "; missing, such as continuations and hygienic macros. Visit"
 						+ crlf
 						+ "; github.com/lbruder/lbjScheme for more information and updates."
 						+ crlf + "; Bug reports are welcome ;)" + crlf + crlf
