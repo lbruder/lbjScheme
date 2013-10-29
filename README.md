@@ -54,6 +54,7 @@ can download the sources and possibly newer releases from
 ## FAQ
 
 Q: Which of the "advanced features" of Scheme are supported?
+
 A: The full numeric tower, tail calls and lexical scoping work. Exactness of
    numbers is preserved as long as feasible. First-class continuations and the
    ability to freely redefine builtins without others breaking will be present
@@ -65,12 +66,14 @@ A: The full numeric tower, tail calls and lexical scoping work. Exactness of
    moment.
 
 Q: How fast is this thing?
+
 A: Not my primary concern. At the moment, this is a very simple interpreter with
    no performance optimizations so I can keep the code clean and simple. The
    next evaluator will be a compiler though, and maybe I'll add a JVM bytecode
    backend, too. Let's see. First thing is to get lbjScheme R5RS compliant.
    
 Q: Is there a console REPL?
+
 A: The .jar file, when started via "java -jar lbjScheme.jar", will open a GUI
    window or start a console REPL depending on from where it was started.
    There are a few command line options for the console REPL that I'll refactor
@@ -78,9 +81,11 @@ A: The .jar file, when started via "java -jar lbjScheme.jar", will open a GUI
    force-console mode too. Nothing fancy yet.
    
 Q: Why did you write this?
+
 A: Why not?
 
 Q: Seriously, why?
+
 A: This is my Scheme interpreter. There are many like it, but this one is mine.
    I'm doing this because I want to learn more about the Scheme language,
    compiler and interpreter implementation techniques, and so on. Reading
