@@ -140,7 +140,8 @@ public abstract class EvaluatorTest extends TestCase {
 		String script = "";
 		for (;;) {
 			String read = in.readLine();
-			if (read == null) break;
+			if (read == null)
+				break;
 			script += read + "\n";
 		}
 		in.close();

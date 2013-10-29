@@ -16,20 +16,8 @@
 
 package org.lb.lbjscheme;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lb.lbjscheme.ast.Apply;
-import org.lb.lbjscheme.ast.BeginForm;
-import org.lb.lbjscheme.ast.CallccForm;
-import org.lb.lbjscheme.ast.DefineForm;
-import org.lb.lbjscheme.ast.Funcall;
-import org.lb.lbjscheme.ast.IfForm;
-import org.lb.lbjscheme.ast.LambdaForm;
-import org.lb.lbjscheme.ast.LiteralSymbol;
-import org.lb.lbjscheme.ast.SelfEvaluatingLiteral;
-import org.lb.lbjscheme.ast.SetForm;
-import org.lb.lbjscheme.ast.SyntaxTreeObject;
+import java.util.*;
+import org.lb.lbjscheme.ast.*;
 
 public final class Analyzer {
 	private static final Symbol _quoteSymbol = Symbol.fromString("quote");

@@ -16,22 +16,9 @@
 
 package org.lb.lbjscheme;
 
-import java.io.EOFException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lb.lbjscheme.ast.Apply;
-import org.lb.lbjscheme.ast.BeginForm;
-import org.lb.lbjscheme.ast.CallccForm;
-import org.lb.lbjscheme.ast.DefineForm;
-import org.lb.lbjscheme.ast.Funcall;
-import org.lb.lbjscheme.ast.IfForm;
-import org.lb.lbjscheme.ast.LambdaForm;
-import org.lb.lbjscheme.ast.LiteralSymbol;
-import org.lb.lbjscheme.ast.SelfEvaluatingLiteral;
-import org.lb.lbjscheme.ast.SetForm;
-import org.lb.lbjscheme.ast.SyntaxTreeObject;
+import java.io.*;
+import java.util.*;
+import org.lb.lbjscheme.ast.*;
 
 public final class AnalyzingEvaluator extends Evaluator {
 	private final static Symbol _undefinedSymbol = Symbol
