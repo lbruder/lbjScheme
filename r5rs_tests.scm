@@ -13,7 +13,8 @@
                  (lambda () (equal? ,expression ,expected-value))))
 
 ; ------------------------------------------------------------------------------
-; Make sure all symbols as defined in the standard do exist:
+; Make sure all symbols as defined in the standard do exist
+; List of symbols copied from the Scheme page on Wikipedia
 
 (define (dynamic-wind . args) (error "TODO: dynamic-wind not implemented yet"))
 
@@ -37,6 +38,13 @@ string->list string->number string-ref string-set! string->symbol
 substring symbol? symbol->string values vector vector? vector-fill!
 vector-length vector->list vector-ref vector-set! with-input-from-file
 with-output-to-file write write-char
+
++ - * / abs quotient remainder modulo gcd lcm expt sqrt numerator denominator
+rational? rationalize floor ceiling truncate round inexact->exact exact->inexact
+exact? inexact? < <= > >= = zero? negative? positive? odd? even? max min sin cos
+tan asin acos atan exp log make-rectangular make-polar real-part imag-part
+magnitude angle complex? number->string string->number integer? rational? real?
+complex? number?
 
 ; ------------------------------------------------------------------------------
 ; 1.3.4
