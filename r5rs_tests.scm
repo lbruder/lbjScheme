@@ -13,9 +13,30 @@
                  (lambda () (equal? ,expression ,expected-value))))
 
 ; ------------------------------------------------------------------------------
-; Just to make sure all symbols as defined in the standard do exist:
-boolean? symbol? char? vector? procedure? pair? number? string? port?
-; TODO
+; Make sure all symbols as defined in the standard do exist:
+
+(define (dynamic-wind . args) (error "TODO: dynamic-wind not implemented yet"))
+
+append apply assoc assq assv boolean? call/cc
+call-with-current-continuation call-with-input-file call-with-output-file
+call-with-values car cdr char<=? char<? char=? char>=? char>? char?
+char-alphabetic? char-ci<=? char-ci<? char-ci=? char-ci>=? char-ci>?
+char-downcase char->integer char-lower-case? char-numeric? char-ready?
+char-upcase char-upper-case? char-whitespace? close-input-port
+close-output-port cons current-input-port current-output-port display
+dynamic-wind eof-object? eq? equal? eqv? eval for-each input-port?
+integer->char interaction-environment length list list? list-ref
+list->string list-tail list->vector make-string make-vector map member
+memq memv newline not null? null-environment number? number->string
+open-input-file open-output-file output-port? pair? peek-char port?
+procedure? read read-char reverse scheme-report-environment set-car!
+set-cdr! string string<=? string<? string=? string>=? string>?
+string? string-append string-ci<=? string-ci<? string-ci=?
+string-ci>=? string-ci>? string-copy string-fill! string-length
+string->list string->number string-ref string-set! string->symbol
+substring symbol? symbol->string values vector vector? vector-fill!
+vector-length vector->list vector-ref vector-set! with-input-from-file
+with-output-to-file write write-char
 
 ; ------------------------------------------------------------------------------
 ; 1.3.4
@@ -36,8 +57,39 @@ boolean? symbol? char? vector? procedure? pair? number? string? port?
 ; ------------------------------------------------------------------------------
 ; 3.2
 
-; TODO: Disjointness. No object satisfies more than one of the following predicates:
-; boolean? symbol? char? vector? procedure? pair? number? string? port?
+(define (test-disjointness x)
+  (test "3.2"
+        (length (filter (lambda (pred) (pred x))
+                        (list boolean?
+                              symbol?
+                              char?
+                              vector?
+                              procedure?
+                              pair?
+                              number?
+                              string?
+                              null? ; Not in R5RS, but makes sense
+                              port?)))
+        1))
+
+(for-each test-disjointness
+          (list 1
+                1.0
+                1234567890123456789012345678901234567890
+                42+2.34i
+                47/23
+                -3-12/3i
+                'foo
+                "foo"
+                #t
+                #f
+                '()
+                '(1 2 3)
+                '#(1 2 3)
+                car
+                (lambda (x) x)
+                (cons 1 2)
+                (delay (+ 1 2))))
 
 ; TODO: All values count as true in [...] a test except for #f.
 
