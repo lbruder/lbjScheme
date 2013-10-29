@@ -16,9 +16,7 @@
 
 package org.lb.lbjscheme;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public final class Environment implements SchemeObject {
 	private final Environment _outer;
@@ -208,6 +206,7 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Sub());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SymbolP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SymbolToString());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.SysError());
 		addBuiltin(target,
 				new org.lb.lbjscheme.builtins.SysSetCurrentInputPort(eval));
 		addBuiltin(target,
@@ -388,5 +387,7 @@ public final class Environment implements SchemeObject {
 			+ "(define values list)"
 			+ "(define (call-with-values generator consumer) (let ((v (generator))) (if (list? v) (apply consumer v) (consumer v))))"
 			+ "(define (call-with-current-continuation f) (sys:call/cc f))"
-			+ "(define (call/cc f) (sys:call/cc f))";
+			+ "(define (call/cc f) (sys:call/cc f))"
+			+ "(define (error . args) (sys:error args))"
+			+ "(define (port? x) (if (input-port? x) #t (output-port? x)))";
 }

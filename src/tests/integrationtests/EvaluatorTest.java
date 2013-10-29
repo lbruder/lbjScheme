@@ -16,6 +16,7 @@
 
 package tests.integrationtests;
 
+import java.io.*;
 import junit.framework.TestCase;
 import org.lb.lbjscheme.*;
 
@@ -131,5 +132,21 @@ public abstract class EvaluatorTest extends TestCase {
 	public void testValues() throws SchemeException {
 		evalTest("(call-with-values (lambda () (values 1 2)) +)", "3");
 		evalTest("(call-with-values * -)", "-1");
+	}
+
+	public void testR5rsTests() throws Exception {
+		final BufferedReader in = new BufferedReader(new FileReader(
+				"r5rs_tests.scm"));
+		String script = "";
+		for (;;) {
+			String read = in.readLine();
+			if (read == null) break;
+			script += read + "\n";
+		}
+		in.close();
+		if (script.equals(""))
+			fail("r5rs_tests.txt not found");
+		interp.eval(script);
+		assertTrue(true);
 	}
 }
