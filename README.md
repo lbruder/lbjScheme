@@ -51,6 +51,52 @@ possible. I am not connected to the JUnit project in any other way. You
 can download the sources and possibly newer releases from
 [the JUnit repo on GitHub](https://github.com/junit-team/junit).
 
+## FAQ
+
+Q: Which of the "advanced features" of Scheme are supported?
+A: The full numeric tower, tail calls and lexical scoping work. Exactness of
+   numbers is preserved as long as feasible. First-class continuations and the
+   ability to freely redefine builtins without others breaking will be present
+   in the 1.0 release. Macros will be CL style in the 1.0 release,
+   i.e. (defmacro name (params) ...) instead of Scheme (hygienic) macros. Maybe
+   in a later version I'll support Scheme macros too.
+   There are a few builtins that are not part of the standard, and a few parts
+   of SRFI-1, but none of the SRFIs are officially part of lbjScheme at the
+   moment.
+
+Q: How fast is this thing?
+A: Not my primary concern. At the moment, this is a very simple interpreter with
+   no performance optimizations so I can keep the code clean and simple. The
+   next evaluator will be a compiler though, and maybe I'll add a JVM bytecode
+   backend, too. Let's see. First thing is to get lbjScheme R5RS compliant.
+   
+Q: Is there a console REPL?
+A: The .jar file, when started via "java -jar lbjScheme.jar", will open a GUI
+   window or start a console REPL depending on from where it was started.
+   There are a few command line options for the console REPL that I'll refactor
+   a bit in the near future so that the GUI will support them too, and add a
+   force-console mode too. Nothing fancy yet.
+   
+Q: Why did you write this?
+A: Why not?
+
+Q: Seriously, why?
+A: This is my Scheme interpreter. There are many like it, but this one is mine.
+   I'm doing this because I want to learn more about the Scheme language,
+   compiler and interpreter implementation techniques, and so on. Reading
+   [SICP](http://mitpress.mit.edu/sicp/) challenged my mind in so many ways
+   that I wanted to build my own interpreter to toy around with. This is the
+   culmination of lots of little side projects evolving in parallel, and now
+   I'm closer than ever to completing my very own Scheme implementation, one
+   that I fully understand, without any magic going on inside some source code
+   taken from other Open Source projects. Maybe I'll even add a Scheme-to-C
+   compiler that uses its own garbage collector. Lots of cool stuff to
+   experiment with.
+   Apart from that, if you truly want to learn a programming language, write a
+   compiler for it. And Scheme is one of the few languages out there that manage
+   to be both powerful and simple, so the concepts you learn in the process of
+   implementing Scheme change how you think about programming in general.
+
 ## TODO
 
 As far as I'm aware (!), this is what's left to do to reach full R5RS
