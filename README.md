@@ -56,9 +56,9 @@ can download the sources and possibly newer releases from
 Q: Which of the "advanced features" of Scheme are supported?
 
 A: The full numeric tower, tail calls and lexical scoping work. Exactness of
-   numbers is preserved as long as feasible. First-class continuations and the
-   ability to freely redefine builtins without others breaking will be present
-   in the 1.0 release. Macros will be CL style in the 1.0 release,
+   numbers is preserved as long as feasible. The 1.0 release will have
+   first-class continuations and the ability to freely redefine builtins without
+   others breaking. Macros will be CL style in the 1.0 release,
    i.e. (defmacro name (params) ...) instead of Scheme (hygienic) macros. Maybe
    in a later version I'll support Scheme macros too.
    There are a few builtins that are not part of the standard, and a few parts
@@ -75,7 +75,7 @@ A: Not my primary concern. At the moment, this is a very simple interpreter with
 Q: Is there a console REPL?
 
 A: The .jar file, when started via "java -jar lbjScheme.jar", will open a GUI
-   window or start a console REPL depending on from where it was started.
+   window or start a console REPL depending on where it was started from.
    There are a few command line options for the console REPL that I'll refactor
    a bit in the near future so that the GUI will support them too, and add a
    force-console mode too. Nothing fancy yet.
