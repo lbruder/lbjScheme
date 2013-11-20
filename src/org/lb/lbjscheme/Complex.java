@@ -202,4 +202,10 @@ public final class Complex extends SchemeNumber {
 	public SchemeNumber getImagPart() {
 		return _imag;
 	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		throw new SchemeException(
+				"Complex number cannot be converted into a plain Java object");
+	}
 }

@@ -55,6 +55,17 @@ public abstract class Evaluator {
 		_currentOutputPort = value;
 	}
 
+	public void defineGlobalVariable(String name, Object value)
+			throws SchemeException {
+		getGlobalEnvironment().define(Symbol.fromString(name),
+				JvmBridge.fromJavaObject(value));
+	}
+
+	public Object getGlobalVariable(String name) throws SchemeException {
+		return JvmBridge.toJavaObject(getGlobalEnvironment().get(
+				Symbol.fromString(name)));
+	}
+
 	public SchemeObject eval(SchemeObject o) throws SchemeException {
 		return eval(o, _global);
 	}

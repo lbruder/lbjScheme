@@ -16,7 +16,7 @@
 
 package org.lb.lbjscheme;
 
-import java.math.*;
+import java.math.BigInteger;
 
 public final class Bignum extends SchemeNumber {
 	private final static BigInteger MAX_INT = BigInteger
@@ -128,5 +128,10 @@ public final class Bignum extends SchemeNumber {
 	@Override
 	public SchemeNumber round() {
 		return this;
+	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		return _value;
 	}
 }

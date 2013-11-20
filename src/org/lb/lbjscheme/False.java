@@ -35,4 +35,9 @@ public class False implements SchemeObject {
 	public String toString(boolean forDisplay) {
 		return "#f";
 	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		return false;
+	}
 }

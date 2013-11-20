@@ -16,7 +16,7 @@
 
 package org.lb.lbjscheme;
 
-import java.io.*;
+import java.io.IOException;
 
 public class InputPort implements SchemeObject {
 	private final java.io.Reader _reader;
@@ -68,5 +68,11 @@ public class InputPort implements SchemeObject {
 			throw new SchemeException("Error closing input port: "
 					+ e.getMessage());
 		}
+	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		throw new SchemeException(
+				"Input port cannot be converted into a plain Java object");
 	}
 }

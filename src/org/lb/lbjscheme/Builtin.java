@@ -84,4 +84,10 @@ public abstract class Builtin implements SchemeObject {
 		assertParameterType(o, Fixnum.class);
 		return ((Fixnum) o).getValue();
 	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		throw new SchemeException(
+				"Scheme builtin cannot be converted into a plain Java object");
+	}
 }

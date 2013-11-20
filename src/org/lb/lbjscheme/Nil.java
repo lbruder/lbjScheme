@@ -52,4 +52,9 @@ public class Nil implements SchemeObject, SchemeList {
 	public Iterator<SchemeObject> iterator() {
 		return new PairIterator(this);
 	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		return null;
+	}
 }

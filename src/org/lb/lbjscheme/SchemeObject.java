@@ -20,4 +20,6 @@ public interface SchemeObject {
 	public abstract String toString();
 
 	public abstract String toString(boolean forDisplay);
+
+	public abstract Object toJavaObject() throws SchemeException;
 }

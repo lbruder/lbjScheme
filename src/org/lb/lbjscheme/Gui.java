@@ -226,6 +226,9 @@ public final class Gui {
 						+ "(define (primes upto)" + crlf
 						+ "  (filter prime? (range 1 upto)))" + crlf + crlf
 						+ "(display (primes 1000))");
+
+		_eval.getGlobalEnvironment().define(Symbol.fromString("test"),
+				new JvmBridge("asd"));
 	}
 
 	public void show() {

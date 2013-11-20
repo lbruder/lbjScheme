@@ -191,4 +191,9 @@ public final class Real extends SchemeNumber {
 								.setScale(0, BigDecimal.ROUND_HALF_EVEN)
 								.toBigInteger()).mul(new Real(1.0));
 	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		return _value;
+	}
 }

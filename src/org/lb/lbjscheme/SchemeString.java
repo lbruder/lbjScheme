@@ -84,4 +84,9 @@ public final class SchemeString implements SchemeObject {
 		ret.append("\"");
 		return ret.toString();
 	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		return new String(_characters);
+	}
 }

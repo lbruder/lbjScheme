@@ -16,9 +16,7 @@
 
 package org.lb.lbjscheme;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.MathContext;
+import java.math.*;
 import java.util.regex.*;
 
 public final class Rational extends SchemeNumber {
@@ -198,5 +196,11 @@ public final class Rational extends SchemeNumber {
 	public SchemeNumber round() {
 		return Bignum.valueOf(new BigDecimal(_n).divide(new BigDecimal(_d))
 				.setScale(0, BigDecimal.ROUND_HALF_EVEN).toBigInteger());
+	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		return new BigDecimal(_n).divide(new BigDecimal(_d),
+				MathContext.DECIMAL64).doubleValue();
 	}
 }

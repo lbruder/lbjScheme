@@ -113,4 +113,12 @@ public final class Pair implements SchemeObject, SchemeList {
 	public Iterator<SchemeObject> iterator() {
 		return new PairIterator(this);
 	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		final List<Object> ret = new ArrayList<Object>();
+		for (SchemeObject o : this)
+			ret.add(o.toJavaObject());
+		return ret;
+	}
 }

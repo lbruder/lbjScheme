@@ -52,4 +52,9 @@ public final class SchemeCharacter implements SchemeObject {
 			return "#\\" + String.valueOf(_value);
 		}
 	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		return _value;
+	}
 }

@@ -35,4 +35,10 @@ public class EofObject implements SchemeObject {
 	public String toString(boolean forDisplay) {
 		return "<eof-object>";
 	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		throw new SchemeException(
+				"EOF object cannot be converted into a plain Java object");
+	}
 }

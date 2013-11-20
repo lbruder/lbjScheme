@@ -16,7 +16,7 @@
 
 package org.lb.lbjscheme;
 
-import java.util.*;
+import java.util.List;
 
 public final class Macro implements SchemeObject {
 	private final String _name;
@@ -62,5 +62,11 @@ public final class Macro implements SchemeObject {
 	@Override
 	public String toString(boolean forDisplay) {
 		return "<macro " + _name + ">";
+	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		throw new SchemeException(
+				"Macro cannot be converted into a plain Java object");
 	}
 }

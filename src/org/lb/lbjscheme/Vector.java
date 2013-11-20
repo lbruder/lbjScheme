@@ -79,4 +79,13 @@ public final class Vector implements SchemeObject {
 
 		return ret.toString();
 	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		final Object[] ret = new Object[_values.length];
+		int index = 0;
+		for (SchemeObject o : _values)
+			ret[index++] = o.toJavaObject();
+		return ret;
+	}
 }

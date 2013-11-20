@@ -206,7 +206,9 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Sub());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SymbolP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SymbolToString());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.SysCall());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SysError());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.SysGetMethodNames());
 		addBuiltin(target,
 				new org.lb.lbjscheme.builtins.SysSetCurrentInputPort(eval));
 		addBuiltin(target,
@@ -390,4 +392,10 @@ public final class Environment implements SchemeObject {
 			+ "(define (call/cc f) (sys:call/cc f))"
 			+ "(define (error . args) (sys:error args))"
 			+ "(define (port? x) (if (input-port? x) #t (output-port? x)))";
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		throw new SchemeException(
+				"Environment cannot be converted into a plain Java object");
+	}
 }

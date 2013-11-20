@@ -53,4 +53,10 @@ public class OutputPort implements SchemeObject {
 					+ e.getMessage());
 		}
 	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		throw new SchemeException(
+				"Output port cannot be converted into a plain Java object");
+	}
 }

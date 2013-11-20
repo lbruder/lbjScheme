@@ -120,4 +120,9 @@ public final class Fixnum extends SchemeNumber {
 	public SchemeNumber round() {
 		return this;
 	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		return _value;
+	}
 }

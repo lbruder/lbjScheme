@@ -35,4 +35,9 @@ public class True implements SchemeObject {
 	public String toString(boolean forDisplay) {
 		return "#t";
 	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		return true;
+	}
 }

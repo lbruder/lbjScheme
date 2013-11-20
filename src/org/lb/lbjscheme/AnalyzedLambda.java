@@ -16,7 +16,7 @@
 
 package org.lb.lbjscheme;
 
-import java.util.*;
+import java.util.List;
 import org.lb.lbjscheme.ast.BeginForm;
 
 public final class AnalyzedLambda implements SchemeObject {
@@ -63,5 +63,11 @@ public final class AnalyzedLambda implements SchemeObject {
 	@Override
 	public String toString(boolean forDisplay) {
 		return "<procedure " + _name + ">";
+	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		throw new SchemeException(
+				"Lambda expression cannot be converted into a plain Java object");
 	}
 }

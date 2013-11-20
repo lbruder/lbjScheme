@@ -16,7 +16,7 @@
 
 package org.lb.lbjscheme;
 
-import java.util.*;
+import java.util.HashMap;
 
 public final class Symbol implements SchemeObject {
 	private final String _name;
@@ -44,5 +44,10 @@ public final class Symbol implements SchemeObject {
 		final Symbol ret = new Symbol(name);
 		_cache.put(name, ret);
 		return ret;
+	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		return _name;
 	}
 }
