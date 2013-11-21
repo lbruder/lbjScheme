@@ -135,19 +135,33 @@ public abstract class EvaluatorTest extends TestCase {
 	}
 
 	public void testR5rsTests() throws Exception {
-		final BufferedReader in = new BufferedReader(new FileReader(
-				"r5rs_tests.scm"));
-		String script = "";
+		final String script = readWholeFile("r5rs_tests.scm");
+		if (script.equals(""))
+			fail("r5rs_tests.scm not found");
+		interp.eval(script);
+		assertTrue(true);
+	}
+
+	public void testExtensionTests() throws Exception {
+		final String script = readWholeFile("extension_tests.scm");
+		if (script.equals(""))
+			fail("extension_tests.scm not found");
+		interp.defineGlobalVariable("test-object", new TestObject());
+		interp.eval(script);
+		assertTrue(true);
+	}
+
+	private static String readWholeFile(String fileName)
+			throws FileNotFoundException, IOException {
+		final BufferedReader in = new BufferedReader(new FileReader(fileName));
+		String contents = "";
 		for (;;) {
 			String read = in.readLine();
 			if (read == null)
 				break;
-			script += read + "\n";
+			contents += read + "\n";
 		}
 		in.close();
-		if (script.equals(""))
-			fail("r5rs_tests.txt not found");
-		interp.eval(script);
-		assertTrue(true);
+		return contents;
 	}
 }

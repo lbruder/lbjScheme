@@ -211,6 +211,7 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SysGetMethodNames());
 		addBuiltin(target,
 				new org.lb.lbjscheme.builtins.SysSetCurrentInputPort(eval));
+		addBuiltin(target, new org.lb.lbjscheme.builtins.SysNew());
 		addBuiltin(target,
 				new org.lb.lbjscheme.builtins.SysSetCurrentOutputPort(eval));
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SysSqrt());

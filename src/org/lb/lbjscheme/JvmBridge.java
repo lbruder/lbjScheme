@@ -48,20 +48,56 @@ public final class JvmBridge implements SchemeObject {
 		return Pair.fromIterable(ret);
 	}
 
+	public static SchemeObject newObject(String className,
+			List<SchemeObject> parameters) throws SchemeException {
+		final Object[] parameterArray = getParameterArray(parameters);
+		final Class<?>[] parameterTypes = getParameterTypes(parameterArray);
+
+		Class<?> c;
+
+		try {
+			c = Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			c = null;
+		}
+
+		if (c == null)
+			throw new SchemeException("Class not found: " + className);
+
+		Constructor<?> constructor;
+
+		try {
+			constructor = c.getConstructor(parameterTypes);
+		} catch (NoSuchMethodException e) {
+			constructor = null;
+		} catch (SecurityException e) {
+			throw new SchemeException("Unable to create instance of class "
+					+ className + " due to security reasons");
+		}
+
+		if (constructor == null)
+			throw new SchemeException("Constructor not found: " + className);
+
+		try {
+			return fromJavaObject(constructor.newInstance(parameterArray));
+		} catch (InstantiationException | IllegalAccessException
+				| IllegalArgumentException | InvocationTargetException e) {
+			throw new SchemeException("Unable to create instance of class "
+					+ className);
+		}
+	}
+
 	public SchemeObject call(String methodName, List<SchemeObject> parameters)
 			throws SchemeException {
-		Object[] parameterArray = new Object[parameters.size()];
-		for (int i = 0; i < parameterArray.length; ++i)
-			parameterArray[i] = toJavaObject(parameters.get(i));
-		Class<?>[] parameterTypes = new Class<?>[parameterArray.length];
-		for (int i = 0; i < parameterArray.length; ++i)
-			parameterTypes[i] = parameterArray[i].getClass();
+		final Object[] parameterArray = getParameterArray(parameters);
+		final Class<?>[] parameterTypes = getParameterTypes(parameterArray);
 
 		Method m = null;
 		try {
 			m = _obj.getClass().getMethod(methodName, parameterTypes);
 		} catch (NoSuchMethodException e) {
-			throw new SchemeException("No suitable method found");
+			throw new SchemeException("No suitable method found (" + methodName
+					+ ")");
 		} catch (SecurityException e) {
 			throw new SchemeException("Unable to call methods on object");
 		}
@@ -79,7 +115,32 @@ public final class JvmBridge implements SchemeObject {
 			throw new SchemeException("Error in foreign method: "
 					+ e.getMessage());
 		}
-	}// (sys:call test "equals" "asd")
+	}
+
+	private static Class<?>[] getParameterTypes(Object[] parameterArray) {
+		Class<?>[] parameterTypes = new Class<?>[parameterArray.length];
+		for (int i = 0; i < parameterArray.length; ++i) {
+			parameterTypes[i] = parameterArray[i].getClass();
+			// Argh.
+			if (parameterTypes[i] == Integer.class)
+				parameterTypes[i] = int.class;
+			if (parameterTypes[i] == Double.class)
+				parameterTypes[i] = double.class;
+			if (parameterTypes[i] == Boolean.class)
+				parameterTypes[i] = boolean.class;
+			if (parameterTypes[i] == Character.class)
+				parameterTypes[i] = char.class;
+		}
+		return parameterTypes;
+	}
+
+	private static Object[] getParameterArray(List<SchemeObject> parameters)
+			throws SchemeException {
+		Object[] parameterArray = new Object[parameters.size()];
+		for (int i = 0; i < parameterArray.length; ++i)
+			parameterArray[i] = toJavaObject(parameters.get(i));
+		return parameterArray;
+	}
 
 	public static SchemeObject fromJavaObject(boolean o) {
 		return o ? True.getInstance() : False.getInstance();
@@ -153,8 +214,7 @@ public final class JvmBridge implements SchemeObject {
 			return Pair.fromIterable(values);
 		}
 
-		throw new SchemeException("Unable to convert object of type "
-				+ o.getClass() + " into Scheme object (yet)");
+		return new JvmBridge(o);
 	}
 
 	private static SchemeObject fromJavaArray(Object o) throws SchemeException {
