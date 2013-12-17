@@ -152,7 +152,6 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.ExactP());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.ExactToInexact());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Exp());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Expt());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Floor());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Ge());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.Gt());
@@ -208,6 +207,7 @@ public final class Environment implements SchemeObject {
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SymbolToString());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SysCall());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SysError());
+		addBuiltin(target, new org.lb.lbjscheme.builtins.SysExpt());
 		addBuiltin(target, new org.lb.lbjscheme.builtins.SysGetMethodNames());
 		addBuiltin(target,
 				new org.lb.lbjscheme.builtins.SysSetCurrentInputPort(eval));
@@ -387,6 +387,8 @@ public final class Environment implements SchemeObject {
 			+ "(define (angle n) (let* ((r (real-part n)) (i (imag-part n)) (pi 3.1415926535897932384626433) (a (atan (/ (abs i) (abs r))))) (if (positive? r) (if (positive? i) a (- a)) (if (positive? i) (- pi a) (- a pi)))))"
 			+ "(define (make-polar r a) (+ (* r (cos a)) (* r (sin a) 0+1i)))"
 			+ "(define (apply f arglist) (sys:apply f arglist))"
+			+ "(define (square x) (* x x))"
+			+ "(define (expt a b) (cond ((zero? b) 1) ((= 1 b) a) ((not (integer? b)) (sys:expt a b)) ((negative? b) (/ (expt a (- b)))) ((even? b) (square (expt a (quotient b 2)))) (else (* a (expt a (- b 1))))))"
 			+ "(define values list)"
 			+ "(define (call-with-values generator consumer) (let ((v (generator))) (if (list? v) (apply consumer v) (consumer v))))"
 			+ "(define (call-with-current-continuation f) (sys:call/cc f))"

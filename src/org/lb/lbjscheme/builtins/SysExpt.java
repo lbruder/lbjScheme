@@ -19,12 +19,12 @@ package org.lb.lbjscheme.builtins;
 import java.util.List;
 import org.lb.lbjscheme.*;
 
-public final class Expt extends Builtin {
+public final class SysExpt extends Builtin {
 	private final Fixnum _one = new Fixnum(1);
 
 	@Override
 	public String getName() {
-		return "expt";
+		return "sys:expt";
 	}
 
 	@Override
@@ -39,9 +39,6 @@ public final class Expt extends Builtin {
 			throw new SchemeException("Division by zero");
 		if (n1.isExact() && n1.eq(_one))
 			return new Fixnum(1);
-		if (n1.isExact() && n2.isExact()) {
-			// TODO: Can we return an exact value?
-		}
 		while (!(n1 instanceof Real))
 			n1 = n1.promoteToLevel(4);
 		while (!(n2 instanceof Real))
