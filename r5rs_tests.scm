@@ -358,7 +358,185 @@ complex? number?
 (test "6.1" (equal? (make-vector 5 'a) (make-vector 5 'a)) #t)
 
 ; ------------------------------------------------------------------------------
-; 6.2
+; 6.2.1
 
-; TODO: Page 19ff
+(test "6.2.1" (integer? 3) #t)
+(test "6.2.1" (rational? 3) #t)
+(test "6.2.1" (real? 3) #t)
+(test "6.2.1" (complex? 3) #t)
+(test "6.2.1" (number? 3) #t)
+
+; ------------------------------------------------------------------------------
+; 6.2.3
+
+; TODO Page 20f
+
+; ------------------------------------------------------------------------------
+; 6.2.4
+
+; TODO Page 21
+
+; ------------------------------------------------------------------------------
+; 6.2.5
+
+(test "6.2.5" (complex? 3+4i) #t)
+(test "6.2.5" (complex? 3) #t)
+(test "6.2.5" (real? 3) #t)
+; TODO: Test fails (test "6.2.5" (real? -2.5+0.0i) #t)
+(test "6.2.5" (real? #e1e10) #t)
+(test "6.2.5" (rational? 6/10) #t)
+(test "6.2.5" (rational? 6/3) #t)
+(test "6.2.5" (integer? 3+0i) #t)
+; TODO: Test fails (test "6.2.5" (integer? 3.0) #t)
+(test "6.2.5" (integer? 8/4) #t)
+
+(test "6.2.5" (max 3 4) 4)
+(test "6.2.5" (max 3.9 4) 4.0)
+(test "6.2.5" (exact? (max 3 4)) #t)
+; TODO: Test fails (test "6.2.5" (inexact? (max 3.9 4)) #t)
+(test "6.2.5" (+ 3 4) 7)
+(test "6.2.5" (+ 3) 3)
+(test "6.2.5" (+) 0)
+(test "6.2.5" (* 4) 4)
+(test "6.2.5" (*) 1)
+(test "6.2.5" (- 3 4) -1)
+(test "6.2.5" (- 3 4 5) -6)
+(test "6.2.5" (- 3) -3)
+(test "6.2.5" (/ 3 4 5) 3/20)
+(test "6.2.5" (/ 3) 1/3)
+(test "6.2.5" (abs -7) 7)
+(test "6.2.5" (modulo 13 4) 1)
+(test "6.2.5" (remainder 13 4) 1)
+(test "6.2.5" (modulo -13 4) 3)
+(test "6.2.5" (remainder -13 4) -1)
+(test "6.2.5" (modulo 13 -4) -3)
+(test "6.2.5" (remainder 13 -4) 1)
+(test "6.2.5" (modulo -13 -4) -1)
+(test "6.2.5" (remainder -13 -4) -1)
+; TODO: Test fails (test "6.2.5" (remainder -13 -4.0) -1.0)
+; TODO: Test fails (test "6.2.5" (inexact? (remainder -13 -4.0)) #t)
+
+(test "6.2.5" (gcd 32 -36) 4)
+(test "6.2.5" (gcd) 0)
+(test "6.2.5" (lcm 32 -36) 288)
+; TODO: Test fails (test "6.2.5" (lcm 32.0 -36) 288.0)
+; TODO: Test fails (test "6.2.5" (inexact? (lcm 32.0 -36)) #t)
+(test "6.2.5" (lcm) 1)
+(test "6.2.5" (denominator 0) 1)
+(test "6.2.5" (numerator (/ 6 4)) 3)
+(test "6.2.5" (denominator (/ 6 4)) 2)
+; TODO: Test fails (test "6.2.5" (denominator (exact->inexact (/ 6 4))) 2.0)
+(test "6.2.5" (floor -4.3) -5.0)
+(test "6.2.5" (ceiling -4.3) -4.0)
+(test "6.2.5" (truncate -4.3) -4.0)
+(test "6.2.5" (round -4.3) -4.0)
+(test "6.2.5" (floor 3.5) 3.0)
+(test "6.2.5" (ceiling 3.5) 4.0)
+(test "6.2.5" (truncate 3.5) 3.0)
+(test "6.2.5" (round 3.5) 4.0)
+(test "6.2.5" (round 7/2) 4)
+(test "6.2.5" (round 7) 7)
+
+(test "6.2.5" (rationalize (inexact->exact .3) 1/10) 1/3)
+(test "6.2.5" (rationalize .3 1/10) #i1/3)
+(test "6.2.5" (inexact? (rationalize .3 1/10)) #t)
+
+; ------------------------------------------------------------------------------
+; 6.2.5
+
+(test "6.2.6" (string->number "100") 100)
+(test "6.2.6" (string->number "100" 16) 256)
+(test "6.2.6" (string->number "1e2") 100.0)
+; TODO: Test fails (test "6.2.6" (string->number "15##") 1500.0)
+
+; ------------------------------------------------------------------------------
+; 6.3.1
+
+(test "6.3.1" (not #t) #f)
+(test "6.3.1" (not 3) #f)
+(test "6.3.1" (not (list 3)) #f)
+(test "6.3.1" (not #f) #t)
+(test "6.3.1" (not '()) #f)
+(test "6.3.1" (not (list)) #f)
+(test "6.3.1" (not 'nil) #f)
+(test "6.3.1" (boolean? #f) #t)
+(test "6.3.1" (boolean? 0) #f)
+(test "6.3.1" (boolean? '()) #f)
+
+; ------------------------------------------------------------------------------
+; 6.3.2
+
+(define x (list 'a 'b 'c))
+(define y x)
+(test "6.3.2" y '(a b c))
+(test "6.3.2" (list? y) #t)
+(set-cdr! x 4)
+; TODO: Test fails, fix equals? (test "6.3.2" x '(a . 4))
+(test "6.3.2" (eqv? x y) #t)
+; TODO: Test fails, fix equals? (test "6.3.2" y '(a . 4))
+(test "6.3.2" (list? y) #f)
+(set-cdr! x x)
+; TODO: Test fails, endless loop in list? (test "6.3.2" (list? x) #f)
+
+(test "6.3.2" (pair? '(a . b)) #t)
+(test "6.3.2" (pair? '(a b c)) #t)
+(test "6.3.2" (pair? '()) #f)
+(test "6.3.2" (pair? '#(a b)) #f)
+
+(test "6.3.2" (cons 'a '()) '(a))
+(test "6.3.2" (cons '(a) '(b c d)) '((a) b c d))
+(test "6.3.2" (cons "a" '(b c)) '("a" b c))
+; TODO: Test fails, fix equals? (test "6.3.2" (cons 'a 3) '(a . 3))
+; TODO: Test fails, fix equals? (test "6.3.2" (cons '(a b) 'c) '((a b) . c))
+
+(test "6.3.2" (car '(a b c)) 'a)
+(test "6.3.2" (car '((a) b c d)) '(a))
+(test "6.3.2" (car '(1 . 2)) 1)
+
+(test "6.3.2" (cdr '((a) b c d)) '(b c d))
+(test "6.3.2" (cdr '(1 . 2)) 2)
+
+(test "6.3.2" (list? '(a b c)) #t)
+(test "6.3.2" (list? '()) #t)
+(test "6.3.2" (list? '(a . b)) #f)
+; TODO: Test fails, endless loop in list? (test "6.3.2" (let ((x (list 'a))) (set-cdr! x x) (list? x)) #f)
+
+(test "6.3.2" (list 'a (+ 3 4) 'c) '(a 7 c))
+(test "6.3.2" (list) '())
+
+(test "6.3.2" (length '(a b c)) 3)
+(test "6.3.2" (length '(a (b) (c d e))) 3)
+(test "6.3.2" (length '()) 0)
+
+(test "6.3.2" (append '(x) '(y)) '(x y))
+(test "6.3.2" (append '(a) '(b c d)) '(a b c d))
+(test "6.3.2" (append '(a (b)) '((c))) '(a (b) (c)))
+; TODO: Test fails (test "6.3.2" (append '(a b) '(c . d)) '(a b c . d))
+; TODO: Test fails (test "6.3.2" (append '() 'a) 'a)
+
+(test "6.3.2" (reverse '(a b c)) '(c b a))
+(test "6.3.2" (reverse '(a (b c) d (e (f)))) '((e (f)) d (b c) a))
+
+(test "6.3.2" (list-ref '(a b c d) 2) 'c)
+(test "6.3.2" (list-ref '(a b c d) (inexact->exact (round 1.8))) 'c)
+
+(test "6.3.2" (memq 'a '(a b c)) '(a b c))
+(test "6.3.2" (memq 'b '(a b c)) '(b c))
+(test "6.3.2" (memq 'a '(b c d)) #f)
+(test "6.3.2" (memq (list 'a) '(b (a) c)) #f)
+(test "6.3.2" (member (list 'a) '(b (a) c)) '((a) c))
+(test "6.3.2" (memv 101 '(100 101 102)) '(101 102))
+
+(define e '((a 1) (b 2) (c 3)))
+(test "6.3.2" (assq 'a e) '(a 1))
+(test "6.3.2" (assq 'b e) '(b 2))
+(test "6.3.2" (assq 'd e) #f
+(test "6.3.2" (assq (list 'a) '(((a)) ((b)) ((c)))) #f)
+(test "6.3.2" (assoc (list 'a) '(((a)) ((b)) ((c)))) '((a)))
+(test "6.3.2" (assv 5 '((2 3) (5 7) (11 13))) '(5 7))
+
+; ------------------------------------------------------------------------------
+; 6.3.3
+
+; TODO: Page 28ff
 
