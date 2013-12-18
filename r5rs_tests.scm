@@ -530,7 +530,7 @@ complex? number?
 (define e '((a 1) (b 2) (c 3)))
 (test "6.3.2" (assq 'a e) '(a 1))
 (test "6.3.2" (assq 'b e) '(b 2))
-(test "6.3.2" (assq 'd e) #f
+(test "6.3.2" (assq 'd e) #f)
 (test "6.3.2" (assq (list 'a) '(((a)) ((b)) ((c)))) #f)
 (test "6.3.2" (assoc (list 'a) '(((a)) ((b)) ((c)))) '((a)))
 (test "6.3.2" (assv 5 '((2 3) (5 7) (11 13))) '(5 7))
@@ -538,5 +538,174 @@ complex? number?
 ; ------------------------------------------------------------------------------
 ; 6.3.3
 
-; TODO: Page 28ff
+(test "6.3.3" (symbol? 'foo) #t)
+(test "6.3.3" (symbol? (car '(a b))) #t)
+(test "6.3.3" (symbol? "bar") #f)
+(test "6.3.3" (symbol? 'nil) #t)
+(test "6.3.3" (symbol? '()) #f)
+(test "6.3.3" (symbol? #f) #f)
+
+(test "6.3.3" (symbol->string 'flying-fish) "flying-fish")
+; TODO: No case conversion (test "6.3.3" (symbol->string 'Martin) "Martin")
+(test "6.3.3" (symbol->string (string->symbol "Malvina")) "Malvina")
+; TODO: No case conversion (test "6.3.3" (eq? 'mISSISSIppi 'mississippi) #t)
+; TODO: Test fails (test "6.3.3" (eq? 'bitBlt (string->symbol "bitBlt")) #f)
+(test "6.3.3" (eq? 'JollyWog (string->symbol (symbol->string 'JollyWog))) #t)
+(test "6.3.3" (string=? "K. Harper, M.D." (symbol->string (string->symbol "K. Harper, M.D."))) #t)
+
+; ------------------------------------------------------------------------------
+; 6.3.4
+
+(test "6.3.4" (char<? #\A #\B) #t)
+(test "6.3.4" (char<? #\a #\b) #t)
+(test "6.3.4" (char<? #\0 #\9) #t)
+(test "6.3.4" (char-ci=? #\A #\a) #t)
+
+; ------------------------------------------------------------------------------
+; 6.3.5
+
+; No direct examples here, providing a few of my own
+
+(define a "test string")
+(test "6.3.5" (string? a) #t)
+(test "6.3.5" (string-length a) 11)
+(test "6.3.5" (string=? a (string #\t #\e #\s #\t #\space #\s #\t #\r #\i #\n #\g)) #t)
+(test "6.3.5" (string-ref a 3) #\t)
+(string-set! a 3 #\x)
+(test "6.3.5" (string-ref a 3) #\x)
+(test "6.3.5" (string=? (substring a 6 9) "tri") #t)
+
+(define b (make-string 3 #\*))
+(test "6.3.5" (string=? b "***") #t)
+(test "6.3.5" (string-append a b) "tesx string***")
+
+(define c "banana")
+(define d (string-copy c))
+(test "6.3.5" (string=? c d) #t)
+(test "6.3.5" (eq? c d) #f)
+(string-set! c 3 #\space)
+(test "6.3.5" (string=? c d) #f)
+
+; ------------------------------------------------------------------------------
+; 6.3.6
+
+(define v (vector 'a 'b 'c))
+(test "6.3.6" v '#(a b c))
+(test "6.3.6" (vector-length v) 3)
+(test "6.3.6" (vector-ref v 2) 'c)
+(test "6.3.6" (vector-ref '#(1 1 2 3 5 8 13 21) 5) 8)
+(test "6.3.6" (vector-ref '#(1 1 2 3 5 8 13 21) (let ((i (round (* 2 (acos -1))))) (if (inexact? i) (inexact->exact i) i))) 13)
+
+(test "6.3.6" (let ((vec (vector 0 '(2 2 2 2) "Anna")))
+                (vector-set! vec 1 '("Sue" "Sue"))
+                vec)
+              '#(0 ("Sue" "Sue") "Anna"))
+
+(test "6.3.6" (vector->list '#(dah dah didah)) '(dah dah didah))
+(test "6.3.6" (list->vector '(dah dah didah)) '#(dah dah didah))
+
+; ------------------------------------------------------------------------------
+; 6.4
+
+(test "6.4" (procedure? car) #t)
+(test "6.4" (procedure? 'car) #f)
+(test "6.4" (procedure? (lambda (x) (* x x))) #t)
+(test "6.4" (procedure? '(lambda (x) (* x x))) #f)
+; TODO: Compiling evaluator only (test "6.4" (call-with-current-continuation procedure?) #t)
+
+(test "6.4" (apply + (list 3 4)) 7)
+(define compose (lambda (f g) (lambda args (f (apply g args)))))
+(test "6.4" ((compose sqrt *) 12 75) 30)
+
+(test "6.4" (map cadr '((a b) (d e) (g h))) '(b e h))
+(test "6.4" (map (lambda (n) (expt n n)) '(1 2 3 4 5)) '(1 4 27 256 3125))
+; TODO: Fix map (test "6.4" (map + '(1 2 3) '(4 5 6)) '(5 7 9))
+
+(define foo (let ((count 0)) (map (lambda (ignored) (set! count (+ count 1)) count) '(a b))))
+(test "6.4" (or (equal? foo '(1 2)) (equal? foo '(2 1))) #t)
+
+(test "6.4" (let ((v (make-vector 5)))
+              (for-each (lambda (i)
+                          (vector-set! v i (* i i)))
+                        '(0 1 2 3 4))
+              v)
+            '#(0 1 4 9 16))
+
+(test "6.4" (force (delay (+ 1 2))) 3)
+(test "6.4" (let ((p (delay (+ 1 2)))) (list (force p) (force p))) '(3 3))
+
+(define a-stream
+  (letrec ((next
+             (lambda (n)
+               (cons n (delay (next (+ n 1)))))))
+    (next 0)))               
+(define head car)
+(define tail
+  (lambda (stream) (force (cdr stream))))
+
+(test "6.4" (head (tail (tail a-stream))) 2)
+
+(define count 0)
+(define p
+  (delay (begin (set! count (+ count 1))
+                (if (> count x)
+                    count
+                    (force p)))))
+(define x 5)
+(test "6.4" (force p) 6)
+(test "6.4" (begin (set! x 10) (force p)) 6)
+
+; TODO: No continuations yet
+; (test "6.4" (call-with-current-continuation
+;               (lambda (exit)
+;                 (for-each (lambda (x)
+;                             (if (negative? x)
+;                                 (exit x)))
+;                           '(54 0 37 -3 245 19))
+;                 #t))
+;             -3)
+
+(define list-length
+  (lambda (obj)
+    (call-with-current-continuation
+      (lambda (return)
+        (letrec ((r
+                  (lambda (obj)
+                    (cond ((null? obj) 0)
+                          ((pair? obj)
+                           (+ (r (cdr obj)) 1))
+                          (else (return #f))))))
+          (r obj))))))
+
+; TODO: No continuations yet (test "6.4" (list-length '(1 2 3 4)) 4)
+; TODO: No continuations yet (test "6.4" (list-length '(a b . c)) #f)
+
+(test "6.4" (call-with-values (lambda () (values 4 5)) (lambda (a b) b)) 5)
+(test "6.4" (call-with-values * -) -1)
+
+; TODO: dynamic-wind not implemented yet
+; (test "6.4" (let ((path '())
+;                   (c #f))
+;               (let ((add (lambda (s)
+;                            (set! path (cons s path)))))
+;                 (dynamic-wind
+;                   (lambda () (add 'connect))
+;                   (lambda ()
+;                     (add (call-with-current-continuation
+;                            (lambda (c0)
+;                              (set! c c0)
+;                              'talk1))))
+;                   (lambda () (add 'disconnect)))
+;                     (if (< (length path) 4)
+;                         (c 'talk2)
+;                         (reverse path))))
+;             '(connect talk1 disconnect connect talk2 disconnect))
+
+; ------------------------------------------------------------------------------
+; 6.5
+
+(test "6.5" (eval '(* 7 3) (scheme-report-environment 5)) 21)
+(test "6.5" (let ((f (eval '(lambda (f x) (f x x)) (null-environment 5)))) (f + 10)) 20)
+
+; TODO: When executing a file or REPL script, make sure all parens are matched. Stop on first error!
 
