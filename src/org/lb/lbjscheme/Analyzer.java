@@ -45,10 +45,8 @@ public final class Analyzer {
 			throw new SchemeException("Empty list can not be evaluated");
 		if (obj instanceof Vector)
 			throw new SchemeException("Vectors must be quoted");
-		if (obj instanceof Symbol)
-			return new LiteralSymbol((Symbol) obj);
-		if (!(obj instanceof Pair))
-			return new SelfEvaluatingLiteral(obj);
+		if (obj instanceof Symbol) return new LiteralSymbol((Symbol) obj);
+		if (!(obj instanceof Pair)) return new SelfEvaluatingLiteral(obj);
 
 		final Pair p = (Pair) obj;
 		final SchemeObject car = p.getCar();
@@ -67,24 +65,15 @@ public final class Analyzer {
 			return analyze(evald);
 		}
 
-		if (car == _lambdaSymbol)
-			return analyzeLambdaForm(p.getCdr());
-		if (car == _defineSymbol)
-			return analyzeDefineForm(p.getCdr());
-		if (car == _defmacroSymbol)
-			return defmacro(p);
-		if (car == _quoteSymbol)
-			return new SelfEvaluatingLiteral(form.get(1));
-		if (car == _setSymbol)
-			return analyzeSetForm(form);
-		if (car == _callccSymbol)
-			return analyzeCallccForm(form);
-		if (car == _applySymbol)
-			return analyzeApplyForm(p);
-		if (car == _ifSymbol)
-			return analyzeIfForm(form);
-		if (car == _beginSymbol)
-			return analyzeBeginForm(form);
+		if (car == _lambdaSymbol) return analyzeLambdaForm(p.getCdr());
+		if (car == _defineSymbol) return analyzeDefineForm(p.getCdr());
+		if (car == _defmacroSymbol) return defmacro(p);
+		if (car == _quoteSymbol) return new SelfEvaluatingLiteral(form.get(1));
+		if (car == _setSymbol) return analyzeSetForm(form);
+		if (car == _callccSymbol) return analyzeCallccForm(form);
+		if (car == _applySymbol) return analyzeApplyForm(p);
+		if (car == _ifSymbol) return analyzeIfForm(form);
+		if (car == _beginSymbol) return analyzeBeginForm(form);
 
 		return analyzeFuncall(p);
 	}
@@ -101,7 +90,7 @@ public final class Analyzer {
 					"Invalid lambda form: Expected at least a parameter list and one form");
 
 		final Pair forms = (Pair) p1.getCdr();
-		final List<Symbol> parameterNames = new ArrayList<Symbol>();
+		final List<Symbol> parameterNames = new ArrayList<>();
 
 		if (parameterNameObject instanceof Symbol) { // (lambda x forms)
 			parameterNames.add((Symbol) parameterNameObject);
@@ -137,10 +126,8 @@ public final class Analyzer {
 					"Invalid define form: Expected target and value");
 
 		final Pair p1 = (Pair) obj;
-		if (p1.getCar() instanceof Symbol)
-			return analyzeDefineValue(p1);
-		if (p1.getCar() instanceof Pair)
-			return analyzeDefineProcedure(p1);
+		if (p1.getCar() instanceof Symbol) return analyzeDefineValue(p1);
+		if (p1.getCar() instanceof Pair) return analyzeDefineProcedure(p1);
 
 		throw new SchemeException(
 				"Invalid define form: Expected symbol or list as target");
@@ -166,7 +153,7 @@ public final class Analyzer {
 			throw new SchemeException(
 					"Invalid define form: Expected lambda forms");
 		Symbol sym = null;
-		final List<Symbol> parameterNames = new ArrayList<Symbol>();
+		final List<Symbol> parameterNames = new ArrayList<>();
 		for (SchemeObject o : target) {
 			if (!(o instanceof Symbol))
 				throw new SchemeException(
@@ -243,7 +230,7 @@ public final class Analyzer {
 		if (form.size() == 1)
 			throw new SchemeException("Invalid begin form: Empty");
 
-		List<SyntaxTreeObject> analyzedForms = new ArrayList<SyntaxTreeObject>();
+		List<SyntaxTreeObject> analyzedForms = new ArrayList<>();
 		for (SchemeObject o : form.subList(1, form.size()))
 			analyzedForms.add(analyze(o));
 
@@ -257,7 +244,7 @@ public final class Analyzer {
 		final SchemeObject procedure = rawForm.getCar();
 
 		final List<SchemeObject> form = rawForm.toJavaList();
-		final ArrayList<SyntaxTreeObject> parameters = new ArrayList<SyntaxTreeObject>();
+		final ArrayList<SyntaxTreeObject> parameters = new ArrayList<>();
 		for (int i = 1; i < form.size(); ++i)
 			parameters.add(analyze(form.get(i)));
 

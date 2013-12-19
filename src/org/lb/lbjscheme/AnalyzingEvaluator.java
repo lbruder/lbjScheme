@@ -93,8 +93,8 @@ public final class AnalyzingEvaluator extends Evaluator {
 					throw new SchemeException("Empty list can not be evaluated");
 				if (procedure instanceof Vector)
 					throw new SchemeException("Vectors must be quoted");
-				final List<SchemeObject> parameters = new ArrayList<SchemeObject>(
-						form.getParameters().size());
+				final List<SchemeObject> parameters = new ArrayList<>(form
+						.getParameters().size());
 				for (SyntaxTreeObject i : form.getParameters())
 					parameters.add(eval(i, env));
 

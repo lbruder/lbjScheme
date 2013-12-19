@@ -39,18 +39,13 @@ public final class Rationalize extends Builtin {
 			final SchemeNumber n = number.mul(d).roundToNearestInteger();
 			final SchemeNumber asRational = n.div(d);
 			if (abs(asRational.sub(number)).le(maxDiff)) {
-				if (number.isExact())
-					return asRational;
-				else
-					return asRational.mul(new Real(1));
+				if (number.isExact()) return asRational;
+				return asRational.mul(new Real(1));
 			}
 		}
 	}
 
 	private SchemeNumber abs(SchemeNumber n) throws SchemeException {
-		if (n.compareTo(_zero) >= 0)
-			return n;
-		else
-			return _zero.sub(n);
+		return n.compareTo(_zero) >= 0 ? n : _zero.sub(n);
 	}
 }

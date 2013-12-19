@@ -30,8 +30,7 @@ public final class Sub extends Builtin {
 			throws SchemeException {
 		assertParameterCountMin(1, parameters);
 		SchemeNumber ret = getNumber(parameters.get(0));
-		if (parameters.size() == 1)
-			return new Fixnum(0).sub(ret);
+		if (parameters.size() == 1) return new Fixnum(0).sub(ret);
 		for (SchemeObject o : parameters.subList(1, parameters.size()))
 			ret = ret.sub(getNumber(o));
 		return ret;

@@ -26,12 +26,12 @@ public class JvmBridgeTest extends TestCase {
 		assertEquals(Nil.getInstance(), JvmBridge.fromJavaObject(o));
 	}
 
-	public void testBooleanFromJavaObject() throws SchemeException {
+	public void testBooleanFromJavaObject() {
 		assertEquals(True.getInstance(), JvmBridge.fromJavaObject(true));
 		assertEquals(False.getInstance(), JvmBridge.fromJavaObject(false));
 	}
 
-	public void testNumberFromJavaObject() throws SchemeException {
+	public void testNumberFromJavaObject() {
 		assertTrue(JvmBridge.fromJavaObject(15) instanceof SchemeNumber);
 		assertTrue(((SchemeNumber) JvmBridge.fromJavaObject(15)).isExact());
 
@@ -39,18 +39,18 @@ public class JvmBridgeTest extends TestCase {
 		assertFalse(((SchemeNumber) JvmBridge.fromJavaObject(15.678)).isExact());
 	}
 
-	public void testCharacterFromJavaObject() throws SchemeException {
+	public void testCharacterFromJavaObject() {
 		assertTrue(JvmBridge.fromJavaObject('A') instanceof SchemeCharacter);
 		assertEquals("#\\A", JvmBridge.fromJavaObject('A').toString(false));
 	}
 
-	public void testStringFromJavaObject() throws SchemeException {
+	public void testStringFromJavaObject() {
 		assertTrue(JvmBridge.fromJavaObject("Test") instanceof SchemeString);
 		assertEquals("Test", JvmBridge.fromJavaObject("Test").toString(true));
 	}
 
 	public void testListFromJavaObject() throws SchemeException {
-		final ArrayList<Integer> testList = new ArrayList<Integer>();
+		final ArrayList<Integer> testList = new ArrayList<>();
 		for (int i = 0; i < 10; ++i)
 			testList.add(i);
 		final SchemeObject o = JvmBridge.fromJavaObject(testList);
@@ -97,7 +97,7 @@ public class JvmBridgeTest extends TestCase {
 	}
 
 	public void testListToJavaObject() throws SchemeException {
-		final ArrayList<SchemeObject> alist = new ArrayList<SchemeObject>();
+		final ArrayList<SchemeObject> alist = new ArrayList<>();
 		for (int i = 1; i < 5; ++i)
 			alist.add(Fixnum.valueOf(i));
 		final SchemeList list = Pair.fromIterable(alist);

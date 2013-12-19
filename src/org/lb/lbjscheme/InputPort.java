@@ -37,8 +37,7 @@ public class InputPort implements SchemeObject {
 	}
 
 	public int peekChar() throws SchemeException {
-		if (_nextChar == -2)
-			_nextChar = readChar();
+		if (_nextChar == -2) _nextChar = readChar();
 		return _nextChar;
 	}
 

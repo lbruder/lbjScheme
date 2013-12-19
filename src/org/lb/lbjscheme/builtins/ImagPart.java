@@ -30,9 +30,7 @@ public final class ImagPart extends Builtin {
 			throws SchemeException {
 		assertParameterCount(1, parameters);
 		final SchemeNumber n = getNumber(parameters.get(0));
-		if (n instanceof Complex)
-			return ((Complex) n).getImagPart();
-		else
-			return Fixnum.valueOf(0);
+		if (n instanceof Complex) return ((Complex) n).getImagPart();
+		return Fixnum.valueOf(0);
 	}
 }

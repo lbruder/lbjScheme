@@ -33,7 +33,7 @@ public final class SysNew extends Builtin {
 		final SchemeObject name = parameters.get(0);
 		assertParameterType(name, SchemeString.class);
 
-		final List<SchemeObject> constructorParameters = new ArrayList<SchemeObject>();
+		final List<SchemeObject> constructorParameters = new ArrayList<>();
 		for (int i = 1; i < parameters.size(); ++i)
 			constructorParameters.add(parameters.get(i));
 

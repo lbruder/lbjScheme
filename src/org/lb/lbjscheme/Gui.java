@@ -59,6 +59,7 @@ public final class Gui {
 
 			@Override
 			public void close() throws IOException {
+				// Nothing to close
 			}
 		});
 
@@ -75,6 +76,7 @@ public final class Gui {
 
 			@Override
 			public void close() throws IOException {
+				// Nothing to close
 			}
 		});
 		_eval = new AnalyzingEvaluator(_defaultInputPort, _defaultOutputPort);
@@ -94,6 +96,7 @@ public final class Gui {
 		final KeyListener f5Listener = new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
+				// Uninteresting
 			}
 
 			@Override
@@ -112,6 +115,7 @@ public final class Gui {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
+				// Uninteresting
 			}
 		};
 

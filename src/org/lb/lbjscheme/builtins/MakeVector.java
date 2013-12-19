@@ -33,8 +33,7 @@ public final class MakeVector extends Builtin {
 		final int length = getFixnum(parameters.get(0));
 		final Vector ret = new Vector(length);
 
-		if (parameters.size() == 1)
-			return ret;
+		if (parameters.size() == 1) return ret;
 
 		final SchemeObject valueToSet = parameters.get(1);
 		for (int i = 0; i < length; ++i)

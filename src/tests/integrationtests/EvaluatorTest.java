@@ -136,16 +136,14 @@ public abstract class EvaluatorTest extends TestCase {
 
 	public void testR5rsTests() throws Exception {
 		final String script = readWholeFile("r5rs_tests.scm");
-		if (script.equals(""))
-			fail("r5rs_tests.scm not found");
+		if (script.equals("")) fail("r5rs_tests.scm not found");
 		interp.eval(script);
 		assertTrue(true);
 	}
 
 	public void testExtensionTests() throws Exception {
 		final String script = readWholeFile("extension_tests.scm");
-		if (script.equals(""))
-			fail("extension_tests.scm not found");
+		if (script.equals("")) fail("extension_tests.scm not found");
 		interp.defineGlobalVariable("test-object", new TestObject());
 		interp.eval(script);
 		assertTrue(true);
@@ -157,8 +155,7 @@ public abstract class EvaluatorTest extends TestCase {
 		String contents = "";
 		for (;;) {
 			String read = in.readLine();
-			if (read == null)
-				break;
+			if (read == null) break;
 			contents += read + "\n";
 		}
 		in.close();

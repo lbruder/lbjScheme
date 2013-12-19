@@ -30,8 +30,7 @@ public final class Exp extends Builtin {
 			throws SchemeException {
 		assertParameterCount(1, parameters);
 		SchemeNumber n = getNumber(parameters.get(0));
-		if (n.isExact() && n.isZero())
-			return new Fixnum(1);
+		if (n.isExact() && n.isZero()) return new Fixnum(1);
 		while (!(n instanceof Real))
 			n = n.promoteToLevel(4);
 		return new Real(Math.exp(((Real) n).getValue()));

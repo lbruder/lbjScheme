@@ -38,15 +38,12 @@ public final class CharReadyP extends Builtin {
 		assertParameterCountMax(1, parameters);
 
 		if (parameters.size() == 1) {
-			if (_eval != null)
-				return _eval.getInputPort().isCharReady() ? _true : _false;
-			else
+			if (_eval == null)
 				throw new SchemeException(getName()
 						+ ": Not possible in this environment");
-		} else {
-			assertParameterType(parameters.get(0), InputPort.class);
-			return ((InputPort) parameters.get(0)).isCharReady() ? _true
-					: _false;
+			return _eval.getInputPort().isCharReady() ? _true : _false;
 		}
+		assertParameterType(parameters.get(0), InputPort.class);
+		return ((InputPort) parameters.get(0)).isCharReady() ? _true : _false;
 	}
 }

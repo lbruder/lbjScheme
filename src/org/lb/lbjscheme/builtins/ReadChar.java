@@ -39,8 +39,7 @@ public final class ReadChar extends Builtin {
 
 		int ret = -1;
 		if (parameters.size() == 0) {
-			if (_eval != null)
-				ret = _eval.getInputPort().readChar();
+			if (_eval != null) ret = _eval.getInputPort().readChar();
 		} else {
 			assertParameterType(parameters.get(0), InputPort.class);
 			ret = ((InputPort) parameters.get(0)).readChar();

@@ -34,8 +34,7 @@ public final class SchemeCharacter implements SchemeObject {
 
 	@Override
 	public String toString(boolean forDisplay) {
-		if (forDisplay)
-			return String.valueOf(_value);
+		if (forDisplay) return String.valueOf(_value);
 
 		switch (_value) {
 		case '\\':

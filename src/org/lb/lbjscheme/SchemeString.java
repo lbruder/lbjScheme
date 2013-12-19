@@ -57,8 +57,7 @@ public final class SchemeString implements SchemeObject {
 
 	@Override
 	public String toString(boolean forDisplay) {
-		if (forDisplay)
-			return getValue();
+		if (forDisplay) return getValue();
 
 		final StringBuilder ret = new StringBuilder();
 		ret.append("\"");

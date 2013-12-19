@@ -34,6 +34,7 @@ public abstract class Builtin implements SchemeObject {
 		return toString(false);
 	}
 
+	@Override
 	public String toString(boolean forDisplay) {
 		return "Builtin procedure " + getName();
 	}
@@ -68,8 +69,7 @@ public abstract class Builtin implements SchemeObject {
 	protected void assertParameterType(SchemeObject o,
 			Class<? extends SchemeObject> expected) throws SchemeException {
 		final Class<? extends SchemeObject> got = o.getClass();
-		if (expected.isAssignableFrom(got))
-			return;
+		if (expected.isAssignableFrom(got)) return;
 		throw new SchemeException(getName()
 				+ ": Invalid parameter type; expected: "
 				+ expected.getSimpleName() + ", got: " + got.getSimpleName());

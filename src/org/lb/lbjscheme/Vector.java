@@ -26,7 +26,7 @@ public final class Vector implements SchemeObject {
 	}
 
 	public Vector(SchemeList items) {
-		final List<SchemeObject> asList = new ArrayList<SchemeObject>();
+		final List<SchemeObject> asList = new ArrayList<>();
 		for (SchemeObject o : items)
 			asList.add(o);
 		_values = asList.toArray(new SchemeObject[0]);

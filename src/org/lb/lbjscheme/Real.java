@@ -116,10 +116,8 @@ public final class Real extends SchemeNumber {
 
 	@Override
 	protected int doCompareTo(SchemeNumber other) {
-		if (_value > ((Real) other)._value)
-			return 1;
-		if (_value < ((Real) other)._value)
-			return -1;
+		if (_value > ((Real) other)._value) return 1;
+		if (_value < ((Real) other)._value) return -1;
 		return 0;
 	}
 
@@ -152,10 +150,8 @@ public final class Real extends SchemeNumber {
 	@Override
 	public SchemeNumber roundToNearestInteger() {
 		BigDecimal n = new BigDecimal(Double.toString(_value));
-		if (n.signum() == 1)
-			n = n.add(_oneHalf);
-		if (n.signum() == -1)
-			n = n.subtract(_oneHalf);
+		if (n.signum() == 1) n = n.add(_oneHalf);
+		if (n.signum() == -1) n = n.subtract(_oneHalf);
 
 		return Bignum.valueOf(n.toBigInteger());
 	}

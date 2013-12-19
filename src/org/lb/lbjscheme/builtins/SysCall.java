@@ -36,7 +36,7 @@ public final class SysCall extends Builtin {
 		final SchemeObject name = parameters.get(1);
 		assertParameterType(name, SchemeString.class);
 
-		final List<SchemeObject> funcallParameters = new ArrayList<SchemeObject>();
+		final List<SchemeObject> funcallParameters = new ArrayList<>();
 		for (int i = 2; i < parameters.size(); ++i)
 			funcallParameters.add(parameters.get(i));
 

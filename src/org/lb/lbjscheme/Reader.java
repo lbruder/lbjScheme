@@ -16,7 +16,7 @@
 
 package org.lb.lbjscheme;
 
-import java.io.*;
+import java.io.EOFException;
 
 public final class Reader {
 	private static final Symbol _dot = Symbol.fromString(".");
@@ -31,8 +31,7 @@ public final class Reader {
 
 	public SchemeObject read() throws SchemeException, EOFException {
 		skipWhitespace();
-		if (isEof())
-			throw new EOFException();
+		if (isEof()) throw new EOFException();
 
 		switch (peekChar()) {
 		case ';':
@@ -52,9 +51,9 @@ public final class Reader {
 				readChar();
 				return new Pair(Symbol.fromString("unquote-splicing"),
 						new Pair(read(), Nil.getInstance()));
-			} else
-				return new Pair(Symbol.fromString("unquote"), new Pair(read(),
-						Nil.getInstance()));
+			}
+			return new Pair(Symbol.fromString("unquote"), new Pair(read(),
+					Nil.getInstance()));
 		case '(':
 			return readList();
 		case '"':
@@ -82,14 +81,12 @@ public final class Reader {
 	}
 
 	private void ensureAtLeastOneCharRead() throws SchemeException {
-		if (_nextChar == -2)
-			_nextChar = _input.readChar();
+		if (_nextChar == -2) _nextChar = _input.readChar();
 	}
 
 	private void assertNotEof() throws SchemeException {
-		if (isEof())
-			throw new SchemeException("Unexpected end of stream");
-	};
+		if (isEof()) throw new SchemeException("Unexpected end of stream");
+	}
 
 	private char peekChar() throws SchemeException {
 		assertNotEof();
@@ -109,8 +106,7 @@ public final class Reader {
 		Pair current = null;
 		while (true) {
 			final SchemeObject o = read();
-			if (o == _listEnd)
-				return (ret == null) ? Nil.getInstance() : ret; // )
+			if (o == _listEnd) return (ret == null) ? Nil.getInstance() : ret; // )
 			if (o == _dot) {
 				if (current == null)
 					throw new SchemeException("Invalid dotted list");
@@ -137,12 +133,9 @@ public final class Reader {
 			char c = readChar();
 			if (c == '\\') {
 				c = readChar();
-				if (c == 'n')
-					c = '\n';
-				if (c == 'r')
-					c = '\r';
-				if (c == 't')
-					c = '\t';
+				if (c == 'n') c = '\n';
+				if (c == 'r') c = '\r';
+				if (c == 't') c = '\t';
 			}
 			sb.append(c);
 		}
@@ -152,18 +145,15 @@ public final class Reader {
 
 	private SchemeObject readSpecial() throws SchemeException, EOFException {
 		readChar(); // #
-		if (peekChar() == '(')
-			return new Vector((SchemeList) readList());
-		if (peekChar() != '\\')
-			return readSymbolOrNumber("#");
+		if (peekChar() == '(') return new Vector((SchemeList) readList());
+		if (peekChar() != '\\') return readSymbolOrNumber("#");
 		readChar();
 		return readCharacter();
 	}
 
 	private SchemeObject readCharacter() throws SchemeException {
 		final char c = readChar();
-		if (!Character.isLetter(c))
-			return new SchemeCharacter(c);
+		if (!Character.isLetter(c)) return new SchemeCharacter(c);
 
 		final StringBuilder sb = new StringBuilder();
 		sb.append(c);
@@ -181,8 +171,7 @@ public final class Reader {
 		case "tab":
 			return new SchemeCharacter('\t');
 		default:
-			if (name.length() == 1)
-				return new SchemeCharacter(name.charAt(0));
+			if (name.length() == 1) return new SchemeCharacter(name.charAt(0));
 			throw new SchemeException("Invalid character name: \\" + name);
 		}
 	}
@@ -201,29 +190,26 @@ public final class Reader {
 			sb.append(readChar());
 		final String symbol = sb.toString();
 
-		if (symbol.equals("#t"))
-			return True.getInstance();
-		if (symbol.equals("#f"))
-			return False.getInstance();
+		if (symbol.equals("#t")) return True.getInstance();
+		if (symbol.equals("#f")) return False.getInstance();
 
 		try {
 			return SchemeNumber.fromString(symbol, 10);
 		} catch (Exception ex) {
+			if (symbol.startsWith("#e"))
+				return SchemeNumber.fromString(symbol.substring(2), 10);
+			if (symbol.startsWith("#i"))
+				return SchemeNumber.fromString(symbol.substring(2), 10).mul(
+						new Real(1));
+			if (symbol.startsWith("#x"))
+				return SchemeNumber.fromString(symbol.substring(2), 16);
+			if (symbol.startsWith("#d"))
+				return SchemeNumber.fromString(symbol.substring(2), 10);
+			if (symbol.startsWith("#o"))
+				return SchemeNumber.fromString(symbol.substring(2), 8);
+			if (symbol.startsWith("#b"))
+				return SchemeNumber.fromString(symbol.substring(2), 2);
+			return Symbol.fromString(symbol);
 		}
-
-		if (symbol.startsWith("#e"))
-			return SchemeNumber.fromString(symbol.substring(2), 10);
-		if (symbol.startsWith("#i"))
-			return SchemeNumber.fromString(symbol.substring(2), 10).mul(
-					new Real(1));
-		if (symbol.startsWith("#x"))
-			return SchemeNumber.fromString(symbol.substring(2), 16);
-		if (symbol.startsWith("#d"))
-			return SchemeNumber.fromString(symbol.substring(2), 10);
-		if (symbol.startsWith("#o"))
-			return SchemeNumber.fromString(symbol.substring(2), 8);
-		if (symbol.startsWith("#b"))
-			return SchemeNumber.fromString(symbol.substring(2), 2);
-		return Symbol.fromString(symbol);
 	}
 }

@@ -18,7 +18,7 @@ package org.lb.lbjscheme;
 
 import java.util.*;
 
-public class Nil implements SchemeObject, SchemeList {
+public class Nil implements SchemeList {
 	private Nil() {
 	}
 
@@ -35,7 +35,7 @@ public class Nil implements SchemeObject, SchemeList {
 
 	@Override
 	public List<SchemeObject> toJavaList() {
-		return new ArrayList<SchemeObject>();
+		return new ArrayList<>();
 	}
 
 	@Override

@@ -33,12 +33,10 @@ public final class SysExpt extends Builtin {
 		assertParameterCount(2, parameters);
 		SchemeNumber n1 = getNumber(parameters.get(0));
 		SchemeNumber n2 = getNumber(parameters.get(1));
-		if (n2.isZero())
-			return n2.isExact() ? _one : new Real(1);
+		if (n2.isZero()) return n2.isExact() ? _one : new Real(1);
 		if (n1.isZero() && n1.isExact() && n2.lt(new Fixnum(0)))
 			throw new SchemeException("Division by zero");
-		if (n1.isExact() && n1.eq(_one))
-			return new Fixnum(1);
+		if (n1.isExact() && n1.eq(_one)) return new Fixnum(1);
 		while (!(n1 instanceof Real))
 			n1 = n1.promoteToLevel(4);
 		while (!(n2 instanceof Real))

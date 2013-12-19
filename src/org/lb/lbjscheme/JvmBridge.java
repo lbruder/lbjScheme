@@ -36,12 +36,11 @@ public final class JvmBridge implements SchemeObject {
 			names[index++] = m.getName();
 		Arrays.sort(names);
 
-		final List<String> uniqueSortedNames = new ArrayList<String>();
+		final List<String> uniqueSortedNames = new ArrayList<>();
 		for (String i : names)
-			if (!uniqueSortedNames.contains(i))
-				uniqueSortedNames.add(i);
+			if (!uniqueSortedNames.contains(i)) uniqueSortedNames.add(i);
 
-		final List<SchemeObject> ret = new ArrayList<SchemeObject>();
+		final List<SchemeObject> ret = new ArrayList<>();
 		for (String i : uniqueSortedNames)
 			ret.add(new SchemeString(i));
 
@@ -102,8 +101,7 @@ public final class JvmBridge implements SchemeObject {
 			throw new SchemeException("Unable to call methods on object");
 		}
 
-		if (m == null)
-			throw new SchemeException("No suitable method found");
+		if (m == null) throw new SchemeException("No suitable method found");
 
 		try {
 			return fromJavaObject(m.invoke(_obj, parameterArray));
@@ -183,32 +181,26 @@ public final class JvmBridge implements SchemeObject {
 	}
 
 	public static SchemeObject fromJavaObject(Object o) throws SchemeException {
-		if (o == null)
-			return Nil.getInstance();
+		if (o == null) return Nil.getInstance();
 		if (o instanceof Boolean)
 			return fromJavaObject(((Boolean) o).booleanValue());
 		if (o instanceof Character)
 			return fromJavaObject(((Character) o).charValue());
-		if (o instanceof Byte)
-			return fromJavaObject(((Byte) o).byteValue());
+		if (o instanceof Byte) return fromJavaObject(((Byte) o).byteValue());
 		if (o instanceof Short)
 			return fromJavaObject(((Short) o).shortValue());
 		if (o instanceof Integer)
 			return fromJavaObject(((Integer) o).intValue());
-		if (o instanceof Long)
-			return fromJavaObject(((Long) o).longValue());
+		if (o instanceof Long) return fromJavaObject(((Long) o).longValue());
 		if (o instanceof Float)
 			return fromJavaObject(((Float) o).floatValue());
 		if (o instanceof Double)
 			return fromJavaObject(((Double) o).doubleValue());
-		if (o instanceof BigInteger)
-			return fromJavaObject((BigInteger) o);
-		if (o instanceof String)
-			return fromJavaObject((String) o);
-		if (o.getClass().isArray())
-			return fromJavaArray(o);
+		if (o instanceof BigInteger) return fromJavaObject((BigInteger) o);
+		if (o instanceof String) return fromJavaObject((String) o);
+		if (o.getClass().isArray()) return fromJavaArray(o);
 		if (o instanceof Collection<?>) {
-			final List<SchemeObject> values = new ArrayList<SchemeObject>();
+			final List<SchemeObject> values = new ArrayList<>();
 			for (Object i : (Collection<?>) o)
 				values.add(fromJavaObject(i));
 			return Pair.fromIterable(values);
@@ -218,7 +210,7 @@ public final class JvmBridge implements SchemeObject {
 	}
 
 	private static SchemeObject fromJavaArray(Object o) throws SchemeException {
-		final List<SchemeObject> asList = new ArrayList<SchemeObject>();
+		final List<SchemeObject> asList = new ArrayList<>();
 
 		if (o instanceof boolean[]) {
 			for (boolean i : (boolean[]) o)
@@ -266,10 +258,8 @@ public final class JvmBridge implements SchemeObject {
 
 	@Override
 	public String toString(boolean forDisplay) {
-		if (forDisplay)
-			return _obj.toString();
-		else
-			return "<JVM object: " + _obj.toString() + ">";
+		if (forDisplay) return _obj.toString();
+		return "<JVM object: " + _obj.toString() + ">";
 	}
 
 	@Override

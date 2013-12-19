@@ -32,8 +32,7 @@ public final class NumEq extends Builtin {
 		final SchemeNumber last = getNumber(parameters.get(0));
 		for (final SchemeObject o : parameters.subList(1, parameters.size())) {
 			SchemeNumber now = getNumber(o);
-			if (!last.eq(now))
-				return _false;
+			if (!last.eq(now)) return _false;
 		}
 		return _true;
 	}

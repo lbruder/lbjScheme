@@ -89,10 +89,8 @@ public final class Fixnum extends SchemeNumber {
 
 	@Override
 	protected int doCompareTo(SchemeNumber other) {
-		if (_value > ((Fixnum) other)._value)
-			return 1;
-		if (_value < ((Fixnum) other)._value)
-			return -1;
+		if (_value > ((Fixnum) other)._value) return 1;
+		if (_value < ((Fixnum) other)._value) return -1;
 		return 0;
 	}
 

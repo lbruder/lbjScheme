@@ -39,8 +39,7 @@ public final class PeekChar extends Builtin {
 
 		int ret = -1;
 		if (parameters.size() == 0) {
-			if (_eval != null)
-				ret = _eval.getInputPort().peekChar();
+			if (_eval != null) ret = _eval.getInputPort().peekChar();
 		} else {
 			assertParameterType(parameters.get(0), InputPort.class);
 			ret = ((InputPort) parameters.get(0)).peekChar();

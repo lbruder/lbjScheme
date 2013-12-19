@@ -20,7 +20,7 @@ import java.io.*;
 import java.util.*;
 
 public final class ConsoleRepl {
-	public void run(String[] args) throws SchemeException,
+	public static void run(String[] args) throws SchemeException,
 			FileNotFoundException, IOException {
 		if (hasArgument(args, "-h") || hasArgument(args, "-?")) {
 			System.out.println("Command line switches:");
@@ -101,22 +101,19 @@ public final class ConsoleRepl {
 			r.close();
 		}
 
-		if (interactiveRepl)
-			repl(new InputStreamReader(System.in), e, true);
+		if (interactiveRepl) repl(new InputStreamReader(System.in), e, true);
 	}
 
 	private static boolean hasArgument(String[] args, String arg) {
 		for (String i : args)
-			if (i.equals(arg))
-				return true;
+			if (i.equals(arg)) return true;
 		return false;
 	}
 
 	private static List<String> getFileNames(String[] args) {
-		final List<String> ret = new ArrayList<String>();
+		final List<String> ret = new ArrayList<>();
 		for (String i : args)
-			if (!i.startsWith("-"))
-				ret.add(i);
+			if (!i.startsWith("-")) ret.add(i);
 		return ret;
 	}
 
@@ -130,11 +127,9 @@ public final class ConsoleRepl {
 					System.out.flush();
 				}
 				final SchemeObject result = e.eval(r.read());
-				if (!printPromptAndResults)
-					continue;
+				if (!printPromptAndResults) continue;
 				if ((result instanceof Symbol)
-						&& result.toString(true).equals("undefined"))
-					continue;
+						&& result.toString(true).equals("undefined")) continue;
 				System.out.println(result);
 			} catch (EOFException ex) {
 				break;

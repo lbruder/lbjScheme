@@ -67,9 +67,8 @@ public final class Rational extends SchemeNumber {
 		// TODO: Infinity => Exception!
 		if (targetLevel == 5) // promote to complex
 			return new Complex(this);
-		else
-			return new Real(new BigDecimal(_n).divide(new BigDecimal(_d),
-					MathContext.DECIMAL64).doubleValue());
+		return new Real(new BigDecimal(_n).divide(new BigDecimal(_d),
+				MathContext.DECIMAL64).doubleValue());
 	}
 
 	public static SchemeNumber valueOf(String value, int base)
@@ -168,10 +167,8 @@ public final class Rational extends SchemeNumber {
 			d = d.multiply(_two);
 		}
 
-		if (_n.signum() == 1)
-			n = n.add(d.divide(_two));
-		if (_n.signum() == -1)
-			n = n.subtract(d.divide(_two));
+		if (_n.signum() == 1) n = n.add(d.divide(_two));
+		if (_n.signum() == -1) n = n.subtract(d.divide(_two));
 
 		return Bignum.valueOf(n.divide(d));
 	}

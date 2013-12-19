@@ -39,15 +39,13 @@ public final class Read extends Builtin {
 
 		try {
 			if (parameters.size() == 0) {
-				if (_eval != null)
-					return new Reader(_eval.getInputPort()).read();
-				else
+				if (_eval == null)
 					throw new SchemeException(getName()
 							+ ": Not possible in this environment");
-			} else {
-				assertParameterType(parameters.get(0), InputPort.class);
-				return new Reader(((InputPort) parameters.get(0))).read();
+				return new Reader(_eval.getInputPort()).read();
 			}
+			assertParameterType(parameters.get(0), InputPort.class);
+			return new Reader(((InputPort) parameters.get(0))).read();
 		} catch (java.io.EOFException ex) {
 			return EofObject.getInstance();
 		}

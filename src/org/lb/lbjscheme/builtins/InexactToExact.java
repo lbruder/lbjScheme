@@ -41,8 +41,7 @@ public final class InexactToExact extends Builtin {
 					makeNumberExact(c.getImagPart()));
 		}
 
-		if (o instanceof Real)
-			return ((Real) o).makeExact();
+		if (o instanceof Real) return ((Real) o).makeExact();
 
 		return o; // If number is already exact, just return it
 	}

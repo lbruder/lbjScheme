@@ -22,7 +22,7 @@ public class TestObject {
 
 	public List<Integer> primesUpTo(int max) {
 		boolean[] sieve = new boolean[max];
-		List<Integer> ret = new ArrayList<Integer>();
+		List<Integer> ret = new ArrayList<>();
 		for (int i = 2; i < max; ++i) {
 			if (!sieve[i]) {
 				ret.add(i);

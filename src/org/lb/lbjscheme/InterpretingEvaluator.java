@@ -39,8 +39,7 @@ public final class InterpretingEvaluator extends Evaluator {
 	}
 
 	public InterpretingEvaluator(Environment global,
-			InputPort defaultInputPort, OutputPort defaultOutputPort)
-			throws SchemeException {
+			InputPort defaultInputPort, OutputPort defaultOutputPort) {
 		super(global, defaultInputPort, defaultOutputPort);
 	}
 
@@ -70,22 +69,16 @@ public final class InterpretingEvaluator extends Evaluator {
 				throw new SchemeException("Empty list can not be evaluated");
 			if (o instanceof Vector)
 				throw new SchemeException("Vectors must be quoted");
-			if (o instanceof Symbol)
-				return env.get((Symbol) o);
+			if (o instanceof Symbol) return env.get((Symbol) o);
 			if (o instanceof Pair) {
 				final Pair p = (Pair) o;
 				final SchemeObject car = p.getCar();
-				if (car == _lambdaSymbol)
-					return makeLambda(p.getCdr(), env);
-				if (car == _defineSymbol)
-					return define(p.getCdr(), env);
-				if (car == _defmacroSymbol)
-					return defmacro(p.getCdr(), env);
+				if (car == _lambdaSymbol) return makeLambda(p.getCdr(), env);
+				if (car == _defineSymbol) return define(p.getCdr(), env);
+				if (car == _defmacroSymbol) return defmacro(p.getCdr(), env);
 				final List<SchemeObject> form = p.toJavaList();
-				if (car == _quoteSymbol)
-					return ((Pair) p.getCdr()).getCar();
-				if (car == _setSymbol)
-					return set(form, env);
+				if (car == _quoteSymbol) return ((Pair) p.getCdr()).getCar();
+				if (car == _setSymbol) return set(form, env);
 				if (car == _callccSymbol)
 					throw new SchemeException(
 							"InterpretingEvaluator doesn't support continuations");
@@ -148,13 +141,12 @@ public final class InterpretingEvaluator extends Evaluator {
 						o = form.get(i);
 						if (i == form.size() - 1) // Last form in (begin...)
 							continue tailCall;
-						else
-							eval(o, env);
+						eval(o, env);
 					}
 				}
 
 				final SchemeObject procedure = eval(car, env);
-				final ArrayList<SchemeObject> parameters = new ArrayList<SchemeObject>();
+				final ArrayList<SchemeObject> parameters = new ArrayList<>();
 
 				if (procedure instanceof Macro) {
 					final Macro m = (Macro) procedure;
@@ -166,8 +158,7 @@ public final class InterpretingEvaluator extends Evaluator {
 							m.hasRestParameter(), parameters);
 					o = eval(new Pair(_beginSymbol, m.getForms()), macroEnv);
 
-					if (doNotExecuteExpandedMacros)
-						return o;
+					if (doNotExecuteExpandedMacros) return o;
 					continue tailCall;
 				}
 
@@ -194,7 +185,7 @@ public final class InterpretingEvaluator extends Evaluator {
 		}
 	}
 
-	private SchemeObject makeLambda(SchemeObject form, Environment env)
+	private static SchemeObject makeLambda(SchemeObject form, Environment env)
 			throws SchemeException {
 		if (!(form instanceof Pair))
 			throw new SchemeException(
@@ -213,17 +204,17 @@ public final class InterpretingEvaluator extends Evaluator {
 		throw new SchemeException("Invalid lambda form");
 	}
 
-	private SchemeObject makeLambdaWithRestParameterOnly(Environment env,
-			SchemeObject parameterNameObject, Pair forms) {
-		final List<Symbol> parameterNames = new ArrayList<Symbol>();
+	private static SchemeObject makeLambdaWithRestParameterOnly(
+			Environment env, SchemeObject parameterNameObject, Pair forms) {
+		final List<Symbol> parameterNames = new ArrayList<>();
 		parameterNames.add((Symbol) parameterNameObject);
 		return new Lambda("lambda", parameterNames, true, forms, env);
 	}
 
-	private SchemeObject makeLambdaWithParameterList(Environment env,
+	private static SchemeObject makeLambdaWithParameterList(Environment env,
 			SchemeObject parameterNameObject, Pair forms)
 			throws SchemeException {
-		final List<Symbol> parameterNames = new ArrayList<Symbol>();
+		final List<Symbol> parameterNames = new ArrayList<>();
 		final boolean hasRestParameter = ((SchemeList) parameterNameObject)
 				.isDottedList();
 		for (SchemeObject o : (SchemeList) parameterNameObject) {
@@ -243,10 +234,8 @@ public final class InterpretingEvaluator extends Evaluator {
 			throw new SchemeException(
 					"Invalid define form: Expected target and value");
 		final Pair p1 = (Pair) form;
-		if (p1.getCar() instanceof Symbol)
-			return defineValue(env, p1);
-		if (p1.getCar() instanceof Pair)
-			return defineProcedure(env, p1);
+		if (p1.getCar() instanceof Symbol) return defineValue(env, p1);
+		if (p1.getCar() instanceof Pair) return defineProcedure(env, p1);
 
 		throw new SchemeException(
 				"Invalid define form: Expected symbol or list as target");
@@ -267,7 +256,7 @@ public final class InterpretingEvaluator extends Evaluator {
 		return _undefinedSymbol;
 	}
 
-	private SchemeObject defineProcedure(Environment env, Pair p1)
+	private static SchemeObject defineProcedure(Environment env, Pair p1)
 			throws SchemeException {
 		final SchemeList target = (SchemeList) p1.getCar();
 		final SchemeObject forms = p1.getCdr();
@@ -275,7 +264,7 @@ public final class InterpretingEvaluator extends Evaluator {
 			throw new SchemeException(
 					"Invalid define form: Expected lambda forms");
 		Symbol sym = null;
-		final List<Symbol> parameterNames = new ArrayList<Symbol>();
+		final List<Symbol> parameterNames = new ArrayList<>();
 		for (SchemeObject o : target) {
 			if (!(o instanceof Symbol))
 				throw new SchemeException(
@@ -292,7 +281,7 @@ public final class InterpretingEvaluator extends Evaluator {
 		return _undefinedSymbol;
 	}
 
-	private SchemeObject defmacro(SchemeObject obj, Environment env)
+	private static SchemeObject defmacro(SchemeObject obj, Environment env)
 			throws SchemeException {
 		if (!(obj instanceof Pair))
 			throw new SchemeException("Invalid defmacro form: Empty form");
@@ -310,7 +299,7 @@ public final class InterpretingEvaluator extends Evaluator {
 		if (!(formsObj instanceof Pair))
 			throw new SchemeException("Invalid defmacro form: Expected forms");
 		Pair forms = (Pair) formsObj;
-		final List<Symbol> parameterNames = new ArrayList<Symbol>();
+		final List<Symbol> parameterNames = new ArrayList<>();
 		boolean hasRestParameter;
 		if (paramListObj instanceof Symbol) {
 			hasRestParameter = true;

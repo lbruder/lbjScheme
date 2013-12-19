@@ -31,8 +31,7 @@ public final class Mul extends Builtin {
 		SchemeNumber ret = new Fixnum(1);
 		for (SchemeObject o : parameters) {
 			final SchemeNumber number = getNumber(o);
-			if (number.isZero() && number.isExact())
-				return number;
+			if (number.isZero() && number.isExact()) return number;
 			ret = ret.mul(number);
 		}
 		return ret;

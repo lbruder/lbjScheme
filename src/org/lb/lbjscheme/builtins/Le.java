@@ -32,8 +32,7 @@ public final class Le extends Builtin {
 		SchemeNumber last = getNumber(parameters.get(0));
 		for (SchemeObject o : parameters.subList(1, parameters.size())) {
 			SchemeNumber now = getNumber(o);
-			if (last.gt(now))
-				return _false;
+			if (last.gt(now)) return _false;
 			last = now;
 		}
 		return _true;

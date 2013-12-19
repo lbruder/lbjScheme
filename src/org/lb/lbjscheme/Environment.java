@@ -20,7 +20,7 @@ import java.util.*;
 
 public final class Environment implements SchemeObject {
 	private final Environment _outer;
-	private final HashMap<Symbol, SchemeObject> _values = new HashMap<Symbol, SchemeObject>();
+	private final HashMap<Symbol, SchemeObject> _values = new HashMap<>();
 
 	public Environment() {
 		_outer = null;
@@ -41,10 +41,8 @@ public final class Environment implements SchemeObject {
 	}
 
 	public SchemeObject get(Symbol name) throws SchemeException {
-		if (_values.containsKey(name))
-			return _values.get(name);
-		if (_outer != null)
-			return _outer.get(name);
+		if (_values.containsKey(name)) return _values.get(name);
+		if (_outer != null) return _outer.get(name);
 		throw new SchemeException("Unknown symbol " + name.toString());
 	}
 
@@ -58,8 +56,9 @@ public final class Environment implements SchemeObject {
 		case "begin":
 			throw new SchemeException("Symbol '" + name.toString()
 					+ "' is constant and must not be changed");
+		default:
+			_values.put(name, value);
 		}
-		_values.put(name, value);
 	}
 
 	public void set(Symbol name, SchemeObject value) throws SchemeException {

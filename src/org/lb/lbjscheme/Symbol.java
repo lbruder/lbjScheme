@@ -35,12 +35,11 @@ public final class Symbol implements SchemeObject {
 		return _name;
 	}
 
-	private static final HashMap<String, Symbol> _cache = new HashMap<String, Symbol>();
+	private static final HashMap<String, Symbol> _cache = new HashMap<>();
 
 	public static Symbol fromString(String name) {
 		final Symbol fromCache = _cache.get(name);
-		if (fromCache != null)
-			return fromCache;
+		if (fromCache != null) return fromCache;
 		final Symbol ret = new Symbol(name);
 		_cache.put(name, ret);
 		return ret;

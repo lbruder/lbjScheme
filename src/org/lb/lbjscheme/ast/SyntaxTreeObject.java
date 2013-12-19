@@ -17,4 +17,5 @@
 package org.lb.lbjscheme.ast;
 
 public abstract class SyntaxTreeObject {
+	// TODO: Empty interface; could I just store the AST objects as Object?
 }

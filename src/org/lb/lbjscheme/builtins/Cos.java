@@ -30,8 +30,7 @@ public final class Cos extends Builtin {
 			throws SchemeException {
 		assertParameterCount(1, parameters);
 		SchemeNumber n = getNumber(parameters.get(0));
-		if (n.isExact() && n.isZero())
-			return Fixnum.valueOf(1);
+		if (n.isExact() && n.isZero()) return Fixnum.valueOf(1);
 		while (!(n instanceof Real))
 			n = n.promoteToLevel(4);
 		return new Real(Math.cos(((Real) n).getValue()));

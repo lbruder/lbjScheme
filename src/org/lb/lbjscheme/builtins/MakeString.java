@@ -33,8 +33,7 @@ public final class MakeString extends Builtin {
 		final int length = getFixnum(parameters.get(0));
 		final SchemeString ret = new SchemeString(length);
 
-		if (parameters.size() == 1)
-			return ret;
+		if (parameters.size() == 1) return ret;
 
 		final SchemeObject asChar = parameters.get(1);
 		assertParameterType(asChar, SchemeCharacter.class);
