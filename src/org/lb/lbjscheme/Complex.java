@@ -61,8 +61,7 @@ public final class Complex extends SchemeNumber {
 		if (!value.endsWith("i"))
 			throw new SchemeException("Value can not be converted to a complex");
 		int pos = value.lastIndexOf('+');
-		if (pos == -1)
-			pos = value.lastIndexOf('-');
+		if (pos == -1) pos = value.lastIndexOf('-');
 		if (pos == -1)
 			throw new SchemeException("Value can not be converted to a complex");
 
@@ -73,11 +72,14 @@ public final class Complex extends SchemeNumber {
 				SchemeNumber.fromString(imagPart, 10));
 	}
 
-	public static SchemeNumber valueOf(SchemeNumber real, SchemeNumber imag) {
-		if (imag.isExact() && imag.isZero())
-			return real;
-		else
-			return new Complex(real, imag);
+	public static SchemeNumber valueOf(SchemeNumber real, SchemeNumber imag)
+			throws SchemeException {
+		if (imag.isExact() && imag.isZero()) return real;
+		if (imag.isZero()) {
+			if (imag.isExact()) return real;
+			return real.mul(new Real(1));
+		}
+		return new Complex(real, imag);
 	}
 
 	@Override
@@ -140,7 +142,7 @@ public final class Complex extends SchemeNumber {
 	}
 
 	@Override
-	public boolean eq(SchemeNumber other) {
+	public boolean eq(SchemeNumber other) throws SchemeException {
 		Complex o = (Complex) other;
 		return _real.eq(o._real) && _imag.eq(o._imag);
 	}

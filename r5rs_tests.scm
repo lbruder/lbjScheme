@@ -382,7 +382,7 @@ complex? number?
 (test "6.2.5" (complex? 3+4i) #t)
 (test "6.2.5" (complex? 3) #t)
 (test "6.2.5" (real? 3) #t)
-; TODO: Test fails (test "6.2.5" (real? -2.5+0.0i) #t)
+(test "6.2.5" (real? -2.5+0.0i) #t)
 (test "6.2.5" (real? #e1e10) #t)
 (test "6.2.5" (rational? 6/10) #t)
 (test "6.2.5" (rational? 6/3) #t)
