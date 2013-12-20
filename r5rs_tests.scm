@@ -263,8 +263,7 @@ complex? number?
 (test "4.2.6" (let ((name 'a)) `(list ,name ',name)) '(list a (quote a)))
 (test "4.2.6" `(a ,(+ 1 2) ,@(map abs '(4 -5 6)) b) '(a 3 4 5 6 b))
 
-; TODO: Test fails
-; (test "4.2.6" `(( foo ,(- 10 3)) ,@(cdr '(c)) . ,(car '(cons))) '((foo 7) . cons))
+(test "4.2.6" `(( foo ,(- 10 3)) ,@(cdr '(c)) . ,(car '(cons))) '((foo 7) . cons))
 
 ; TODO: Test fails
 ; (test "4.2.6" `#(10 5 ,(sqrt 4) ,@(map sqrt '(16 9)) 8) '#(10 5 2 4 3 8))
@@ -511,8 +510,8 @@ complex? number?
 (test "6.3.2" (append '(x) '(y)) '(x y))
 (test "6.3.2" (append '(a) '(b c d)) '(a b c d))
 (test "6.3.2" (append '(a (b)) '((c))) '(a (b) (c)))
-; TODO: Test fails (test "6.3.2" (append '(a b) '(c . d)) '(a b c . d))
-; TODO: Test fails (test "6.3.2" (append '() 'a) 'a)
+(test "6.3.2" (append '(a b) '(c . d)) '(a b c . d))
+(test "6.3.2" (append '() 'a) 'a)
 
 (test "6.3.2" (reverse '(a b c)) '(c b a))
 (test "6.3.2" (reverse '(a (b c) d (e (f)))) '((e (f)) d (b c) a))

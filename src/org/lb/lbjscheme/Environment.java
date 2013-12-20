@@ -332,7 +332,7 @@ public final class Environment implements SchemeObject {
 			+ "(define (char-alphabetic? x) (if (char-upper-case? x) #t (char-lower-case? x)))"
 			+ "(define (char-numeric? x) (if (>= (char->integer x) 48) (<= (char->integer x) 57) #f))"
 			+ "(define (char-whitespace? x) (if (char=? x #\\space) #t (if (char=? x #\\tab) #t (if (char=? x #\\newline) #t (char=? x #\\cr)))))"
-			+ "(define (append . lsts) (define (iter current acc) (if (pair? current) (iter (cdr current) (cons (car current) acc)) acc)) (reverse (fold iter '() lsts)))"
+			+ "(define (append . lists) (define (add-list lst acc) (if (null? lst) acc (add-list (cdr lst) (cons (car lst) acc)))) (define (iter rest-lists acc) (if (null? rest-lists) acc (iter (cdr rest-lists) (add-list (car rest-lists) acc)))) (if (null? lists) lists (let* ((reversed (reverse lists)) (last-list (car reversed)) (rest-lists (map reverse (cdr reversed)))) (iter rest-lists last-list))))"
 			+ "(define (string=? a b) (define (check i max) (if (>= i max) #t (if (char=? (string-ref a i) (string-ref b i)) (check (+ i 1) max) #f))) (if (= (string-length a) (string-length b)) (check 0 (string-length a)) #f))"
 			+ "(define (string-ci=? a b) (define (check i max) (if (>= i max) #t (if (char-ci=? (string-ref a i) (string-ref b i)) (check (+ i 1) max) #f))) (if (= (string-length a) (string-length b)) (check 0 (string-length a)) #f))"
 			+ "(define (string>? a b) (define (check i max-a max-b) (if (>= i max-a) #f (if (>= i max-b) #t (if (char=? (string-ref a i) (string-ref b i)) (check (+ i 1) max-a max-b) (char>? (string-ref a i) (string-ref b i)))))) (check 0 (string-length a) (string-length b)))"
