@@ -111,6 +111,8 @@ public final class Real extends SchemeNumber {
 
 	@Override
 	public SchemeNumber doMod(SchemeNumber other) throws SchemeException {
+		final Real r = (Real) other;
+		if (isInteger() && r.isInteger()) return new Real(_value % r._value);
 		throw new SchemeException("remainder: Integer expected");
 	}
 
@@ -124,6 +126,10 @@ public final class Real extends SchemeNumber {
 	@Override
 	public boolean isExact() {
 		return false;
+	}
+
+	public boolean isInteger() {
+		return Double.toString(_value).endsWith(".0");
 	}
 
 	@Override
