@@ -128,6 +128,7 @@ public final class Real extends SchemeNumber {
 		return false;
 	}
 
+	@Override
 	public boolean isInteger() {
 		return Double.toString(_value).endsWith(".0");
 	}

@@ -90,6 +90,11 @@ public final class Bignum extends SchemeNumber {
 	}
 
 	@Override
+	public boolean isInteger() {
+		return true;
+	}
+
+	@Override
 	public boolean isZero() {
 		// No Bignum can ever be zero, as it would be converted to a Fixnum
 		// on the fly. Using this implementation for reference purposes.

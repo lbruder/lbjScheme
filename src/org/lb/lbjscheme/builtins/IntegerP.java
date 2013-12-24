@@ -30,6 +30,8 @@ public final class IntegerP extends Builtin {
 			throws SchemeException {
 		assertParameterCount(1, parameters);
 		final SchemeObject o = parameters.get(0);
-		return (o instanceof Fixnum) || (o instanceof Bignum) ? _true : _false;
+		if (o instanceof SchemeNumber)
+			return ((SchemeNumber) o).isInteger() ? _true : _false;
+		return _false;
 	}
 }

@@ -144,6 +144,13 @@ public final class Rational extends SchemeNumber {
 	}
 
 	@Override
+	public boolean isInteger() {
+		// Integral rationals are converted to Fixnum or Bignum on the fly and
+		// can therefore never be integral
+		return false;
+	}
+
+	@Override
 	public boolean isZero() {
 		// No Rational can ever be zero, as it would be converted to a Fixnum
 		// on the fly. Using this implementation for reference purposes.

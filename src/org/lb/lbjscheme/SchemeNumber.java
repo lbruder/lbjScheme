@@ -116,6 +116,8 @@ public abstract class SchemeNumber implements SchemeObject {
 		return compareTo(other.promoteToLevel(getLevel()));
 	}
 
+	public abstract boolean isInteger();
+
 	public abstract boolean isZero();
 
 	public abstract int getLevel();

@@ -386,7 +386,7 @@ complex? number?
 (test "6.2.5" (rational? 6/10) #t)
 (test "6.2.5" (rational? 6/3) #t)
 (test "6.2.5" (integer? 3+0i) #t)
-; TODO: Test fails (test "6.2.5" (integer? 3.0) #t)
+(test "6.2.5" (integer? 3.0) #t)
 (test "6.2.5" (integer? 8/4) #t)
 
 (test "6.2.5" (max 3 4) 4)
