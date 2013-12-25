@@ -392,7 +392,7 @@ complex? number?
 (test "6.2.5" (max 3 4) 4)
 (test "6.2.5" (max 3.9 4) 4.0)
 (test "6.2.5" (exact? (max 3 4)) #t)
-; TODO: Test fails (test "6.2.5" (inexact? (max 3.9 4)) #t)
+(test "6.2.5" (inexact? (max 3.9 4)) #t)
 (test "6.2.5" (+ 3 4) 7)
 (test "6.2.5" (+ 3) 3)
 (test "6.2.5" (+) 0)
