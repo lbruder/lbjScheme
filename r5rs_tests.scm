@@ -475,7 +475,7 @@ complex? number?
 (test "6.3.2" y '(a . 4))
 (test "6.3.2" (list? y) #f)
 (set-cdr! x x)
-; TODO: Test fails, endless loop in list? (test "6.3.2" (list? x) #f)
+(test "6.3.2" (list? x) #f)
 
 (test "6.3.2" (pair? '(a . b)) #t)
 (test "6.3.2" (pair? '(a b c)) #t)
@@ -498,7 +498,7 @@ complex? number?
 (test "6.3.2" (list? '(a b c)) #t)
 (test "6.3.2" (list? '()) #t)
 (test "6.3.2" (list? '(a . b)) #f)
-; TODO: Test fails, endless loop in list? (test "6.3.2" (let ((x (list 'a))) (set-cdr! x x) (list? x)) #f)
+(test "6.3.2" (let ((x (list 'a))) (set-cdr! x x) (list? x)) #f)
 
 (test "6.3.2" (list 'a (+ 3 4) 'c) '(a 7 c))
 (test "6.3.2" (list) '())
