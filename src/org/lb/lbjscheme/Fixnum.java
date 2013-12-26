@@ -105,6 +105,11 @@ public final class Fixnum extends SchemeNumber {
 	}
 
 	@Override
+	public SchemeNumber makeInexact() {
+		return new Real(_value);
+	}
+
+	@Override
 	public SchemeNumber floor() {
 		return this;
 	}

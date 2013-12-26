@@ -149,6 +149,8 @@ public abstract class SchemeNumber implements SchemeObject {
 	protected abstract SchemeNumber doMod(SchemeNumber other)
 			throws SchemeException;
 
+	public abstract SchemeNumber makeInexact();
+
 	public abstract SchemeNumber floor() throws SchemeException;
 
 	public abstract SchemeNumber ceiling() throws SchemeException;

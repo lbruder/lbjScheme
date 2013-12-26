@@ -31,6 +31,6 @@ public final class ExactToInexact extends Builtin {
 		assertParameterCount(1, parameters);
 		final SchemeObject o = parameters.get(0);
 		assertParameterType(o, SchemeNumber.class);
-		return ((SchemeNumber) o).mul(new Real(1));
+		return ((SchemeNumber) o).makeInexact();
 	}
 }

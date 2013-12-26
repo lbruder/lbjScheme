@@ -181,6 +181,11 @@ public final class Rational extends SchemeNumber {
 	}
 
 	@Override
+	public SchemeNumber makeInexact() {
+		return promoteToLevel(4); // TODO: Allow for inexact rationals, too!
+	}
+
+	@Override
 	public SchemeNumber floor() {
 		return Bignum.valueOf(_n.subtract(_n.mod(_d)).divide(_d));
 	}

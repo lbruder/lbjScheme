@@ -40,7 +40,7 @@ public final class Rationalize extends Builtin {
 			final SchemeNumber asRational = n.div(d);
 			if (abs(asRational.sub(number)).le(maxDiff)) {
 				if (number.isExact()) return asRational;
-				return asRational.mul(new Real(1));
+				return asRational.makeInexact();
 			}
 		}
 	}

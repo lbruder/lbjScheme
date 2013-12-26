@@ -77,7 +77,7 @@ public final class Complex extends SchemeNumber {
 		if (imag.isExact() && imag.isZero()) return real;
 		if (imag.isZero()) {
 			if (imag.isExact()) return real;
-			return real.mul(new Real(1));
+			return real.makeInexact();
 		}
 		return new Complex(real, imag);
 	}
@@ -182,6 +182,11 @@ public final class Complex extends SchemeNumber {
 	@Override
 	public SchemeNumber roundToNearestInteger() throws SchemeException {
 		throw new SchemeException("Real number expected");
+	}
+
+	@Override
+	public SchemeNumber makeInexact() {
+		return new Complex(_real.makeInexact(), _imag.makeInexact());
 	}
 
 	@Override

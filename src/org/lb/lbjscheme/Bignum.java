@@ -116,6 +116,11 @@ public final class Bignum extends SchemeNumber {
 	}
 
 	@Override
+	public SchemeNumber makeInexact() {
+		return new Real(_value);
+	}
+
+	@Override
 	public SchemeNumber floor() {
 		return this;
 	}

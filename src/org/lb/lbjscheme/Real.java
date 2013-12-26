@@ -164,10 +164,15 @@ public final class Real extends SchemeNumber {
 	}
 
 	@Override
+	public SchemeNumber makeInexact() {
+		return this; // Reals are inexact already
+	}
+
+	@Override
 	public SchemeNumber floor() throws SchemeException {
 		return Bignum.valueOf(
 				BigDecimal.valueOf(_value).setScale(0, BigDecimal.ROUND_FLOOR)
-						.toBigInteger()).mul(new Real(1.0));
+						.toBigInteger()).makeInexact();
 	}
 
 	@Override
@@ -175,14 +180,14 @@ public final class Real extends SchemeNumber {
 		return Bignum.valueOf(
 				BigDecimal.valueOf(_value)
 						.setScale(0, BigDecimal.ROUND_CEILING).toBigInteger())
-				.mul(new Real(1.0));
+				.makeInexact();
 	}
 
 	@Override
 	public SchemeNumber truncate() throws SchemeException {
 		return Bignum.valueOf(
 				BigDecimal.valueOf(_value).setScale(0, BigDecimal.ROUND_DOWN)
-						.toBigInteger()).mul(new Real(1.0));
+						.toBigInteger()).makeInexact();
 
 	}
 
@@ -192,7 +197,7 @@ public final class Real extends SchemeNumber {
 				.valueOf(
 						BigDecimal.valueOf(_value)
 								.setScale(0, BigDecimal.ROUND_HALF_EVEN)
-								.toBigInteger()).mul(new Real(1.0));
+								.toBigInteger()).makeInexact();
 	}
 
 	@Override
