@@ -197,10 +197,11 @@ public final class Reader {
 			return SchemeNumber.fromString(symbol, 10);
 		} catch (Exception ex) {
 			if (symbol.startsWith("#e"))
-				return SchemeNumber.fromString(symbol.substring(2), 10);
+				return SchemeNumber.fromString(symbol.substring(2), 10)
+						.makeExact();
 			if (symbol.startsWith("#i"))
-				return SchemeNumber.fromString(symbol.substring(2), 10).mul(
-						new Real(1));
+				return SchemeNumber.fromString(symbol.substring(2), 10)
+						.makeInexact();
 			if (symbol.startsWith("#x"))
 				return SchemeNumber.fromString(symbol.substring(2), 16);
 			if (symbol.startsWith("#d"))

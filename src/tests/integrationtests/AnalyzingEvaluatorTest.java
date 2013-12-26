@@ -16,11 +16,13 @@
 
 package tests.integrationtests;
 
+import java.io.OutputStreamWriter;
 import org.lb.lbjscheme.*;
 
 public class AnalyzingEvaluatorTest extends EvaluatorTest {
 	@Override
 	public void setUp() throws SchemeException {
-		interp = new AnalyzingEvaluator(null, null);
+		interp = new AnalyzingEvaluator(null, new OutputPort(
+				new OutputStreamWriter(System.out)));
 	}
 }

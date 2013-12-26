@@ -110,6 +110,11 @@ public final class Fixnum extends SchemeNumber {
 	}
 
 	@Override
+	public SchemeNumber makeExact() {
+		return this;
+	}
+
+	@Override
 	public SchemeNumber floor() {
 		return this;
 	}

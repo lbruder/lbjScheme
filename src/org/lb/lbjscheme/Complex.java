@@ -190,6 +190,15 @@ public final class Complex extends SchemeNumber {
 	}
 
 	@Override
+	public SchemeNumber makeExact() {
+		try {
+			return valueOf(_real.makeExact(), _imag.makeExact());
+		} catch (SchemeException e) {
+			throw new RuntimeException("Impossible exception");
+		}
+	}
+
+	@Override
 	public SchemeNumber floor() throws SchemeException {
 		throw new SchemeException("Real number expected");
 	}

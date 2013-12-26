@@ -111,6 +111,25 @@ public abstract class EvaluatorTest extends TestCase {
 		evalTest("asd", "3.1415");
 	}
 
+	public void testInexactRationals() throws SchemeException {
+		interp.eval("(define a 3/4)");
+		interp.eval("(define b (exact->inexact a))");
+		evalTest("a", "3/4");
+		evalTest("b", "0.75");
+		evalTest("(* 4 a)", "3");
+		evalTest("(* 4 b)", "3.0");
+		evalTest("(inexact->exact b)", "3/4");
+	}
+
+	public void testEqualityOfInexactRationals() throws SchemeException {
+		interp.eval("(define a 3/4)");
+		interp.eval("(define b (exact->inexact a))");
+		evalTest("(eq? a b)", "#f");
+		evalTest("(eqv? a b)", "#f");
+		evalTest("(equal? a b)", "#f");
+		evalTest("(eqv? a (inexact->exact b))", "#t");
+	}
+
 	public void testApplyBuiltin() throws SchemeException {
 		evalTest("(apply + '())", "0");
 		evalTest("(apply + '(1))", "1");

@@ -121,6 +121,11 @@ public final class Bignum extends SchemeNumber {
 	}
 
 	@Override
+	public SchemeNumber makeExact() {
+		return this;
+	}
+
+	@Override
 	public SchemeNumber floor() {
 		return this;
 	}

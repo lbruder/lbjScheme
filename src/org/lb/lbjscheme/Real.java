@@ -138,7 +138,8 @@ public final class Real extends SchemeNumber {
 		return _value == 0.0;
 	}
 
-	public SchemeNumber makeExact() throws SchemeException {
+	@Override
+	public SchemeNumber makeExact() {
 		final BigDecimal number = new BigDecimal(Double.toString(_value));
 		int scale = number.scale();
 		BigInteger numerator = number.movePointRight(scale).toBigInteger();
@@ -147,7 +148,12 @@ public final class Real extends SchemeNumber {
 			scale++;
 		}
 		final BigInteger denominator = BigInteger.TEN.pow(scale);
-		return Rational.valueOf(numerator, denominator);
+
+		try {
+			return Rational.valueOf(numerator, denominator, true);
+		} catch (SchemeException e) {
+			throw new RuntimeException("Impossible exception");
+		}
 	}
 
 	public double getValue() {

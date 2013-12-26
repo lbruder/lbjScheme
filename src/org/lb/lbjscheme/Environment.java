@@ -361,7 +361,7 @@ public final class Environment implements SchemeObject {
 			+ "(define (min . args) (define (min-of-two a b) (if (< a b) a b)) (let ((l (length args))) (cond ((= 0 l) (error \"min called without parameters\")) ((= 1 l) (car args)) (else (let ((ret (fold min-of-two (car args) (cdr args)))) (if (any inexact? args) (exact->inexact ret) ret))))))"
 			+ "(define (max . args) (define (max-of-two a b) (if (> a b) a b)) (let ((l (length args))) (cond ((= 0 l) (error \"max called without parameters\")) ((= 1 l) (car args)) (else (let ((ret (fold max-of-two (car args) (cdr args)))) (if (any inexact? args) (exact->inexact ret) ret))))))"
 			+ "(defmacro or args (if (null? (cdr args)) (car args) (list 'aif (car args) 'it (cons 'or (cdr args)))))"
-			+ "(define (eqv? a b) (define (bool=? a b) (if a b (not b))) (cond ((eq? a b) #t) ((and (number? a) (number? b)) (= a b)) ((and (char? a) (char? b)) (char=? a b)) ((and (boolean? a) (boolean? b)) (bool=? a b)) (else #f)))"
+			+ "(define (eqv? a b) (define (bool=? a b) (if a b (not b))) (cond ((eq? a b) #t) ((and (number? a) (number? b)) (and (bool=? (exact? a) (exact? b)) (= a b))) ((and (char? a) (char? b)) (char=? a b)) ((and (boolean? a) (boolean? b)) (bool=? a b)) (else #f)))"
 			+ "(define (equal? a b) (cond ((eqv? a b) #t) ((and (string? a) (string? b)) (string=? a b)) ((and (pair? a) (pair? b)) (if (equal? (car a) (car b)) (equal? (cdr a) (cdr b)) #f)) ((and (vector? a) (vector? b)) (equal? (vector->list a) (vector->list b))) (else #f)))"
 			+ "(define (memq obj lst) (if (pair? lst) (if (eq? obj (car lst)) lst (memq obj (cdr lst))) #f))"
 			+ "(define (memv obj lst) (if (pair? lst) (if (eqv? obj (car lst)) lst (memv obj (cdr lst))) #f))"

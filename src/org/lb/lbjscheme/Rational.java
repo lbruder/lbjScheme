@@ -24,6 +24,7 @@ public final class Rational extends SchemeNumber {
 
 	private final BigInteger _n;
 	private final BigInteger _d;
+	private final boolean _isExact;
 
 	private static final Pattern _rationalRegex = Pattern
 			.compile("^([+-]?\\d+)/(\\d+)$");
@@ -31,18 +32,22 @@ public final class Rational extends SchemeNumber {
 	public Rational(int value) {
 		_n = BigInteger.valueOf(value);
 		_d = BigInteger.ONE;
+		_isExact = true;
 	}
 
 	public Rational(BigInteger value) {
 		_n = value;
 		_d = BigInteger.ONE;
+		_isExact = true;
 	}
 
-	private Rational(BigInteger n, BigInteger d) throws SchemeException {
+	private Rational(BigInteger n, BigInteger d, boolean isExact)
+			throws SchemeException {
 		if (d.equals(BigInteger.ZERO))
 			throw new SchemeException("Division by zero");
 		_n = n;
 		_d = d;
+		_isExact = isExact;
 	}
 
 	@Override
@@ -53,7 +58,8 @@ public final class Rational extends SchemeNumber {
 	@Override
 	public String toString(boolean forDisplay, int base) throws SchemeException {
 		assertBaseTen(base);
-		return _n.toString() + "/" + _d.toString();
+		if (_isExact) return _n.toString() + "/" + _d.toString();
+		return promoteToLevel(4).toString(forDisplay, base);
 	}
 
 	private static void assertBaseTen(int base) throws SchemeException {
@@ -80,57 +86,64 @@ public final class Rational extends SchemeNumber {
 					"Value can not be converted to a rational");
 		BigInteger n = new BigInteger(m.group(1), 10);
 		BigInteger d = new BigInteger(m.group(2), 10);
-		return valueOf(n, d);
+		return valueOf(n, d, true);
 	}
 
-	public static SchemeNumber valueOf(BigInteger n, BigInteger d)
-			throws SchemeException {
+	public static SchemeNumber valueOf(BigInteger n, BigInteger d,
+			boolean isExact) throws SchemeException {
 		BigInteger gcd = n.gcd(d);
 		n = n.divide(gcd);
 		d = d.divide(gcd);
 
 		if (d.equals(BigInteger.ONE))
-			return Bignum.valueOf(n);
+			return isExact ? Bignum.valueOf(n) : new Real(n);
 		else if (d.signum() == -1)
-			return new Rational(n.negate(), d.negate());
+			return new Rational(n.negate(), d.negate(), isExact);
 		else
-			return new Rational(n, d);
+			return new Rational(n, d, isExact);
 	}
 
 	@Override
 	public SchemeNumber getNumerator() {
-		return Bignum.valueOf(_n);
+		return _isExact ? Bignum.valueOf(_n) : Bignum.valueOf(_n).makeInexact();
 	}
 
 	@Override
 	public SchemeNumber getDenominator() {
-		return Bignum.valueOf(_d);
+		return _isExact ? Bignum.valueOf(_d) : Bignum.valueOf(_d).makeInexact();
+	}
+
+	@Override
+	public boolean isExact() {
+		return _isExact;
 	}
 
 	@Override
 	protected SchemeNumber doAdd(SchemeNumber other) throws SchemeException {
 		Rational o = (Rational) other;
 		return valueOf(_n.multiply(o._d).add(_d.multiply(o._n)),
-				_d.multiply(o._d));
+				_d.multiply(o._d), _isExact && o._isExact);
 	}
 
 	@Override
 	public SchemeNumber doSub(SchemeNumber other) throws SchemeException {
 		Rational o = (Rational) other;
 		return valueOf(_n.multiply(o._d).subtract(_d.multiply(o._n)),
-				_d.multiply(o._d));
+				_d.multiply(o._d), _isExact && o._isExact);
 	}
 
 	@Override
 	public SchemeNumber doMul(SchemeNumber other) throws SchemeException {
 		Rational o = (Rational) other;
-		return valueOf(_n.multiply(o._n), _d.multiply(o._d));
+		return valueOf(_n.multiply(o._n), _d.multiply(o._d), _isExact
+				&& o._isExact);
 	}
 
 	@Override
 	public SchemeNumber doDiv(SchemeNumber other) throws SchemeException {
 		Rational o = (Rational) other;
-		return valueOf(_n.multiply(o._d), _d.multiply(o._n));
+		return valueOf(_n.multiply(o._d), _d.multiply(o._n), _isExact
+				&& o._isExact);
 	}
 
 	@Override
@@ -182,29 +195,49 @@ public final class Rational extends SchemeNumber {
 
 	@Override
 	public SchemeNumber makeInexact() {
-		return promoteToLevel(4); // TODO: Allow for inexact rationals, too!
+		try {
+			return new Rational(_n, _d, false);
+		} catch (SchemeException e) {
+			throw new RuntimeException("Impossible exception");
+		}
+	}
+
+	@Override
+	public SchemeNumber makeExact() {
+		if (_isExact) return this;
+		try {
+			return new Rational(_n, _d, true);
+		} catch (SchemeException e) {
+			throw new RuntimeException("Impossible exception");
+		}
 	}
 
 	@Override
 	public SchemeNumber floor() {
-		return Bignum.valueOf(_n.subtract(_n.mod(_d)).divide(_d));
+		final SchemeNumber ret = Bignum.valueOf(_n.subtract(_n.mod(_d)).divide(
+				_d));
+		return _isExact ? ret : ret.makeInexact();
 	}
 
 	@Override
 	public SchemeNumber ceiling() {
-		return Bignum.valueOf(_n.subtract(_n.mod(_d)).divide(_d)
-				.add(BigInteger.ONE));
+		final SchemeNumber ret = Bignum.valueOf(_n.subtract(_n.mod(_d))
+				.divide(_d).add(BigInteger.ONE));
+		return _isExact ? ret : ret.makeInexact();
 	}
 
 	@Override
 	public SchemeNumber truncate() {
-		return Bignum.valueOf(_n.divide(_d));
+		final SchemeNumber ret = Bignum.valueOf(_n.divide(_d));
+		return _isExact ? ret : ret.makeInexact();
 	}
 
 	@Override
 	public SchemeNumber round() {
-		return Bignum.valueOf(new BigDecimal(_n).divide(new BigDecimal(_d))
+		final SchemeNumber ret = Bignum.valueOf(new BigDecimal(_n)
+				.divide(new BigDecimal(_d))
 				.setScale(0, BigDecimal.ROUND_HALF_EVEN).toBigInteger());
+		return _isExact ? ret : ret.makeInexact();
 	}
 
 	@Override

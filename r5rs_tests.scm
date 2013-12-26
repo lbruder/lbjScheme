@@ -99,8 +99,6 @@ complex? number?
                 (cons 1 2)
                 (delay (+ 1 2))))
 
-; TODO: All values count as true in [...] a test except for #f.
-
 ; ------------------------------------------------------------------------------
 ; 3.3
 
@@ -424,7 +422,7 @@ complex? number?
 (test "6.2.5" (denominator 0) 1)
 (test "6.2.5" (numerator (/ 6 4)) 3)
 (test "6.2.5" (denominator (/ 6 4)) 2)
-; TODO: Test fails (test "6.2.5" (denominator (exact->inexact (/ 6 4))) 2.0)
+(test "6.2.5" (denominator (exact->inexact (/ 6 4))) 2.0)
 (test "6.2.5" (floor -4.3) -5.0)
 (test "6.2.5" (ceiling -4.3) -4.0)
 (test "6.2.5" (truncate -4.3) -4.0)
