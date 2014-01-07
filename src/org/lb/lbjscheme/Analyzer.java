@@ -50,7 +50,6 @@ public final class Analyzer {
 
 		final Pair p = (Pair) obj;
 		final SchemeObject car = p.getCar();
-		final List<SchemeObject> form = p.toJavaList();
 
 		if (car instanceof Symbol
 				&& _macroEnvironment.getDefinedSymbols().contains(car)
@@ -68,10 +67,12 @@ public final class Analyzer {
 		if (car == _lambdaSymbol) return analyzeLambdaForm(p.getCdr());
 		if (car == _defineSymbol) return analyzeDefineForm(p.getCdr());
 		if (car == _defmacroSymbol) return defmacro(p);
+		if (car == _applySymbol) return analyzeApplyForm(p);
+
+		final List<SchemeObject> form = p.toJavaList();
 		if (car == _quoteSymbol) return new SelfEvaluatingLiteral(form.get(1));
 		if (car == _setSymbol) return analyzeSetForm(form);
 		if (car == _callccSymbol) return analyzeCallccForm(form);
-		if (car == _applySymbol) return analyzeApplyForm(p);
 		if (car == _ifSymbol) return analyzeIfForm(form);
 		if (car == _beginSymbol) return analyzeBeginForm(form);
 
