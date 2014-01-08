@@ -543,10 +543,10 @@ complex? number?
 (test "6.3.3" (symbol? #f) #f)
 
 (test "6.3.3" (symbol->string 'flying-fish) "flying-fish")
-; TODO: No case conversion (test "6.3.3" (symbol->string 'Martin) "Martin")
+(test "6.3.3" (symbol->string 'Martin) "martin")
 (test "6.3.3" (symbol->string (string->symbol "Malvina")) "Malvina")
-; TODO: No case conversion (test "6.3.3" (eq? 'mISSISSIppi 'mississippi) #t)
-; TODO: Test fails (test "6.3.3" (eq? 'bitBlt (string->symbol "bitBlt")) #f)
+(test "6.3.3" (eq? 'mISSISSIppi 'mississippi) #t)
+(test "6.3.3" (eq? 'bitBlt (string->symbol "bitBlt")) #f)
 (test "6.3.3" (eq? 'JollyWog (string->symbol (symbol->string 'JollyWog))) #t)
 (test "6.3.3" (string=? "K. Harper, M.D." (symbol->string (string->symbol "K. Harper, M.D."))) #t)
 

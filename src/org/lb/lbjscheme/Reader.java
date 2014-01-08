@@ -210,7 +210,7 @@ public final class Reader {
 				return SchemeNumber.fromString(symbol.substring(2), 8);
 			if (symbol.startsWith("#b"))
 				return SchemeNumber.fromString(symbol.substring(2), 2);
-			return Symbol.fromString(symbol);
+			return Symbol.fromString(symbol.toLowerCase());
 		}
 	}
 }
