@@ -303,7 +303,7 @@ public final class Environment implements SchemeObject {
 			+ "(define (not x) (if x #f #t))"
 			+ "(define (fold f acc lst) (if (null? lst) acc (fold f (f (car lst) acc) (cdr lst))))"
 			+ "(define (reverse lst) (fold cons '() lst))"
-			+ "(define (map f lst) (reverse (fold (lambda (i acc) (cons (f i) acc)) '() lst)))"
+			+ "(define (map1 f lst) (reverse (fold (lambda (i acc) (cons (f i) acc)) '() lst)))"
 			+ "(define (for-each f lst) (fold (lambda (i acc) (f i) 'undefined) 'undefined lst))"
 			+ "(define (even? x) (zero? (remainder x 2)))"
 			+ "(define (odd? x) (if (even? x) #f #t))"
@@ -331,7 +331,7 @@ public final class Environment implements SchemeObject {
 			+ "(define (char-alphabetic? x) (if (char-upper-case? x) #t (char-lower-case? x)))"
 			+ "(define (char-numeric? x) (if (>= (char->integer x) 48) (<= (char->integer x) 57) #f))"
 			+ "(define (char-whitespace? x) (if (char=? x #\\space) #t (if (char=? x #\\tab) #t (if (char=? x #\\newline) #t (char=? x #\\cr)))))"
-			+ "(define (append . lists) (define (add-list lst acc) (if (null? lst) acc (add-list (cdr lst) (cons (car lst) acc)))) (define (iter rest-lists acc) (if (null? rest-lists) acc (iter (cdr rest-lists) (add-list (car rest-lists) acc)))) (if (null? lists) lists (let* ((reversed (reverse lists)) (last-list (car reversed)) (rest-lists (map reverse (cdr reversed)))) (iter rest-lists last-list))))"
+			+ "(define (append . lists) (define (add-list lst acc) (if (null? lst) acc (add-list (cdr lst) (cons (car lst) acc)))) (define (iter rest-lists acc) (if (null? rest-lists) acc (iter (cdr rest-lists) (add-list (car rest-lists) acc)))) (if (null? lists) lists (let* ((reversed (reverse lists)) (last-list (car reversed)) (rest-lists (map1 reverse (cdr reversed)))) (iter rest-lists last-list))))"
 			+ "(define (string=? a b) (define (check i max) (if (>= i max) #t (if (char=? (string-ref a i) (string-ref b i)) (check (+ i 1) max) #f))) (if (= (string-length a) (string-length b)) (check 0 (string-length a)) #f))"
 			+ "(define (string-ci=? a b) (define (check i max) (if (>= i max) #t (if (char-ci=? (string-ref a i) (string-ref b i)) (check (+ i 1) max) #f))) (if (= (string-length a) (string-length b)) (check 0 (string-length a)) #f))"
 			+ "(define (string>? a b) (define (check i max-a max-b) (if (>= i max-a) #f (if (>= i max-b) #t (if (char=? (string-ref a i) (string-ref b i)) (check (+ i 1) max-a max-b) (char>? (string-ref a i) (string-ref b i)))))) (check 0 (string-length a) (string-length b)))"
@@ -346,11 +346,11 @@ public final class Environment implements SchemeObject {
 			+ "(define (list->string lst) (define (iter i l acc) (if (null? l) acc (begin (string-set! acc i (car l)) (iter (+ i 1) (cdr l) acc)))) (iter 0 lst (make-string (length lst))))"
 			+ "(define (string . values) (list->string values))"
 			+ "(define (substring s start end) (list->string (take (list-tail (string->list s) start) (- end start))))"
-			+ "(define (string-append . strings) (list->string (fold append '() (map string->list (reverse strings)))))"
+			+ "(define (string-append . strings) (list->string (fold append '() (map1 string->list (reverse strings)))))"
 			+ "(define (string-copy s) (list->string (string->list s)))"
 			+ "(define (string-fill! s c) (define (iter i max) (if (>= i max) s (begin (string-set! s i c) (iter (+ i 1) max)))) (iter 0 (string-length s)))"
-			+ "(defmacro letrec (lst . forms) (cons (append '(lambda) (list (map car lst)) (map (lambda (i) (list 'set! (car i) (cadr i))) lst) forms) (map (lambda (x) #f) lst)))"
-			+ "(defmacro let data (if (symbol? (car data)) (cons 'letrec (cons (list (cons (car data) (list (cons 'lambda (cons (map car (cadr data)) (cddr data)))))) (list (cons (car data) (map cadr (cadr data)))))) (cons (cons 'lambda (cons (map car (car data)) (cdr data))) (map cadr (car data)))))"
+			+ "(defmacro letrec (lst . forms) (cons (append '(lambda) (list (map1 car lst)) (map1 (lambda (i) (list 'set! (car i) (cadr i))) lst) forms) (map1 (lambda (x) #f) lst)))"
+			+ "(defmacro let data (if (symbol? (car data)) (cons 'letrec (cons (list (cons (car data) (list (cons 'lambda (cons (map1 car (cadr data)) (cddr data)))))) (list (cons (car data) (map1 cadr (cadr data)))))) (cons (cons 'lambda (cons (map1 car (car data)) (cdr data))) (map1 cadr (car data)))))"
 			+ "(defmacro let* (lst . forms) (if (null? lst) (cons 'begin forms) (list 'let (list (car lst)) (cons 'let* (cons (cdr lst) forms)))))"
 			+ "(defmacro cond list-of-forms (define (expand-cond lst) (if (null? lst) #f (if (eq? (caar lst) 'else) (cons 'begin (cdar lst)) (list 'if (caar lst) (cons 'begin (cdar lst)) (expand-cond (cdr lst)))))) (expand-cond list-of-forms))"
 			+ "(defmacro and list-of-forms (if (null? list-of-forms) #t (if (null? (cdr list-of-forms)) (car list-of-forms) (list 'if (car list-of-forms) (append '(and) (cdr list-of-forms)) #f))))"
@@ -370,7 +370,7 @@ public final class Environment implements SchemeObject {
 			+ "(define (assv obj lst) (if (pair? lst) (if (eqv? obj (caar lst)) (car lst) (assv obj (cdr lst))) #f))"
 			+ "(define (assoc obj lst) (if (pair? lst) (if (equal? obj (caar lst)) (car lst) (assoc obj (cdr lst))) #f))"
 			+ "(defmacro case (exp . clauses) (define (make-thunk-symbol index) (string->symbol (string-append \"thunk\" (number->string index)))) (define (expand-case-thunks c index) (if (null? c) '() (cons (list (make-thunk-symbol index) (cons 'lambda (cons '() (cdar c)))) (expand-case-thunks (cdr c) (+ index 1))))) (define (expand-case-cond c index) (if (null? c) '() (cons (list (if (eq? (caar c) 'else) 'else (list 'memv 'key (list 'quote (caar c)))) (list (make-thunk-symbol index))) (expand-case-cond (cdr c) (+ index 1))))) (list 'let (cons (list 'key exp) (expand-case-thunks clauses 1)) (cons 'cond (expand-case-cond clauses 1))))"
-			+ "(defmacro do (vars pred . body) (let ((symbol (gensym))) `(let ((,symbol '())) (set! ,symbol (lambda ,(map car vars) (if ,(car pred) ,(cadr pred) ,(cons 'begin (append body (list (cons symbol (map caddr vars)))))))) ,(cons symbol (map cadr vars))))) "
+			+ "(defmacro do (vars pred . body) (let ((symbol (gensym))) `(let ((,symbol '())) (set! ,symbol (lambda ,(map1 car vars) (if ,(car pred) ,(cadr pred) ,(cons 'begin (append body (list (cons symbol (map1 caddr vars)))))))) ,(cons symbol (map1 cadr vars))))) "
 			+ "(define (vector-fill! v obj) (define (iter i max) (if (>= i max) v (begin (vector-set! v i obj) (iter (+ i 1) max)))) (iter 0 (vector-length v)))"
 			+ "(define (list->vector lst) (define (iter v i vals) (vector-set! v i (car vals)) (if (zero? i) v (iter v (- i 1) (cdr vals)))) (let ((v (make-vector (length lst)))) (if (zero? (vector-length v)) v (iter v (- (vector-length v) 1) (reverse lst)))))"
 			+ "(define (vector->list v) (define (iter i acc) (if (< i 0) acc (iter (- i 1) (cons (vector-ref v i) acc)))) (iter (- (vector-length v) 1) '()))"
@@ -393,7 +393,8 @@ public final class Environment implements SchemeObject {
 			+ "(define (call-with-current-continuation f) (sys:call/cc f))"
 			+ "(define (call/cc f) (sys:call/cc f))"
 			+ "(define (error . args) (sys:error args))"
-			+ "(define (port? x) (if (input-port? x) #t (output-port? x)))";
+			+ "(define (port? x) (if (input-port? x) #t (output-port? x)))"
+			+ "(define (map f . lists) (define (iter acc ls) (if (any null? ls) (reverse acc) (iter (cons (apply f (map1 car ls)) acc) (map1 cdr ls)))) (iter '() lists))";
 
 	@Override
 	public Object toJavaObject() throws SchemeException {

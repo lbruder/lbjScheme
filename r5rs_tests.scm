@@ -616,7 +616,7 @@ complex? number?
 
 (test "6.4" (map cadr '((a b) (d e) (g h))) '(b e h))
 (test "6.4" (map (lambda (n) (expt n n)) '(1 2 3 4 5)) '(1 4 27 256 3125))
-; TODO: Fix map (test "6.4" (map + '(1 2 3) '(4 5 6)) '(5 7 9))
+(test "6.4" (map + '(1 2 3) '(4 5 6)) '(5 7 9))
 
 (define foo (let ((count 0)) (map (lambda (ignored) (set! count (+ count 1)) count) '(a b))))
 (test "6.4" (or (equal? foo '(1 2)) (equal? foo '(2 1))) #t)
