@@ -135,7 +135,8 @@ public final class ConsoleRepl {
 				break;
 			} catch (SchemeException ex) {
 				System.out.println(ex.getMessage());
-				System.in.skip(System.in.available());
+				while (input.ready())
+					input.read();
 			} catch (Exception ex) {
 				System.out.println("Internal error:");
 				System.out.println(ex.getMessage());
