@@ -19,7 +19,7 @@ package tests.unittests;
 import junit.framework.TestCase;
 import org.lb.lbjscheme.*;
 
-public class FalseTest extends TestCase {
+public final class FalseTest extends TestCase {
 	public void testDisplay() {
 		assertEquals("#f", False.getInstance().toString(true));
 	}

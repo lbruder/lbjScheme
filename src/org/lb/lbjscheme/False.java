@@ -16,7 +16,7 @@
 
 package org.lb.lbjscheme;
 
-public class False implements SchemeObject {
+public final class False implements SchemeObject {
 	private False() {
 	}
 

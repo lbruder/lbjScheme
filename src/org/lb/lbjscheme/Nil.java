@@ -18,7 +18,7 @@ package org.lb.lbjscheme;
 
 import java.util.*;
 
-public class Nil implements SchemeList {
+public final class Nil implements SchemeList {
 	private Nil() {
 	}
 

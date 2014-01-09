@@ -18,7 +18,7 @@ package org.lb.lbjscheme;
 
 import java.io.*;
 
-public class OutputPort implements SchemeObject {
+public final class OutputPort implements SchemeObject {
 	private final Writer _writer;
 
 	public OutputPort(Writer writer) {

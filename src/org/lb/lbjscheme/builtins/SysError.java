@@ -19,7 +19,7 @@ package org.lb.lbjscheme.builtins;
 import java.util.List;
 import org.lb.lbjscheme.*;
 
-public class SysError extends Builtin {
+public final class SysError extends Builtin {
 	@Override
 	public String getName() {
 		return "sys:error";

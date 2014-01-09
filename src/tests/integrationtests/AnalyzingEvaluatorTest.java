@@ -19,7 +19,7 @@ package tests.integrationtests;
 import java.io.OutputStreamWriter;
 import org.lb.lbjscheme.*;
 
-public class AnalyzingEvaluatorTest extends EvaluatorTest {
+public final class AnalyzingEvaluatorTest extends EvaluatorTest {
 	@Override
 	public void setUp() throws SchemeException {
 		interp = new AnalyzingEvaluator(null, new OutputPort(

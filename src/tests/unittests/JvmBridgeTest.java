@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import junit.framework.TestCase;
 import org.lb.lbjscheme.*;
 
-public class JvmBridgeTest extends TestCase {
+public final class JvmBridgeTest extends TestCase {
 	public void testNullValueFromJavaObject() throws SchemeException {
 		final Object o = null;
 		assertEquals(Nil.getInstance(), JvmBridge.fromJavaObject(o));

@@ -16,7 +16,7 @@
 
 package org.lb.lbjscheme;
 
-public class EofObject implements SchemeObject {
+public final class EofObject implements SchemeObject {
 	private EofObject() {
 	}
 

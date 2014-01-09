@@ -1,6 +1,6 @@
 package org.lb.lbjscheme.ast;
 
-public class CallccForm extends SyntaxTreeObject {
+public final class CallccForm extends SyntaxTreeObject {
 	private final SyntaxTreeObject _target;
 
 	public CallccForm(SyntaxTreeObject target) {

@@ -2,7 +2,7 @@ package tests.integrationtests;
 
 import java.util.*;
 
-public class TestObject {
+public final class TestObject {
 	private int _value;
 
 	public int getValue() {

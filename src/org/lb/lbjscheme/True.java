@@ -16,7 +16,7 @@
 
 package org.lb.lbjscheme;
 
-public class True implements SchemeObject {
+public final class True implements SchemeObject {
 	private True() {
 	}
 

@@ -18,7 +18,7 @@ package org.lb.lbjscheme;
 
 import java.awt.GraphicsEnvironment;
 
-public class Main {
+public final class Main {
 	public static void main(String[] args) throws Exception {
 		if (GraphicsEnvironment.isHeadless() || System.console() != null) {
 			ConsoleRepl.run(args);

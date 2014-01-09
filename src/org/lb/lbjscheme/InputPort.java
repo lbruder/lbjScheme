@@ -18,7 +18,7 @@ package org.lb.lbjscheme;
 
 import java.io.IOException;
 
-public class InputPort implements SchemeObject {
+public final class InputPort implements SchemeObject {
 	private final java.io.Reader _reader;
 	private int _nextChar = -2;
 
