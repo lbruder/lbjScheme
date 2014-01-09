@@ -173,7 +173,8 @@ public abstract class SchemeNumber implements SchemeObject {
 					return Rational.valueOf(value, base);
 				} catch (Exception ex3) {
 					try {
-						return Real.valueOf(value, base);
+						return Real.valueOf(value.charAt(0)
+								+ value.substring(1).replace("#", "0"), base);
 					} catch (Exception ex4) {
 						try {
 							return Complex.valueOf(value, base);

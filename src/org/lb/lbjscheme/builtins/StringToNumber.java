@@ -35,9 +35,8 @@ public final class StringToNumber extends Builtin {
 			assertParameterType(value, SchemeString.class);
 			return SchemeNumber.fromString(((SchemeString) value).getValue(),
 					parameters.size() == 1 ? 10 : getFixnum(parameters.get(1)));
-		} catch (NumberFormatException ex) {
-			throw new SchemeException(
-					"string->number: Value can not be converted");
+		} catch (Exception ex) {
+			return _false;
 		}
 	}
 }

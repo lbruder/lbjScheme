@@ -444,7 +444,7 @@ complex? number?
 (test "6.2.6" (string->number "100") 100)
 (test "6.2.6" (string->number "100" 16) 256)
 (test "6.2.6" (string->number "1e2") 100.0)
-; TODO: Test fails (test "6.2.6" (string->number "15##") 1500.0)
+(test "6.2.6" (string->number "15##") 1500.0)
 
 ; ------------------------------------------------------------------------------
 ; 6.3.1
