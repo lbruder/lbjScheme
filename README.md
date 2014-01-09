@@ -102,14 +102,3 @@ A: This is my Scheme interpreter. There are many like it, but this one is mine.
    to be both powerful and simple, so the concepts you learn in the process of
    implementing Scheme change how you think about programming in general.
 
-## TODO
-
-As far as I'm aware (!), this is what's left to do to reach full R5RS
-compliance:
-
-* Some builtins break if other builtins are re-defined
-* Add (load) builtin (optional in R5RS)
-* Add more test cases, make all of them work
-* Add compiling evaluator, continuations, (dynamic-wind)
-* Add Scheme macros: define-syntax, let-syntax, letrec-syntax, syntax-rules
-
