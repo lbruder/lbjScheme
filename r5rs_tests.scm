@@ -226,7 +226,7 @@ complex? number?
 ; 4.2.4
 
 (test "4.2.4"
-      (do ((vec (make-vector 5) vec) ; TODO: Must work without the second "vec" too
+      (do ((vec (make-vector 5))
            (i 0 (+ i 1)))
         ((= i 5) vec)
         (vector-set! vec i i))
