@@ -177,7 +177,7 @@ public final class Reader {
 	}
 
 	private SchemeObject readSymbolOrNumber(String init) throws SchemeException {
-		if (init == "" && peekChar() == ')') {
+		if (init.length() == 0 && peekChar() == ')') {
 			readChar();
 			return _listEnd;
 		}
