@@ -47,21 +47,38 @@ public final class Environment implements SchemeObject {
 	}
 
 	public void define(Symbol name, SchemeObject value) throws SchemeException {
-		switch (name.toString()) {
+		assertSymbolMayBeRedefined(name);
+		_values.put(name, value);
+	}
+
+	private void assertSymbolMayBeRedefined(Symbol name) throws SchemeException {
+		if (!mayBeRedefined(name))
+			throw new SchemeException("Symbol '" + name.toString()
+					+ "' is constant and must not be changed");
+	}
+
+	private boolean mayBeRedefined(Symbol name) {
+		final String nameAsString = name.toString();
+
+		switch (nameAsString) {
 		case "if":
 		case "define":
 		case "set!":
 		case "lambda":
 		case "quote":
 		case "begin":
-			throw new SchemeException("Symbol '" + name.toString()
-					+ "' is ##constant and must not be changed");
+			return false;
 		default:
-			_values.put(name, value);
+			if (nameAsString.startsWith("##gensym##")) return true;
+			if (nameAsString.startsWith("##") && _values.containsKey(name))
+				return false;
+			return true;
 		}
 	}
 
 	public void set(Symbol name, SchemeObject value) throws SchemeException {
+		assertSymbolMayBeRedefined(name);
+
 		if (_values.containsKey(name))
 			_values.put(name, value);
 		else if (_outer != null)
