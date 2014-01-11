@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Denominator extends Builtin {
 	@Override
 	public String getName() {
-		return "denominator";
+		return "##denominator";
 	}
 
 	@Override

@@ -25,7 +25,7 @@ public final class Rationalize extends Builtin {
 
 	@Override
 	public String getName() {
-		return "rationalize";
+		return "##rationalize";
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class ProcedureP extends Builtin {
 	@Override
 	public String getName() {
-		return "procedure?";
+		return "##procedure?";
 	}
 
 	@Override

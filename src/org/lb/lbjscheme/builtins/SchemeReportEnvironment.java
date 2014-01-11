@@ -28,7 +28,7 @@ public final class SchemeReportEnvironment extends Builtin {
 
 	@Override
 	public String getName() {
-		return "scheme-report-environment";
+		return "##scheme-report-environment";
 	}
 
 	@Override

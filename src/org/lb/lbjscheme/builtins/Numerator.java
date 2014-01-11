@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Numerator extends Builtin {
 	@Override
 	public String getName() {
-		return "numerator";
+		return "##numerator";
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class SymbolP extends Builtin {
 	@Override
 	public String getName() {
-		return "symbol?";
+		return "##symbol?";
 	}
 
 	@Override

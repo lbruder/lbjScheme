@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class PairP extends Builtin {
 	@Override
 	public String getName() {
-		return "pair?";
+		return "##pair?";
 	}
 
 	@Override

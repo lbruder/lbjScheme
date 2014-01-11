@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class RealPart extends Builtin {
 	@Override
 	public String getName() {
-		return "real-part";
+		return "##real-part";
 	}
 
 	@Override

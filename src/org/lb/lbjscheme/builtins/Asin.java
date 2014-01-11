@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Asin extends Builtin {
 	@Override
 	public String getName() {
-		return "asin";
+		return "##asin";
 	}
 
 	@Override

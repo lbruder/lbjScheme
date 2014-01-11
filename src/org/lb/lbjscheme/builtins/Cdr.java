@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Cdr extends Builtin {
 	@Override
 	public String getName() {
-		return "cdr";
+		return "##cdr";
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Quotient extends Builtin {
 	@Override
 	public String getName() {
-		return "quotient";
+		return "##quotient";
 	}
 
 	@Override

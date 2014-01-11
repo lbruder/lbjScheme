@@ -22,13 +22,13 @@ import org.lb.lbjscheme.*;
 public final class NullP extends Builtin {
 	@Override
 	public String getName() {
-		return "null?";
+		return "##null?";
 	}
 
 	@Override
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		return parameters.get(0) instanceof Nil ? _true : _false;
+		return parameters.get(0) == Nil.getInstance() ? _true : _false;
 	}
 }

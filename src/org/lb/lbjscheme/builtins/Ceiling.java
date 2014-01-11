@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Ceiling extends Builtin {
 	@Override
 	public String getName() {
-		return "ceiling";
+		return "##ceiling";
 	}
 
 	@Override

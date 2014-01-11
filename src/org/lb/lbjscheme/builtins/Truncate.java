@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Truncate extends Builtin {
 	@Override
 	public String getName() {
-		return "truncate";
+		return "##truncate";
 	}
 
 	@Override

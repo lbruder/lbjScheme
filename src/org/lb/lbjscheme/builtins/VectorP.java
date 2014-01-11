@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class VectorP extends Builtin {
 	@Override
 	public String getName() {
-		return "vector?";
+		return "##vector?";
 	}
 
 	@Override

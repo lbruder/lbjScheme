@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class ImagPart extends Builtin {
 	@Override
 	public String getName() {
-		return "imag-part";
+		return "##imag-part";
 	}
 
 	@Override

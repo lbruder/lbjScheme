@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Acos extends Builtin {
 	@Override
 	public String getName() {
-		return "acos";
+		return "##acos";
 	}
 
 	@Override

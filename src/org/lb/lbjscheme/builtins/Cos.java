@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Cos extends Builtin {
 	@Override
 	public String getName() {
-		return "cos";
+		return "##cos";
 	}
 
 	@Override

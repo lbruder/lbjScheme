@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class MakeString extends Builtin {
 	@Override
 	public String getName() {
-		return "make-string";
+		return "##make-string";
 	}
 
 	@Override

@@ -28,7 +28,7 @@ public final class Display extends Builtin {
 
 	@Override
 	public String getName() {
-		return "display";
+		return "##display";
 	}
 
 	@Override

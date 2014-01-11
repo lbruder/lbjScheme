@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Ge extends Builtin {
 	@Override
 	public String getName() {
-		return ">=";
+		return "##>=";
 	}
 
 	@Override

@@ -28,7 +28,7 @@ public final class Read extends Builtin {
 
 	@Override
 	public String getName() {
-		return "read";
+		return "##read";
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class InexactP extends Builtin {
 	@Override
 	public String getName() {
-		return "inexact?";
+		return "##inexact?";
 	}
 
 	@Override

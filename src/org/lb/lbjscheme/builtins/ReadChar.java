@@ -28,7 +28,7 @@ public final class ReadChar extends Builtin {
 
 	@Override
 	public String getName() {
-		return "read-char";
+		return "##read-char";
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class MakeVector extends Builtin {
 	@Override
 	public String getName() {
-		return "make-vector";
+		return "##make-vector";
 	}
 
 	@Override

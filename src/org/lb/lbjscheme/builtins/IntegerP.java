@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class IntegerP extends Builtin {
 	@Override
 	public String getName() {
-		return "integer?";
+		return "##integer?";
 	}
 
 	@Override

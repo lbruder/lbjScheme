@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class StringToSymbol extends Builtin {
 	@Override
 	public String getName() {
-		return "string->symbol";
+		return "##string->symbol";
 	}
 
 	@Override

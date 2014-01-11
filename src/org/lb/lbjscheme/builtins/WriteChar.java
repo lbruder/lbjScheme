@@ -28,7 +28,7 @@ public final class WriteChar extends Builtin {
 
 	@Override
 	public String getName() {
-		return "write-char";
+		return "##write-char";
 	}
 
 	@Override

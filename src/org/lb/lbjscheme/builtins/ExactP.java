@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class ExactP extends Builtin {
 	@Override
 	public String getName() {
-		return "exact?";
+		return "##exact?";
 	}
 
 	@Override

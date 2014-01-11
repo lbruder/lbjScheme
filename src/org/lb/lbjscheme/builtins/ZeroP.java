@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class ZeroP extends Builtin {
 	@Override
 	public String getName() {
-		return "zero?";
+		return "##zero?";
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class VectorLength extends Builtin {
 	@Override
 	public String getName() {
-		return "vector-length";
+		return "##vector-length";
 	}
 
 	@Override

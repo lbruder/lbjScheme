@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Sin extends Builtin {
 	@Override
 	public String getName() {
-		return "sin";
+		return "##sin";
 	}
 
 	@Override

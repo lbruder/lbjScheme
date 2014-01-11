@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class StringSet extends Builtin {
 	@Override
 	public String getName() {
-		return "string-set!";
+		return "##string-set!";
 	}
 
 	@Override

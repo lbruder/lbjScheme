@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class EqP extends Builtin {
 	@Override
 	public String getName() {
-		return "eq?";
+		return "##eq?";
 	}
 
 	@Override

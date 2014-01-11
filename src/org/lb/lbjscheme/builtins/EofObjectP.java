@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class EofObjectP extends Builtin {
 	@Override
 	public String getName() {
-		return "eof-object?";
+		return "##eof-object?";
 	}
 
 	@Override

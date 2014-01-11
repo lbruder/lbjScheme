@@ -28,7 +28,7 @@ public final class CharReadyP extends Builtin {
 
 	@Override
 	public String getName() {
-		return "char-ready?";
+		return "##char-ready?";
 	}
 
 	@Override

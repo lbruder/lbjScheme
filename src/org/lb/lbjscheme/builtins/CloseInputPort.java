@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class CloseInputPort extends Builtin {
 	@Override
 	public String getName() {
-		return "close-input-port";
+		return "##close-input-port";
 	}
 
 	@Override

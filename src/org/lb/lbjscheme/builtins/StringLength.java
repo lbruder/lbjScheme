@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class StringLength extends Builtin {
 	@Override
 	public String getName() {
-		return "string-length";
+		return "##string-length";
 	}
 
 	@Override

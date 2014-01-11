@@ -28,7 +28,7 @@ public final class PeekChar extends Builtin {
 
 	@Override
 	public String getName() {
-		return "peek-char";
+		return "##peek-char";
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Log extends Builtin {
 	@Override
 	public String getName() {
-		return "log";
+		return "##log";
 	}
 
 	@Override

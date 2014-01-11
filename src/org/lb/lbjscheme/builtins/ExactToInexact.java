@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class ExactToInexact extends Builtin {
 	@Override
 	public String getName() {
-		return "exact->inexact";
+		return "##exact->inexact";
 	}
 
 	@Override

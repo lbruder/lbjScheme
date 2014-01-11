@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class InputPortP extends Builtin {
 	@Override
 	public String getName() {
-		return "input-port?";
+		return "##input-port?";
 	}
 
 	@Override

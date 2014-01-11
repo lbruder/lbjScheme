@@ -23,7 +23,7 @@ import org.lb.lbjscheme.*;
 public final class OpenOutputFile extends Builtin {
 	@Override
 	public String getName() {
-		return "open-output-file";
+		return "##open-output-file";
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class VectorSet extends Builtin {
 	@Override
 	public String getName() {
-		return "vector-set!";
+		return "##vector-set!";
 	}
 
 	@Override

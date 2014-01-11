@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class NullEnvironment extends Builtin {
 	@Override
 	public String getName() {
-		return "null-environment";
+		return "##null-environment";
 	}
 
 	@Override

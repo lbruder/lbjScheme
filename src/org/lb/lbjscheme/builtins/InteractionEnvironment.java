@@ -28,7 +28,7 @@ public final class InteractionEnvironment extends Builtin {
 
 	@Override
 	public String getName() {
-		return "interaction-environment";
+		return "##interaction-environment";
 	}
 
 	@Override

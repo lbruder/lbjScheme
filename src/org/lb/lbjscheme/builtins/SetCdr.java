@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class SetCdr extends Builtin {
 	@Override
 	public String getName() {
-		return "set-cdr!";
+		return "##set-cdr!";
 	}
 
 	@Override

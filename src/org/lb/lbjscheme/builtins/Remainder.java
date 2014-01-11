@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Remainder extends Builtin {
 	@Override
 	public String getName() {
-		return "remainder";
+		return "##remainder";
 	}
 
 	@Override

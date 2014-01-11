@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Tan extends Builtin {
 	@Override
 	public String getName() {
-		return "tan";
+		return "##tan";
 	}
 
 	@Override

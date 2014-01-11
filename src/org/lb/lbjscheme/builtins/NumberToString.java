@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class NumberToString extends Builtin {
 	@Override
 	public String getName() {
-		return "number->string";
+		return "##number->string";
 	}
 
 	@Override

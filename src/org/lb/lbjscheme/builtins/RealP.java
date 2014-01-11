@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class RealP extends Builtin {
 	@Override
 	public String getName() {
-		return "real?";
+		return "##real?";
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class StringRef extends Builtin {
 	@Override
 	public String getName() {
-		return "string-ref";
+		return "##string-ref";
 	}
 
 	@Override

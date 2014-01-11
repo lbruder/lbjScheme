@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Floor extends Builtin {
 	@Override
 	public String getName() {
-		return "floor";
+		return "##floor";
 	}
 
 	@Override

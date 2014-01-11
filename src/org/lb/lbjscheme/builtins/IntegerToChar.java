@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class IntegerToChar extends Builtin {
 	@Override
 	public String getName() {
-		return "integer->char";
+		return "##integer->char";
 	}
 
 	@Override

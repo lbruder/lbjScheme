@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Round extends Builtin {
 	@Override
 	public String getName() {
-		return "round";
+		return "##round";
 	}
 
 	@Override

@@ -23,7 +23,7 @@ import org.lb.lbjscheme.*;
 public final class OpenInputFile extends Builtin {
 	@Override
 	public String getName() {
-		return "open-input-file";
+		return "##open-input-file";
 	}
 
 	@Override

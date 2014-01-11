@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class VectorRef extends Builtin {
 	@Override
 	public String getName() {
-		return "vector-ref";
+		return "##vector-ref";
 	}
 
 	@Override

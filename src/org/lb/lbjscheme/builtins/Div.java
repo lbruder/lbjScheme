@@ -22,7 +22,7 @@ import org.lb.lbjscheme.*;
 public final class Div extends Builtin {
 	@Override
 	public String getName() {
-		return "/";
+		return "##/";
 	}
 
 	@Override

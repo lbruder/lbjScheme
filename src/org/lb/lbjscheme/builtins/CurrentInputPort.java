@@ -28,7 +28,7 @@ public final class CurrentInputPort extends Builtin {
 
 	@Override
 	public String getName() {
-		return "current-input-port";
+		return "##current-input-port";
 	}
 
 	@Override
