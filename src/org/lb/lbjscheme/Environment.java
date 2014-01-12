@@ -291,7 +291,6 @@ public final class Environment implements SchemeObject {
 			+ "(define (sys:count upto f) (define (iter i) (if (##= i upto) 'undefined (begin (f i) (iter (##+ i 1))))) (iter 0))"
 			+ "(defmacro dotimes (lst . body) (list 'sys:count (cadr lst) (##cons 'lambda (##cons (list (##car lst)) body))))"
 			+ "(defmacro dolist (lst . forms) (list 'for-each (##cons 'lambda (##cons (list (##car lst)) forms)) (cadr lst)))"
-			+ "(define gensym (let ((sym 0)) (lambda () (set! sym (##+ sym 1)) (##string->symbol (string-append \"##gensym##\" (##number->string sym))))))"
 			+ "(defmacro while (exp . body) (##cons 'do (##cons '() (##cons `((not ,exp) 'undefined) body))))"
 			+ "(define (id x) x)";
 
@@ -401,6 +400,7 @@ public final class Environment implements SchemeObject {
 			+ "(define (assv obj lst) (if (##pair? lst) (if (eqv? obj (caar lst)) (##car lst) (assv obj (##cdr lst))) #f))"
 			+ "(define (assoc obj lst) (if (##pair? lst) (if (equal? obj (caar lst)) (##car lst) (assoc obj (##cdr lst))) #f))"
 			+ "(defmacro case (exp . clauses) (define (make-thunk-symbol index) (##string->symbol (string-append \"thunk\" (##number->string index)))) (define (expand-case-thunks c index) (if (##null? c) '() (##cons (list (make-thunk-symbol index) (##cons 'lambda (##cons '() (cdar c)))) (expand-case-thunks (##cdr c) (##+ index 1))))) (define (expand-case-cond c index) (if (##null? c) '() (##cons (list (if (##eq? (caar c) 'else) 'else (list 'memv 'key (list 'quote (caar c)))) (list (make-thunk-symbol index))) (expand-case-cond (##cdr c) (##+ index 1))))) (list 'let (##cons (list 'key exp) (expand-case-thunks clauses 1)) (##cons 'cond (expand-case-cond clauses 1))))"
+			+ "(define gensym (let ((sym 0)) (lambda () (set! sym (##+ sym 1)) (##string->symbol (string-append \"##gensym##\" (##number->string sym))))))"
 			+ "(defmacro do (vars pred . body) (define (caddr-or-car x) (if (##null? (cddr x)) (##car x) (caddr x))) (let ((symbol (gensym))) `(let ((,symbol '())) (set! ,symbol (lambda ,(map1 ##car vars) (if ,(##car pred) ,(cadr pred) ,(##cons 'begin (append body (list (##cons symbol (map1 caddr-or-car vars)))))))) ,(##cons symbol (map1 cadr vars))))) "
 			+ "(define (vector-fill! v obj) (define (iter i max) (if (##>= i max) v (begin (##vector-set! v i obj) (iter (##+ i 1) max)))) (iter 0 (##vector-length v)))"
 			+ "(define (list->vector lst) (define (iter v i vals) (##vector-set! v i (##car vals)) (if (##zero? i) v (iter v (##- i 1) (##cdr vals)))) (let ((v (##make-vector (length lst)))) (if (##zero? (##vector-length v)) v (iter v (##- (##vector-length v) 1) (reverse lst)))))"
