@@ -100,28 +100,32 @@ public final class Reader {
 		return ret;
 	}
 
-	private SchemeObject readList() throws SchemeException, EOFException {
+	private SchemeObject readList() throws SchemeException {
 		readChar(); // Opening parenthesis
 		Pair ret = null;
 		Pair current = null;
 		while (true) {
-			final SchemeObject o = read();
-			if (o == _listEnd) return (ret == null) ? Nil.getInstance() : ret; // )
-			if (o == _dot) {
-				if (current == null)
-					throw new SchemeException("Invalid dotted list");
-				current.setCdr(read());
-				if (read() != _listEnd)
-					throw new SchemeException("Invalid dotted list");
-				return ret;
-			}
-
-			final Pair newPair = new Pair(o, Nil.getInstance());
-			if (current == null) {
-				ret = current = newPair;
-			} else {
-				current.setCdr(newPair);
-				current = newPair;
+			try {
+				final SchemeObject o = read();
+				if (o == _listEnd)
+					return (ret == null) ? Nil.getInstance() : ret; // )
+				if (o == _dot) {
+					if (current == null)
+						throw new SchemeException("Invalid dotted list");
+					current.setCdr(read());
+					if (read() != _listEnd)
+						throw new SchemeException("Invalid dotted list");
+					return ret;
+				}
+				final Pair newPair = new Pair(o, Nil.getInstance());
+				if (current == null) {
+					ret = current = newPair;
+				} else {
+					current.setCdr(newPair);
+					current = newPair;
+				}
+			} catch (EOFException ex) {
+				throw new SchemeException("Unmatched open (");
 			}
 		}
 	}
