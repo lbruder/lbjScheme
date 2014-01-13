@@ -29,7 +29,7 @@ public final class ConsoleRepl {
 			System.out.println("-i      Use interpreting evaluator (default)");
 			System.out.println("-r      Enter REPL after executing files");
 			System.out.println("-v      Print version info, then quit");
-			System.exit(0);
+			return;
 		}
 
 		if (hasArgument(args, "-v")) {
@@ -73,7 +73,7 @@ public final class ConsoleRepl {
 			System.out.println("Bug reports are welcome ;)");
 			System.out.println();
 
-			System.exit(0);
+			return;
 		}
 
 		final boolean interactiveRepl = hasArgument(args, "-r")
@@ -84,7 +84,7 @@ public final class ConsoleRepl {
 
 		if (useAnalyzingEvaluator && useInterpretingEvaluator) {
 			System.out.println("Arguments -a and -i can not be used together");
-			System.exit(1);
+			return;
 		}
 
 		final InputPort inputPort = new InputPort(new InputStreamReader(
