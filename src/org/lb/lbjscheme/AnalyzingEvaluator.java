@@ -36,6 +36,7 @@ public final class AnalyzingEvaluator extends Evaluator {
 
 	private void analyzeBuiltinLambdas(Environment global)
 			throws SchemeException {
+		global.unlock();
 		for (final Symbol sym : global.getDefinedSymbols()) {
 			if (global.get(sym) instanceof Lambda) {
 				Lambda l = (Lambda) global.get(sym);
@@ -48,6 +49,7 @@ public final class AnalyzingEvaluator extends Evaluator {
 										.getCaptured()));
 			}
 		}
+		global.lock();
 	}
 
 	@Override
