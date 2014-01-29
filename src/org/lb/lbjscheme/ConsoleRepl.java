@@ -33,7 +33,7 @@ public final class ConsoleRepl {
 		}
 
 		if (hasArgument(args, "-v")) {
-			System.out.println("lbjScheme V0.6");
+			System.out.println("lbjScheme V0.7");
 			System.out
 					.println("A Scheme subset interpreter in Java, based on SchemeNet.cs");
 			System.out
