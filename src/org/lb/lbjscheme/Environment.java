@@ -17,11 +17,14 @@
 package org.lb.lbjscheme;
 
 import java.util.*;
+import org.lb.lbjscheme.builtins.*;
 
 public final class Environment implements SchemeObject {
 	private final Environment _outer;
 	private final HashMap<Symbol, SchemeObject> _values = new HashMap<>();
 	private boolean _locked;
+	private InputPort _currentInputPort;
+	private OutputPort _currentOutputPort;
 
 	public Environment() {
 		_outer = null;
@@ -114,6 +117,28 @@ public final class Environment implements SchemeObject {
 		}
 	}
 
+	public InputPort getInputPort() {
+		return _outer == null ? _currentInputPort : _outer.getInputPort();
+	}
+
+	public OutputPort getOutputPort() {
+		return _outer == null ? _currentOutputPort : _outer.getOutputPort();
+	}
+
+	public void setInputPort(InputPort value) {
+		if (_outer == null)
+			_currentInputPort = value;
+		else
+			_outer.setInputPort(value);
+	}
+
+	public void setOutputPort(OutputPort value) {
+		if (_outer == null)
+			_currentOutputPort = value;
+		else
+			_outer.setOutputPort(value);
+	}
+
 	public static Environment newNullEnvironment(final int version)
 			throws SchemeException {
 		if (version != 5)
@@ -123,27 +148,34 @@ public final class Environment implements SchemeObject {
 	}
 
 	public static Environment newReportEnvironment(final int version,
-			Evaluator eval) throws SchemeException {
+			final Environment global) throws SchemeException {
 		if (version != 5)
 			throw new SchemeException(
 					"scheme-report-environment: Only version 5 supported");
-		Environment ret = new Environment();
-		addBuiltinsToEnvironment(ret, eval);
-		new InterpretingEvaluator(ret, null, null).eval(_reportInitScript);
-		addRedefinableBuiltins(ret);
+		final Environment ret = new Environment(global);
+		ret.addBuiltins();
+		new InterpretingEvaluator(ret).eval(getReportInitScript());
+		ret.addRedefinableBuiltins();
 		ret.lock();
 		return ret;
 	}
 
-	public static Environment newInteractionEnvironment(Evaluator eval)
+	public static Environment newInteractionEnvironment(final Environment global)
 			throws SchemeException {
-		Environment ret = new Environment();
-		addBuiltinsToEnvironment(ret, eval);
-		new InterpretingEvaluator(ret, null, null).eval(_reportInitScript);
-		new InterpretingEvaluator(ret, null, null).eval(_interactionInitScript);
-		addRedefinableBuiltins(ret);
+		final Environment ret = new Environment(global);
+		ret.addBuiltins();
+		new InterpretingEvaluator(ret).eval(getInteractionInitScript());
+		ret.addRedefinableBuiltins();
 		ret.lock();
 		return ret;
+	}
+
+	public static String getReportInitScript() {
+		return _reportInitScript;
+	}
+
+	public static String getInteractionInitScript() {
+		return _reportInitScript + " " + _interactionInitScript;
 	}
 
 	public void lock() {
@@ -154,123 +186,115 @@ public final class Environment implements SchemeObject {
 		_locked = false;
 	}
 
-	private static void addBuiltinsToEnvironment(Environment target,
-			Evaluator eval) throws SchemeException {
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Acos());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Add());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Asin());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Atan());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.BooleanP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Car());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Cdr());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Ceiling());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.CharP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.CharReadyP(eval));
-		addBuiltin(target, new org.lb.lbjscheme.builtins.CharToInteger());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.CloseInputPort());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.CloseOutputPort());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Cons());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Cos());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.CurrentInputPort(eval));
-		addBuiltin(target,
-				new org.lb.lbjscheme.builtins.CurrentOutputPort(eval));
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Denominator());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Display(eval));
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Div());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.EofObjectP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.EqP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Eval());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.ExactP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.ExactToInexact());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Exp());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Floor());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Ge());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Gt());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.ImagPart());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.InexactP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.InexactToExact());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.InputPortP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.IntegerP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.IntegerToChar());
-		addBuiltin(target,
-				new org.lb.lbjscheme.builtins.InteractionEnvironment(eval));
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Le());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Log());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Lt());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.MakeString());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.MakeVector());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Mul());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.NullEnvironment());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.NullP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.NumberP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.NumberToString());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.NumEq());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Numerator());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.OpenInputFile());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.OpenOutputFile());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.OutputPortP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.PairP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.PeekChar(eval));
-		addBuiltin(target, new org.lb.lbjscheme.builtins.ProcedureP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Quotient());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Rationalize());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.RationalP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Read(eval));
-		addBuiltin(target, new org.lb.lbjscheme.builtins.ReadChar(eval));
-		addBuiltin(target, new org.lb.lbjscheme.builtins.RealP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.RealPart());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Remainder());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Round());
-		addBuiltin(target,
-				new org.lb.lbjscheme.builtins.SchemeReportEnvironment(eval));
-		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCar());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.SetCdr());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Sin());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.StringLength());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.StringP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.StringRef());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.StringSet());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.StringToNumber());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.StringToSymbol());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Sub());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.SymbolP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.SymbolToString());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.SysCall());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.SysError());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.SysExpt());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.SysGetMethodNames());
-		addBuiltin(target,
-				new org.lb.lbjscheme.builtins.SysSetCurrentInputPort(eval));
-		addBuiltin(target, new org.lb.lbjscheme.builtins.SysNew());
-		addBuiltin(target,
-				new org.lb.lbjscheme.builtins.SysSetCurrentOutputPort(eval));
-		addBuiltin(target, new org.lb.lbjscheme.builtins.SysSqrt());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Tan());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Truncate());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorLength());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorP());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorRef());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.VectorSet());
-		addBuiltin(target, new org.lb.lbjscheme.builtins.Write(eval));
-		addBuiltin(target, new org.lb.lbjscheme.builtins.WriteChar(eval));
-		addBuiltin(target, new org.lb.lbjscheme.builtins.ZeroP());
+	public void addBuiltins() throws SchemeException {
+		addBuiltin(new Acos());
+		addBuiltin(new Add());
+		addBuiltin(new Asin());
+		addBuiltin(new Atan());
+		addBuiltin(new BooleanP());
+		addBuiltin(new Car());
+		addBuiltin(new Cdr());
+		addBuiltin(new Ceiling());
+		addBuiltin(new CharP());
+		addBuiltin(new CharReadyP(this));
+		addBuiltin(new CharToInteger());
+		addBuiltin(new CloseInputPort());
+		addBuiltin(new CloseOutputPort());
+		addBuiltin(new Cons());
+		addBuiltin(new Cos());
+		addBuiltin(new CurrentInputPort(this));
+		addBuiltin(new CurrentOutputPort(this));
+		addBuiltin(new Denominator());
+		addBuiltin(new Display(this));
+		addBuiltin(new Div());
+		addBuiltin(new EofObjectP());
+		addBuiltin(new EqP());
+		addBuiltin(new Eval());
+		addBuiltin(new ExactP());
+		addBuiltin(new ExactToInexact());
+		addBuiltin(new Exp());
+		addBuiltin(new Floor());
+		addBuiltin(new Ge());
+		addBuiltin(new Gt());
+		addBuiltin(new ImagPart());
+		addBuiltin(new InexactP());
+		addBuiltin(new InexactToExact());
+		addBuiltin(new InputPortP());
+		addBuiltin(new IntegerP());
+		addBuiltin(new IntegerToChar());
+		addBuiltin(new InteractionEnvironment(this));
+		addBuiltin(new Le());
+		addBuiltin(new Log());
+		addBuiltin(new Lt());
+		addBuiltin(new MakeString());
+		addBuiltin(new MakeVector());
+		addBuiltin(new Mul());
+		addBuiltin(new NullEnvironment());
+		addBuiltin(new NullP());
+		addBuiltin(new NumberP());
+		addBuiltin(new NumberToString());
+		addBuiltin(new NumEq());
+		addBuiltin(new Numerator());
+		addBuiltin(new OpenInputFile());
+		addBuiltin(new OpenOutputFile());
+		addBuiltin(new OutputPortP());
+		addBuiltin(new PairP());
+		addBuiltin(new PeekChar(this));
+		addBuiltin(new ProcedureP());
+		addBuiltin(new Quotient());
+		addBuiltin(new Rationalize());
+		addBuiltin(new RationalP());
+		addBuiltin(new Read(this));
+		addBuiltin(new ReadChar(this));
+		addBuiltin(new RealP());
+		addBuiltin(new RealPart());
+		addBuiltin(new Remainder());
+		addBuiltin(new Round());
+		addBuiltin(new SchemeReportEnvironment(this));
+		addBuiltin(new SetCar());
+		addBuiltin(new SetCdr());
+		addBuiltin(new Sin());
+		addBuiltin(new StringLength());
+		addBuiltin(new StringP());
+		addBuiltin(new StringRef());
+		addBuiltin(new StringSet());
+		addBuiltin(new StringToNumber());
+		addBuiltin(new StringToSymbol());
+		addBuiltin(new Sub());
+		addBuiltin(new SymbolP());
+		addBuiltin(new SymbolToString());
+		addBuiltin(new SysCall());
+		addBuiltin(new SysError());
+		addBuiltin(new SysExpt());
+		addBuiltin(new SysGetMethodNames());
+		addBuiltin(new SysSetCurrentInputPort(this));
+		addBuiltin(new SysNew());
+		addBuiltin(new SysSetCurrentOutputPort(this));
+		addBuiltin(new SysSqrt());
+		addBuiltin(new Tan());
+		addBuiltin(new Truncate());
+		addBuiltin(new VectorLength());
+		addBuiltin(new VectorP());
+		addBuiltin(new VectorRef());
+		addBuiltin(new VectorSet());
+		addBuiltin(new Write(this));
+		addBuiltin(new WriteChar(this));
+		addBuiltin(new ZeroP());
 	}
 
-	private static void addBuiltin(Environment target, Builtin builtin)
-			throws SchemeException {
+	private void addBuiltin(Builtin builtin) throws SchemeException {
 		final Symbol builtinSymbol = Symbol.fromString(builtin.getName());
-		if (target._values.containsKey(builtinSymbol))
+		if (_values.containsKey(builtinSymbol))
 			throw new SchemeException("Internal error: Builtin '"
 					+ builtin.getName() + "' is being defined twice!");
-		target.define(builtinSymbol, builtin);
+		define(builtinSymbol, builtin);
 	}
 
-	private static void addRedefinableBuiltins(Environment ret) {
-		for (Symbol s : ret.getDefinedSymbols().toArray(new Symbol[0])) {
+	public void addRedefinableBuiltins() {
+		for (Symbol s : getDefinedSymbols().toArray(new Symbol[0])) {
 			if (s.toString().startsWith("##")) {
 				try {
-					ret.define(Symbol.fromString(s.toString().substring(2)),
-							ret.get(s));
+					define(Symbol.fromString(s.toString().substring(2)), get(s));
 				} catch (SchemeException e) {
 					throw new RuntimeException(
 							"Impossible exception thrown while generating environment");
@@ -281,8 +305,6 @@ public final class Environment implements SchemeObject {
 
 	// HACK: Written in Scheme for simplicity. Re-write as builtins for
 	// performance and better error messages! This code is horribly inefficient!
-
-	// TODO: To which environment do the builtins belong? Interaction or Report?
 
 	private final static String _interactionInitScript = "(define (flip f) (lambda (a b) (f b a)))"
 			+ "(define (##reduce f ridentity lst) (if (##null? lst) ridentity (##fold f (##car lst) (##cdr lst))))"
@@ -435,8 +457,9 @@ public final class Environment implements SchemeObject {
 			+ "(define (##expt a b) (cond ((##zero? b) 1) ((##= 1 b) a) ((##not (##integer? b)) (sys:expt a b)) ((##negative? b) (##/ (##expt a (##- b)))) ((##even? b) (##square (##expt a (##quotient b 2)))) (else (##* a (##expt a (##- b 1))))))"
 			+ "(define ##values ##list)"
 			+ "(define (##call-with-values generator consumer) (let ((v (generator))) (if (##list? v) (##apply consumer v) (consumer v))))"
-			+ "(define (##call-with-current-continuation f) (sys:call/cc f))"
-			+ "(define (##call/cc f) (sys:call/cc f))"
+			+ "(define (##call-with-current-continuation f) #f)"
+			// (sys:call/cc f))"
+			+ "(define (##call/cc f) #f)"// (sys:call/cc f))"
 			+ "(define (##error . args) (sys:error args))"
 			+ "(define (##port? x) (if (##input-port? x) #t (##output-port? x)))"
 			+ "(define (##map f . lists) (define (iter acc ls) (if (##any ##null? ls) (##reverse acc) (iter (##cons (##apply f (##map1 ##car ls)) acc) (##map1 ##cdr ls)))) (iter '() lists))"

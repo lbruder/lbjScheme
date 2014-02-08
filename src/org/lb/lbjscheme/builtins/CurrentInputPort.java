@@ -20,10 +20,10 @@ import java.util.List;
 import org.lb.lbjscheme.*;
 
 public final class CurrentInputPort extends Builtin {
-	private final Evaluator _eval;
+	private final Environment _global;
 
-	public CurrentInputPort(Evaluator eval) {
-		_eval = eval;
+	public CurrentInputPort(Environment global) {
+		_global = global;
 	}
 
 	@Override
@@ -35,9 +35,9 @@ public final class CurrentInputPort extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(0, parameters);
-		if (_eval == null)
+		if (_global == null)
 			throw new SchemeException(getName()
 					+ ": Not possible in this environment");
-		return _eval.getInputPort();
+		return _global.getInputPort();
 	}
 }

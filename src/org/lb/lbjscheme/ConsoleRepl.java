@@ -24,7 +24,8 @@ public final class ConsoleRepl {
 			FileNotFoundException, IOException {
 		if (hasArgument(args, "-h") || hasArgument(args, "-?")) {
 			System.out.println("Command line switches:");
-			System.out.println("-a      Use analyzing evaluator (faster)");
+			System.out.println("-a      Use analyzing evaluator");
+			System.out.println("-c      Use compiling evaluator");
 			System.out.println("-h, -?  Show this text");
 			System.out.println("-i      Use interpreting evaluator (default)");
 			System.out.println("-r      Enter REPL after executing files");
@@ -79,21 +80,18 @@ public final class ConsoleRepl {
 		final boolean interactiveRepl = hasArgument(args, "-r")
 				|| getFileNames(args).size() == 0;
 		final boolean useAnalyzingEvaluator = hasArgument(args, "-a");
-		final boolean useInterpretingEvaluator = hasArgument(args, "-i")
-				|| !useAnalyzingEvaluator;
-
-		if (useAnalyzingEvaluator && useInterpretingEvaluator) {
-			System.out.println("Arguments -a and -i can not be used together");
-			return;
-		}
+		final boolean useCompilingEvaluator = hasArgument(args, "-c");
 
 		final InputPort inputPort = new InputPort(new InputStreamReader(
 				System.in));
 		final OutputPort outputPort = new OutputPort(new OutputStreamWriter(
 				System.out));
-		final Evaluator e = useInterpretingEvaluator ? new InterpretingEvaluator(
-				inputPort, outputPort) : new AnalyzingEvaluator(inputPort,
-				outputPort);
+		final Environment global = Environment.newInteractionEnvironment(null);
+		global.setInputPort(inputPort);
+		global.setOutputPort(outputPort);
+		final Evaluator e = useAnalyzingEvaluator ? new AnalyzingEvaluator(
+				global) : useCompilingEvaluator ? new CompilingEvaluator(
+				inputPort, outputPort) : new InterpretingEvaluator(global);
 
 		for (String fileName : getFileNames(args)) {
 			final FileReader r = new FileReader(fileName);

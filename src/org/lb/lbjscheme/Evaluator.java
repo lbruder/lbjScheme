@@ -18,41 +18,13 @@ package org.lb.lbjscheme;
 
 public abstract class Evaluator {
 	private final Environment _global;
-	private InputPort _currentInputPort;
-	private OutputPort _currentOutputPort;
 
-	public Evaluator(InputPort defaultInputPort, OutputPort defaultOutputPort)
-			throws SchemeException {
-		_global = Environment.newInteractionEnvironment(this);
-		_currentInputPort = defaultInputPort;
-		_currentOutputPort = defaultOutputPort;
-	}
-
-	public Evaluator(Environment globalEnv, InputPort defaultInputPort,
-			OutputPort defaultOutputPort) {
+	public Evaluator(Environment globalEnv) {
 		_global = globalEnv;
-		_currentInputPort = defaultInputPort;
-		_currentOutputPort = defaultOutputPort;
 	}
 
 	public Environment getGlobalEnvironment() {
 		return _global;
-	}
-
-	public InputPort getInputPort() {
-		return _currentInputPort;
-	}
-
-	public OutputPort getOutputPort() {
-		return _currentOutputPort;
-	}
-
-	public void setInputPort(InputPort value) {
-		_currentInputPort = value;
-	}
-
-	public void setOutputPort(OutputPort value) {
-		_currentOutputPort = value;
 	}
 
 	public void defineGlobalVariable(String name, Object value)

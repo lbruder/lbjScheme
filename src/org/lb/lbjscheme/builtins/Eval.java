@@ -31,8 +31,7 @@ public final class Eval extends Builtin {
 		assertParameterCount(2, parameters);
 		final SchemeObject env = parameters.get(1);
 		assertParameterType(env, Environment.class);
-		// TODO: Link to parent evaluator for ports
-		return new InterpretingEvaluator((Environment) env, null, null)
-				.eval(parameters.get(0));
+		return new InterpretingEvaluator((Environment) env).eval(parameters
+				.get(0));
 	}
 }

@@ -14,30 +14,34 @@
 // ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 // OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-package org.lb.lbjscheme.builtins;
+package org.lb.lbjscheme.vm;
 
-import java.util.List;
-import org.lb.lbjscheme.*;
+public final class JumpIfFalse extends LabeledOpcode {
+	private final String _label;
+	private int _position;
 
-public final class CurrentOutputPort extends Builtin {
-	private final Environment _global;
-
-	public CurrentOutputPort(Environment global) {
-		_global = global;
+	public JumpIfFalse(String label) {
+		_label = label;
+		_position = -1;
 	}
 
 	@Override
-	public String getName() {
-		return "##current-output-port";
+	public boolean isLabel(String label) {
+		return _label.equals(label);
 	}
 
 	@Override
-	public SchemeObject apply(List<SchemeObject> parameters)
-			throws SchemeException {
-		assertParameterCount(0, parameters);
-		if (_global == null)
-			throw new SchemeException(getName()
-					+ ": Not possible in this environment");
-		return _global.getOutputPort();
+	public void setPosition(int value) {
+		_position = value;
+	}
+
+	@Override
+	public void execute() {
+		_vm.executeJumpIfFalse(_position);
+	}
+
+	@Override
+	public String toString() {
+		return "JUMPFALSE " + _position;
 	}
 }

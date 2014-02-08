@@ -20,10 +20,10 @@ import java.util.List;
 import org.lb.lbjscheme.*;
 
 public final class WriteChar extends Builtin {
-	private final Evaluator _eval;
+	private final Environment _global;
 
-	public WriteChar(Evaluator eval) {
-		_eval = eval;
+	public WriteChar(Environment global) {
+		_global = global;
 	}
 
 	@Override
@@ -40,8 +40,8 @@ public final class WriteChar extends Builtin {
 		final char c = ((SchemeCharacter) parameters.get(0)).getValue();
 
 		if (parameters.size() == 1) {
-			if (_eval != null)
-				_eval.getOutputPort().write(Character.toString(c));
+			if (_global != null)
+				_global.getOutputPort().write(Character.toString(c));
 		} else {
 			assertParameterType(parameters.get(1), OutputPort.class);
 			((OutputPort) parameters.get(1)).write(Character.toString(c));

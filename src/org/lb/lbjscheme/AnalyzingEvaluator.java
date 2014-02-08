@@ -27,19 +27,18 @@ public final class AnalyzingEvaluator extends Evaluator {
 
 	private final Analyzer _analyzer;
 
-	public AnalyzingEvaluator(InputPort defaultInputPort,
-			OutputPort defaultOutputPort) throws SchemeException {
-		super(defaultInputPort, defaultOutputPort);
+	public AnalyzingEvaluator(final Environment global) throws SchemeException {
+		super(global);
 		_analyzer = new Analyzer();
-		analyzeBuiltinLambdas(getGlobalEnvironment());
+		analyzeBuiltinLambdas();
 	}
 
-	private void analyzeBuiltinLambdas(Environment global)
-			throws SchemeException {
+	private void analyzeBuiltinLambdas() throws SchemeException {
+		final Environment global = getGlobalEnvironment();
 		global.unlock();
 		for (final Symbol sym : global.getDefinedSymbols()) {
 			if (global.get(sym) instanceof Lambda) {
-				Lambda l = (Lambda) global.get(sym);
+				final Lambda l = (Lambda) global.get(sym);
 				final BeginForm beginForm = (BeginForm) _analyzer
 						.analyze(new Pair(_beginSymbol, l.getForms()));
 				global.set(

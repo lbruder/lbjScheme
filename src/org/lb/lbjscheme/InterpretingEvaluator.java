@@ -33,14 +33,8 @@ public final class InterpretingEvaluator extends Evaluator {
 	private static final Symbol _callccSymbol = Symbol
 			.fromString("sys:call/cc");
 
-	public InterpretingEvaluator(InputPort defaultInputPort,
-			OutputPort defaultOutputPort) throws SchemeException {
-		super(defaultInputPort, defaultOutputPort);
-	}
-
-	public InterpretingEvaluator(Environment global,
-			InputPort defaultInputPort, OutputPort defaultOutputPort) {
-		super(global, defaultInputPort, defaultOutputPort);
+	public InterpretingEvaluator(Environment global) {
+		super(global);
 	}
 
 	@Override

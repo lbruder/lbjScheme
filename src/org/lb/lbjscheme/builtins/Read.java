@@ -20,10 +20,10 @@ import java.util.List;
 import org.lb.lbjscheme.*;
 
 public final class Read extends Builtin {
-	private final Evaluator _eval;
+	private final Environment _global;
 
-	public Read(Evaluator eval) {
-		_eval = eval;
+	public Read(Environment global) {
+		_global = global;
 	}
 
 	@Override
@@ -39,10 +39,10 @@ public final class Read extends Builtin {
 
 		try {
 			if (parameters.size() == 0) {
-				if (_eval == null)
+				if (_global == null)
 					throw new SchemeException(getName()
 							+ ": Not possible in this environment");
-				return new Reader(_eval.getInputPort()).read();
+				return new Reader(_global.getInputPort()).read();
 			}
 			assertParameterType(parameters.get(0), InputPort.class);
 			return new Reader(((InputPort) parameters.get(0))).read();

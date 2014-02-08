@@ -71,7 +71,7 @@ public final class Pair implements SchemeList {
 
 	@Override
 	public List<SchemeObject> toJavaList() {
-		final List<SchemeObject> ret = new ArrayList<>();
+		final ArrayList<SchemeObject> ret = new ArrayList<SchemeObject>();
 		for (SchemeObject o : this)
 			ret.add(o);
 		return ret;

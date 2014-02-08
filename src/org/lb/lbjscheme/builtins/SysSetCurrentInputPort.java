@@ -20,10 +20,10 @@ import java.util.List;
 import org.lb.lbjscheme.*;
 
 public final class SysSetCurrentInputPort extends Builtin {
-	private final Evaluator _eval;
+	private final Environment _global;
 
-	public SysSetCurrentInputPort(Evaluator eval) {
-		_eval = eval;
+	public SysSetCurrentInputPort(Environment global) {
+		_global = global;
 	}
 
 	@Override
@@ -36,10 +36,10 @@ public final class SysSetCurrentInputPort extends Builtin {
 			throws SchemeException {
 		assertParameterCount(1, parameters);
 		assertParameterType(parameters.get(0), InputPort.class);
-		if (_eval == null)
+		if (_global == null)
 			throw new SchemeException(getName()
 					+ ": Not possible in this environment");
-		_eval.setInputPort((InputPort) parameters.get(0));
+		_global.setInputPort((InputPort) parameters.get(0));
 		return _undefined;
 	}
 }

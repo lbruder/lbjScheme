@@ -22,7 +22,8 @@ import org.lb.lbjscheme.*;
 public final class AnalyzingEvaluatorTest extends EvaluatorTest {
 	@Override
 	public void setUp() throws SchemeException {
-		interp = new AnalyzingEvaluator(null, new OutputPort(
-				new OutputStreamWriter(System.out)));
+		final Environment global = Environment.newInteractionEnvironment(null);
+		global.setOutputPort(new OutputPort(new OutputStreamWriter(System.out)));
+		interp = new AnalyzingEvaluator(global);
 	}
 }

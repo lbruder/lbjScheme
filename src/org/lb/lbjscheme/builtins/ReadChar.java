@@ -20,10 +20,10 @@ import java.util.List;
 import org.lb.lbjscheme.*;
 
 public final class ReadChar extends Builtin {
-	private final Evaluator _eval;
+	private final Environment _global;
 
-	public ReadChar(Evaluator eval) {
-		_eval = eval;
+	public ReadChar(Environment global) {
+		_global = global;
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public final class ReadChar extends Builtin {
 
 		int ret = -1;
 		if (parameters.size() == 0) {
-			if (_eval != null) ret = _eval.getInputPort().readChar();
+			if (_global != null) ret = _global.getInputPort().readChar();
 		} else {
 			assertParameterType(parameters.get(0), InputPort.class);
 			ret = ((InputPort) parameters.get(0)).readChar();

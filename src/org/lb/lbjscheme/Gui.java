@@ -79,7 +79,11 @@ public final class Gui {
 				// Nothing to close
 			}
 		});
-		_eval = new AnalyzingEvaluator(_defaultInputPort, _defaultOutputPort);
+
+		final Environment global = Environment.newInteractionEnvironment(null);
+		global.setInputPort(_defaultInputPort);
+		global.setOutputPort(_defaultOutputPort);
+		_eval = new AnalyzingEvaluator(global);
 
 		_courierFont = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 

@@ -28,4 +28,9 @@ public final class LiteralSymbol extends SyntaxTreeObject {
 	public Symbol getSymbol() {
 		return _symbol;
 	}
+
+	@Override
+	public String toString() {
+		return _symbol.toString();
+	}
 }

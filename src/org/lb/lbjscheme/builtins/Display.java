@@ -20,10 +20,10 @@ import java.util.List;
 import org.lb.lbjscheme.*;
 
 public final class Display extends Builtin {
-	private final Evaluator _eval;
+	private final Environment _global;
 
-	public Display(Evaluator eval) {
-		_eval = eval;
+	public Display(Environment global) {
+		_global = global;
 	}
 
 	@Override
@@ -37,8 +37,8 @@ public final class Display extends Builtin {
 		assertParameterCountMin(1, parameters);
 		assertParameterCountMax(2, parameters);
 		if (parameters.size() == 1) {
-			if (_eval != null)
-				_eval.getOutputPort().write(parameters.get(0).toString(true));
+			if (_global != null)
+				_global.getOutputPort().write(parameters.get(0).toString(true));
 		} else {
 			assertParameterType(parameters.get(1), OutputPort.class);
 			((OutputPort) parameters.get(1)).write(parameters.get(0).toString(

@@ -20,10 +20,10 @@ import java.util.List;
 import org.lb.lbjscheme.*;
 
 public final class CharReadyP extends Builtin {
-	private final Evaluator _eval;
+	private final Environment _global;
 
-	public CharReadyP(Evaluator eval) {
-		_eval = eval;
+	public CharReadyP(Environment global) {
+		_global = global;
 	}
 
 	@Override
@@ -38,10 +38,10 @@ public final class CharReadyP extends Builtin {
 		assertParameterCountMax(1, parameters);
 
 		if (parameters.size() == 1) {
-			if (_eval == null)
+			if (_global == null)
 				throw new SchemeException(getName()
 						+ ": Not possible in this environment");
-			return _eval.getInputPort().isCharReady() ? _true : _false;
+			return _global.getInputPort().isCharReady() ? _true : _false;
 		}
 		assertParameterType(parameters.get(0), InputPort.class);
 		return ((InputPort) parameters.get(0)).isCharReady() ? _true : _false;

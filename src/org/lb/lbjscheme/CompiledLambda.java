@@ -14,30 +14,39 @@
 // ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 // OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-package org.lb.lbjscheme.builtins;
+package org.lb.lbjscheme;
 
 import java.util.List;
-import org.lb.lbjscheme.*;
 
-public final class CurrentOutputPort extends Builtin {
-	private final Environment _global;
+public class CompiledLambda implements SchemeObject {
+	public final Environment captured;
+	public final int pc;
+	public final List<Symbol> parameterNames;
+	public final boolean hasRestParameter;
+	public final String name;
 
-	public CurrentOutputPort(Environment global) {
-		_global = global;
+	public CompiledLambda(String name, Environment captured, int pc,
+			List<Symbol> parameterNames, boolean hasRestParameter) {
+		this.name = name;
+		this.captured = captured;
+		this.pc = pc;
+		this.parameterNames = parameterNames;
+		this.hasRestParameter = hasRestParameter;
 	}
 
 	@Override
-	public String getName() {
-		return "##current-output-port";
+	public String toString() {
+		return toString(false);
 	}
 
 	@Override
-	public SchemeObject apply(List<SchemeObject> parameters)
-			throws SchemeException {
-		assertParameterCount(0, parameters);
-		if (_global == null)
-			throw new SchemeException(getName()
-					+ ": Not possible in this environment");
-		return _global.getOutputPort();
+	public String toString(boolean forDisplay) {
+		return "<compiled procedure " + name + ">";
+	}
+
+	@Override
+	public Object toJavaObject() throws SchemeException {
+		throw new SchemeException(
+				"Compiled procedure cannot be converted into a plain Java object");
 	}
 }

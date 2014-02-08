@@ -20,10 +20,10 @@ import java.util.List;
 import org.lb.lbjscheme.*;
 
 public final class InteractionEnvironment extends Builtin {
-	private final Evaluator _eval;
+	private final Environment _global;
 
-	public InteractionEnvironment(Evaluator eval) {
-		_eval = eval;
+	public InteractionEnvironment(Environment global) {
+		_global = global;
 	}
 
 	@Override
@@ -35,6 +35,6 @@ public final class InteractionEnvironment extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCountMin(0, parameters);
-		return Environment.newInteractionEnvironment(_eval);
+		return Environment.newInteractionEnvironment(_global);
 	}
 }

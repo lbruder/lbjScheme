@@ -14,30 +14,24 @@
 // ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 // OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-package org.lb.lbjscheme.builtins;
+package org.lb.lbjscheme.vm;
 
-import java.util.List;
 import org.lb.lbjscheme.*;
 
-public final class CurrentOutputPort extends Builtin {
-	private final Environment _global;
+public final class SetVariable extends Opcode {
+	private final Symbol _variable;
 
-	public CurrentOutputPort(Environment global) {
-		_global = global;
+	public SetVariable(Symbol variable) {
+		_variable = variable;
 	}
 
 	@Override
-	public String getName() {
-		return "##current-output-port";
+	public void execute() throws SchemeException {
+		_vm.executeSetVariable(_variable);
 	}
 
 	@Override
-	public SchemeObject apply(List<SchemeObject> parameters)
-			throws SchemeException {
-		assertParameterCount(0, parameters);
-		if (_global == null)
-			throw new SchemeException(getName()
-					+ ": Not possible in this environment");
-		return _global.getOutputPort();
+	public String toString() {
+		return "SETVAR " + _variable.toString();
 	}
 }
