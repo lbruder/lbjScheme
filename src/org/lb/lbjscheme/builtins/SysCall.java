@@ -30,17 +30,14 @@ public final class SysCall extends Builtin {
 			throws SchemeException {
 		assertParameterCountMin(2, parameters);
 
-		final SchemeObject o = parameters.get(0);
-		assertParameterType(o, JvmBridge.class);
-
 		final SchemeObject name = parameters.get(1);
-		assertParameterType(name, SchemeString.class);
+		name.assertIsString(getName());
 
 		final List<SchemeObject> funcallParameters = new ArrayList<>();
 		for (int i = 2; i < parameters.size(); ++i)
 			funcallParameters.add(parameters.get(i));
 
-		return ((JvmBridge) o).call(((SchemeString) name).getValue(),
-				funcallParameters);
+		return getBridge(parameters.get(0)).call(
+				((SchemeString) name).getValue(), funcallParameters);
 	}
 }

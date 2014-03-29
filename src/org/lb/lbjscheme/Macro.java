@@ -18,7 +18,7 @@ package org.lb.lbjscheme;
 
 import java.util.List;
 
-public final class Macro implements SchemeObject {
+public final class Macro extends SchemeObject {
 	private final String _name;
 	private final List<Symbol> _parameterNames;
 	private final boolean _hasRestParameter;
@@ -52,11 +52,6 @@ public final class Macro implements SchemeObject {
 
 	public Environment getCaptured() {
 		return _captured;
-	}
-
-	@Override
-	public String toString() {
-		return toString(false);
 	}
 
 	@Override

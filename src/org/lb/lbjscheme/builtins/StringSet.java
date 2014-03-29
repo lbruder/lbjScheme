@@ -29,12 +29,11 @@ public final class StringSet extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(3, parameters);
-		SchemeObject str = parameters.get(0);
-		SchemeObject charObj = parameters.get(2);
-		assertParameterType(str, SchemeString.class);
-		assertParameterType(charObj, SchemeCharacter.class);
+		final SchemeObject str = parameters.get(0);
+		final SchemeObject charObj = parameters.get(2);
+		str.assertIsString(getName());
 		((SchemeString) str).setAt(getFixnum(parameters.get(1)),
-				((SchemeCharacter) charObj).getValue());
+				getCharacter(charObj));
 		return charObj;
 	}
 }

@@ -29,6 +29,6 @@ public final class SymbolP extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		return parameters.get(0) instanceof Symbol ? _true : _false;
+		return parameters.get(0).isSymbol() ? _true : _false;
 	}
 }

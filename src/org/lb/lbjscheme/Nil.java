@@ -18,7 +18,7 @@ package org.lb.lbjscheme;
 
 import java.util.*;
 
-public final class Nil implements SchemeList {
+public final class Nil extends SchemeList {
 	private Nil() {
 	}
 
@@ -29,6 +29,11 @@ public final class Nil implements SchemeList {
 	}
 
 	@Override
+	public boolean isNull() {
+		return true;
+	}
+
+	@Override
 	public boolean isDottedList() {
 		return false;
 	}
@@ -36,11 +41,6 @@ public final class Nil implements SchemeList {
 	@Override
 	public List<SchemeObject> toJavaList() {
 		return new ArrayList<>();
-	}
-
-	@Override
-	public String toString() {
-		return toString(false);
 	}
 
 	@Override

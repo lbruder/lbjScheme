@@ -29,6 +29,6 @@ public final class EofObjectP extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		return parameters.get(0) instanceof EofObject ? _true : _false;
+		return parameters.get(0).isEofObject() ? _true : _false;
 	}
 }

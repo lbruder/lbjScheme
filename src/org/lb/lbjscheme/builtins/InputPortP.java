@@ -29,7 +29,6 @@ public final class InputPortP extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		final SchemeObject o = parameters.get(0);
-		return (o instanceof InputPort) ? _true : _false;
+		return parameters.get(0).isInputPort() ? _true : _false;
 	}
 }

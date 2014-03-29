@@ -29,8 +29,6 @@ public final class SysGetMethodNames extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		final SchemeObject o = parameters.get(0);
-		assertParameterType(o, JvmBridge.class);
-		return ((JvmBridge) o).getMethodNames();
+		return getBridge(parameters.get(0)).getMethodNames();
 	}
 }

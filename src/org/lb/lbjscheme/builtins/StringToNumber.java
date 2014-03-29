@@ -32,7 +32,7 @@ public final class StringToNumber extends Builtin {
 			assertParameterCountMin(1, parameters);
 			assertParameterCountMax(2, parameters);
 			SchemeObject value = parameters.get(0);
-			assertParameterType(value, SchemeString.class);
+			value.assertIsString(getName());
 			return SchemeNumber.fromString(((SchemeString) value).getValue(),
 					parameters.size() == 1 ? 10 : getFixnum(parameters.get(1)));
 		} catch (Exception ex) {

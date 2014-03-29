@@ -29,6 +29,6 @@ public final class StringP extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		return parameters.get(0) instanceof SchemeString ? _true : _false;
+		return parameters.get(0).isString() ? _true : _false;
 	}
 }

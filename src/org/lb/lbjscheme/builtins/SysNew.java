@@ -29,9 +29,8 @@ public final class SysNew extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCountMin(1, parameters);
-
 		final SchemeObject name = parameters.get(0);
-		assertParameterType(name, SchemeString.class);
+		name.assertIsString(getName());
 
 		final List<SchemeObject> constructorParameters = new ArrayList<>();
 		for (int i = 1; i < parameters.size(); ++i)

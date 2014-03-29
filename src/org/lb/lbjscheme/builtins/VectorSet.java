@@ -29,10 +29,9 @@ public final class VectorSet extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(3, parameters);
-		SchemeObject vec = parameters.get(0);
-		SchemeObject valueToSet = parameters.get(2);
-		assertParameterType(vec, Vector.class);
-		((Vector) vec).setAt(getFixnum(parameters.get(1)), valueToSet);
+		final SchemeObject valueToSet = parameters.get(2);
+		getVector(parameters.get(0)).setAt(getFixnum(parameters.get(1)),
+				valueToSet);
 		return valueToSet;
 	}
 }

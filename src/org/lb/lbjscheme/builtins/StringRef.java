@@ -30,7 +30,7 @@ public final class StringRef extends Builtin {
 			throws SchemeException {
 		assertParameterCount(2, parameters);
 		final SchemeObject str = parameters.get(0);
-		assertParameterType(str, SchemeString.class);
+		str.assertIsString(getName());
 		return new SchemeCharacter(
 				((SchemeString) str).getAt(getFixnum(parameters.get(1))));
 	}

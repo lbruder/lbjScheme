@@ -29,8 +29,6 @@ public final class RationalP extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		final SchemeObject o = parameters.get(0);
-		return (o instanceof Fixnum) || (o instanceof Bignum)
-				|| (o instanceof Rational) ? _true : _false;
+		return parameters.get(0).isRational() ? _true : _false;
 	}
 }

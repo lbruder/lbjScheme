@@ -18,7 +18,8 @@ package org.lb.lbjscheme;
 
 import java.util.*;
 
-public interface SchemeList extends Iterable<SchemeObject>, SchemeObject {
+public abstract class SchemeList extends SchemeObject implements
+		Iterable<SchemeObject> {
 	public abstract boolean isDottedList();
 
 	@Override

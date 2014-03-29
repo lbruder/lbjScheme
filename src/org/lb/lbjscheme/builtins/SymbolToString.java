@@ -29,8 +29,6 @@ public final class SymbolToString extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		final SchemeObject sym = parameters.get(0);
-		assertParameterType(sym, Symbol.class);
-		return new SchemeString(((Symbol) sym).toString());
+		return new SchemeString(getSymbol(parameters.get(0)).toString());
 	}
 }

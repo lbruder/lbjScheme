@@ -16,7 +16,7 @@
 
 package org.lb.lbjscheme;
 
-public final class SchemeCharacter implements SchemeObject {
+public final class SchemeCharacter extends SchemeObject {
 	private final char _value;
 
 	public SchemeCharacter(char value) {
@@ -28,8 +28,8 @@ public final class SchemeCharacter implements SchemeObject {
 	}
 
 	@Override
-	public String toString() {
-		return toString(false);
+	public boolean isChar() {
+		return true;
 	}
 
 	@Override

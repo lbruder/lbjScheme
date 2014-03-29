@@ -35,9 +35,7 @@ public final class MakeString extends Builtin {
 
 		if (parameters.size() == 1) return ret;
 
-		final SchemeObject asChar = parameters.get(1);
-		assertParameterType(asChar, SchemeCharacter.class);
-		final char c = ((SchemeCharacter) asChar).getValue();
+		final char c = getCharacter(parameters.get(1));
 		for (int i = 0; i < length; ++i)
 			ret.setAt(i, c);
 		return ret;

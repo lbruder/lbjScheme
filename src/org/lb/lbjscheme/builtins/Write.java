@@ -41,9 +41,8 @@ public final class Write extends Builtin {
 				_global.getOutputPort()
 						.write(parameters.get(0).toString(false));
 		} else {
-			assertParameterType(parameters.get(1), OutputPort.class);
-			((OutputPort) parameters.get(1)).write(parameters.get(0).toString(
-					false));
+			getOutputPort(parameters.get(1)).write(
+					parameters.get(0).toString(false));
 		}
 		return _undefined;
 	}

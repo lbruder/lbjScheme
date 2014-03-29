@@ -29,8 +29,6 @@ public final class Numerator extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		final SchemeObject o = parameters.get(0);
-		assertParameterType(o, SchemeNumber.class);
-		return ((SchemeNumber) o).getNumerator();
+		return getNumber(parameters.get(0)).getNumerator();
 	}
 }

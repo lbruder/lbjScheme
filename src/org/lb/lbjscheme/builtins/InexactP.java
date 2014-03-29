@@ -29,6 +29,6 @@ public final class InexactP extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		return getNumber(parameters.get(0)).isExact() ? _false : _true;
+		return (getNumber(parameters.get(0)).isExact()) ? _false : _true;
 	}
 }

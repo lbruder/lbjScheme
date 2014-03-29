@@ -28,9 +28,8 @@ public final class Cdr extends Builtin {
 	@Override
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
-		assertParameterCount(1, parameters);
-		SchemeObject o = parameters.get(0);
-		assertParameterType(o, Pair.class);
+		final SchemeObject o = parameters.get(0);
+		o.assertIsPair(getName());
 		return ((Pair) o).getCdr();
 	}
 }

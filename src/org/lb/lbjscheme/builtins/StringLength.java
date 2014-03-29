@@ -30,7 +30,7 @@ public final class StringLength extends Builtin {
 			throws SchemeException {
 		assertParameterCount(1, parameters);
 		final SchemeObject o = parameters.get(0);
-		assertParameterType(o, SchemeString.class);
+		o.assertIsString(getName());
 		return new Fixnum(((SchemeString) o).getLength());
 	}
 }

@@ -59,9 +59,9 @@ public final class InterpretingEvaluator extends Evaluator {
 	public SchemeObject eval(SchemeObject o, Environment env,
 			boolean doNotExecuteExpandedMacros) throws SchemeException {
 		tailCall: for (;;) {
-			if (o instanceof Nil)
+			if (o.isNull())
 				throw new SchemeException("Empty list can not be evaluated");
-			if (o instanceof Vector)
+			if (o.isVector())
 				throw new SchemeException("Vectors must be quoted");
 			if (o instanceof Symbol) return env.get((Symbol) o);
 			if (o instanceof Pair) {
@@ -190,7 +190,7 @@ public final class InterpretingEvaluator extends Evaluator {
 			throw new SchemeException(
 					"Invalid lambda form: Expected at least a parameter list and one form");
 		final Pair forms = (Pair) p1.getCdr();
-		if (parameterNameObject instanceof Symbol) // (lambda x forms)
+		if (parameterNameObject.isSymbol()) // (lambda x forms)
 			return makeLambdaWithRestParameterOnly(env, parameterNameObject,
 					forms);
 		if (parameterNameObject instanceof SchemeList) // (lambda (a b) forms)
@@ -228,8 +228,8 @@ public final class InterpretingEvaluator extends Evaluator {
 			throw new SchemeException(
 					"Invalid define form: Expected target and value");
 		final Pair p1 = (Pair) form;
-		if (p1.getCar() instanceof Symbol) return defineValue(env, p1);
-		if (p1.getCar() instanceof Pair) return defineProcedure(env, p1);
+		if (p1.getCar().isSymbol()) return defineValue(env, p1);
+		if (p1.getCar().isPair()) return defineProcedure(env, p1);
 
 		throw new SchemeException(
 				"Invalid define form: Expected symbol or list as target");
@@ -239,10 +239,10 @@ public final class InterpretingEvaluator extends Evaluator {
 			throws SchemeException {
 		final Symbol sym = (Symbol) p1.getCar();
 		final SchemeObject valueObject = p1.getCdr();
-		if (!(valueObject instanceof Pair))
+		if (!(valueObject.isPair()))
 			throw new SchemeException(
 					"Invalid define form: Expected target and value");
-		if (!(((Pair) valueObject).getCdr() instanceof Nil))
+		if (!(((Pair) valueObject).getCdr().isNull()))
 			throw new SchemeException(
 					"Invalid define form: Too many parameters");
 		final SchemeObject value = eval(((Pair) valueObject).getCar(), env);
@@ -254,7 +254,7 @@ public final class InterpretingEvaluator extends Evaluator {
 			throws SchemeException {
 		final SchemeList target = (SchemeList) p1.getCar();
 		final SchemeObject forms = p1.getCdr();
-		if (!(forms instanceof Pair))
+		if (!(forms.isPair()))
 			throw new SchemeException(
 					"Invalid define form: Expected lambda forms");
 		Symbol sym = null;

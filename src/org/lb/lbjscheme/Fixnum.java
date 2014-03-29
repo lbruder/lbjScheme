@@ -83,6 +83,16 @@ public final class Fixnum extends SchemeNumber {
 	}
 
 	@Override
+	public boolean isReal() {
+		return true;
+	}
+
+	@Override
+	public boolean isRational() {
+		return true;
+	}
+
+	@Override
 	public boolean isInteger() {
 		return true;
 	}

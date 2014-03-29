@@ -16,7 +16,7 @@
 
 package org.lb.lbjscheme;
 
-public final class EofObject implements SchemeObject {
+public final class EofObject extends SchemeObject {
 	private EofObject() {
 	}
 
@@ -26,9 +26,8 @@ public final class EofObject implements SchemeObject {
 		return _instance;
 	}
 
-	@Override
-	public String toString() {
-		return toString(false);
+	public boolean isEofObject() {
+		return true;
 	}
 
 	@Override

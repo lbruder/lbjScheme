@@ -18,17 +18,12 @@ package org.lb.lbjscheme;
 
 import java.io.IOException;
 
-public final class InputPort implements SchemeObject {
+public final class InputPort extends SchemeObject {
 	private final java.io.Reader _reader;
 	private int _nextChar = -2;
 
 	public InputPort(java.io.Reader reader) {
 		_reader = reader;
-	}
-
-	@Override
-	public String toString() {
-		return toString(false);
 	}
 
 	@Override
@@ -67,6 +62,11 @@ public final class InputPort implements SchemeObject {
 			throw new SchemeException("Error closing input port: "
 					+ e.getMessage());
 		}
+	}
+
+	@Override
+	public boolean isInputPort() {
+		return false;
 	}
 
 	@Override

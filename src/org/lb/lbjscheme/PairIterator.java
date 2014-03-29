@@ -27,12 +27,12 @@ final class PairIterator implements Iterator<SchemeObject> {
 
 	@Override
 	public boolean hasNext() {
-		return !(_current instanceof Nil);
+		return !(_current.isNull());
 	}
 
 	@Override
 	public SchemeObject next() {
-		if (_current instanceof Nil) throw new UnsupportedOperationException();
+		if (_current.isNull()) throw new UnsupportedOperationException();
 		if (_current instanceof Pair) {
 			final SchemeObject ret = ((Pair) _current).getCar();
 			_current = ((Pair) _current).getCdr();

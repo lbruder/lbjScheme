@@ -18,7 +18,7 @@ package org.lb.lbjscheme;
 
 import java.util.List;
 
-public class CompiledLambda implements SchemeObject {
+public class CompiledLambda extends SchemeObject {
 	public final Environment captured;
 	public final int pc;
 	public final List<Symbol> parameterNames;
@@ -35,8 +35,8 @@ public class CompiledLambda implements SchemeObject {
 	}
 
 	@Override
-	public String toString() {
-		return toString(false);
+	public boolean isProcedure() {
+		return true;
 	}
 
 	@Override

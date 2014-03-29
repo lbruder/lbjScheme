@@ -29,9 +29,9 @@ public final class SetCdr extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(2, parameters);
-		SchemeObject o = parameters.get(0);
-		SchemeObject newCdr = parameters.get(1);
-		assertParameterType(o, Pair.class);
+		final SchemeObject o = parameters.get(0);
+		final SchemeObject newCdr = parameters.get(1);
+		o.assertIsPair(getName());
 		((Pair) o).setCdr(newCdr);
 		return newCdr;
 	}

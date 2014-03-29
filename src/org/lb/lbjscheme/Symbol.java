@@ -18,16 +18,11 @@ package org.lb.lbjscheme;
 
 import java.util.HashMap;
 
-public final class Symbol implements SchemeObject {
+public final class Symbol extends SchemeObject {
 	private final String _name;
 
 	private Symbol(String name) {
 		_name = name;
-	}
-
-	@Override
-	public String toString() {
-		return toString(false);
 	}
 
 	@Override
@@ -43,6 +38,11 @@ public final class Symbol implements SchemeObject {
 		final Symbol ret = new Symbol(name);
 		_cache.put(name, ret);
 		return ret;
+	}
+
+	@Override
+	public boolean isSymbol() {
+		return true;
 	}
 
 	@Override

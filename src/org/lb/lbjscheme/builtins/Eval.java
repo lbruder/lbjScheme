@@ -29,9 +29,7 @@ public final class Eval extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(2, parameters);
-		final SchemeObject env = parameters.get(1);
-		assertParameterType(env, Environment.class);
-		return new InterpretingEvaluator((Environment) env).eval(parameters
-				.get(0));
+		return new InterpretingEvaluator(getEnvironment(parameters.get(1)))
+				.eval(parameters.get(0));
 	}
 }

@@ -34,12 +34,11 @@ public final class SysSetCurrentInputPort extends Builtin {
 	@Override
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
-		assertParameterCount(1, parameters);
-		assertParameterType(parameters.get(0), InputPort.class);
 		if (_global == null)
 			throw new SchemeException(getName()
 					+ ": Not possible in this environment");
-		_global.setInputPort((InputPort) parameters.get(0));
+		assertParameterCount(1, parameters);
+		_global.setInputPort(getInputPort(parameters.get(0)));
 		return _undefined;
 	}
 }

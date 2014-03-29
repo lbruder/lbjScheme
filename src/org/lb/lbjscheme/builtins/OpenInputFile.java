@@ -31,7 +31,7 @@ public final class OpenInputFile extends Builtin {
 			throws SchemeException {
 		assertParameterCount(1, parameters);
 		final SchemeObject o = parameters.get(0);
-		assertParameterType(o, SchemeString.class);
+		o.assertIsString(getName());
 		try {
 			return new InputPort(new java.io.FileReader(
 					((SchemeString) o).getValue()));

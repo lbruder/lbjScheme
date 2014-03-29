@@ -31,7 +31,7 @@ public final class OpenOutputFile extends Builtin {
 			throws SchemeException {
 		assertParameterCount(1, parameters);
 		final SchemeObject o = parameters.get(0);
-		assertParameterType(o, SchemeString.class);
+		o.assertIsString(getName());
 		try {
 			return new OutputPort(new java.io.FileWriter(
 					((SchemeString) o).getValue()));

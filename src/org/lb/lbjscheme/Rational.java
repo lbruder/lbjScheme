@@ -157,10 +157,13 @@ public final class Rational extends SchemeNumber {
 	}
 
 	@Override
-	public boolean isInteger() {
-		// Integral rationals are converted to Fixnum or Bignum on the fly and
-		// can therefore never be integral
-		return false;
+	public boolean isReal() {
+		return true;
+	}
+
+	@Override
+	public boolean isRational() {
+		return true;
 	}
 
 	@Override

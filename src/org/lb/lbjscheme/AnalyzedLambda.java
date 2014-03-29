@@ -19,7 +19,7 @@ package org.lb.lbjscheme;
 import java.util.List;
 import org.lb.lbjscheme.ast.BeginForm;
 
-public final class AnalyzedLambda implements SchemeObject {
+public final class AnalyzedLambda extends SchemeObject {
 	private final String _name;
 	private final List<Symbol> _parameterNames;
 	private final boolean _hasRestParameter;
@@ -56,8 +56,8 @@ public final class AnalyzedLambda implements SchemeObject {
 	}
 
 	@Override
-	public String toString() {
-		return toString(false);
+	public boolean isProcedure() {
+		return true;
 	}
 
 	@Override

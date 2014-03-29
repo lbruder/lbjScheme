@@ -44,8 +44,7 @@ public final class Read extends Builtin {
 							+ ": Not possible in this environment");
 				return new Reader(_global.getInputPort()).read();
 			}
-			assertParameterType(parameters.get(0), InputPort.class);
-			return new Reader(((InputPort) parameters.get(0))).read();
+			return new Reader(getInputPort(parameters.get(0))).read();
 		} catch (java.io.EOFException ex) {
 			return EofObject.getInstance();
 		}

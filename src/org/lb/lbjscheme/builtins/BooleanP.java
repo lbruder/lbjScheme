@@ -29,7 +29,6 @@ public final class BooleanP extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		final SchemeObject o = parameters.get(0);
-		return (o instanceof True) || (o instanceof False) ? _true : _false;
+		return parameters.get(0).isBool() ? _true : _false;
 	}
 }

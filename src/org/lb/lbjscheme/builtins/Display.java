@@ -40,9 +40,8 @@ public final class Display extends Builtin {
 			if (_global != null)
 				_global.getOutputPort().write(parameters.get(0).toString(true));
 		} else {
-			assertParameterType(parameters.get(1), OutputPort.class);
-			((OutputPort) parameters.get(1)).write(parameters.get(0).toString(
-					true));
+			getOutputPort(parameters.get(1)).write(
+					parameters.get(0).toString(true));
 		}
 		return _undefined;
 	}

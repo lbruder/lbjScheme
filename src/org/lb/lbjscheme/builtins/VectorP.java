@@ -29,6 +29,6 @@ public final class VectorP extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		return parameters.get(0) instanceof Vector ? _true : _false;
+		return parameters.get(0).isVector() ? _true : _false;
 	}
 }

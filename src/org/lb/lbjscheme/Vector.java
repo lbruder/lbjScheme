@@ -18,7 +18,7 @@ package org.lb.lbjscheme;
 
 import java.util.*;
 
-public final class Vector implements SchemeObject {
+public final class Vector extends SchemeObject {
 	private final SchemeObject[] _values;
 
 	public Vector(int length) {
@@ -51,9 +51,8 @@ public final class Vector implements SchemeObject {
 		_values[position] = value;
 	}
 
-	@Override
-	public String toString() {
-		return toString(false);
+	public boolean isVector() {
+		return true;
 	}
 
 	@Override

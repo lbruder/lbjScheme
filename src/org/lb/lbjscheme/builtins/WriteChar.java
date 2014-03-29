@@ -36,15 +36,13 @@ public final class WriteChar extends Builtin {
 			throws SchemeException {
 		assertParameterCountMin(1, parameters);
 		assertParameterCountMax(2, parameters);
-		assertParameterType(parameters.get(0), SchemeCharacter.class);
-		final char c = ((SchemeCharacter) parameters.get(0)).getValue();
+		final char c = getCharacter(parameters.get(0));
 
 		if (parameters.size() == 1) {
 			if (_global != null)
 				_global.getOutputPort().write(Character.toString(c));
 		} else {
-			assertParameterType(parameters.get(1), OutputPort.class);
-			((OutputPort) parameters.get(1)).write(Character.toString(c));
+			getOutputPort(parameters.get(1)).write(Character.toString(c));
 		}
 		return _undefined;
 	}

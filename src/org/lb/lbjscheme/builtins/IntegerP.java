@@ -29,9 +29,6 @@ public final class IntegerP extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		final SchemeObject o = parameters.get(0);
-		if (o instanceof SchemeNumber)
-			return ((SchemeNumber) o).isInteger() ? _true : _false;
-		return _false;
+		return parameters.get(0).isInteger() ? _true : _false;
 	}
 }

@@ -126,7 +126,7 @@ public final class ConsoleRepl {
 				}
 				final SchemeObject result = e.eval(r.read());
 				if (!printPromptAndResults) continue;
-				if ((result instanceof Symbol)
+				if (result.isSymbol()
 						&& result.toString(true).equals("undefined")) continue;
 				System.out.println(result);
 			} catch (EOFException ex) {

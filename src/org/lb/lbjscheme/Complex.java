@@ -137,13 +137,6 @@ public final class Complex extends SchemeNumber {
 	}
 
 	@Override
-	public boolean isInteger() {
-		// No complex number can be an integer, or it would be converted to
-		// Fixnum or Bignum on the fly
-		return false;
-	}
-
-	@Override
 	public boolean isZero() {
 		return _real.isZero() && _imag.isZero();
 	}

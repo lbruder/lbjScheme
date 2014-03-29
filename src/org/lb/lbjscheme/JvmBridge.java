@@ -20,7 +20,7 @@ import java.lang.reflect.*;
 import java.math.BigInteger;
 import java.util.*;
 
-public final class JvmBridge implements SchemeObject {
+public final class JvmBridge extends SchemeObject {
 	private final Object _obj;
 
 	public JvmBridge(Object obj) {
@@ -249,11 +249,6 @@ public final class JvmBridge implements SchemeObject {
 
 	public static Object toJavaObject(SchemeObject o) throws SchemeException {
 		return o.toJavaObject();
-	}
-
-	@Override
-	public String toString() {
-		return toString(false);
 	}
 
 	@Override

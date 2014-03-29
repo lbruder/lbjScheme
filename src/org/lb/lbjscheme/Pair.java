@@ -18,7 +18,7 @@ package org.lb.lbjscheme;
 
 import java.util.*;
 
-public final class Pair implements SchemeList {
+public final class Pair extends SchemeList {
 	private SchemeObject _car;
 	private SchemeObject _cdr;
 
@@ -60,10 +60,15 @@ public final class Pair implements SchemeList {
 	}
 
 	@Override
+	public boolean isPair() {
+		return true;
+	}
+
+	@Override
 	public boolean isDottedList() {
 		Pair i = this;
 		while (true) {
-			if (i._cdr instanceof Nil) return false;
+			if (i._cdr.isNull()) return false;
 			if (!(i._cdr instanceof Pair)) return true;
 			i = (Pair) i._cdr;
 		}
@@ -78,11 +83,6 @@ public final class Pair implements SchemeList {
 	}
 
 	@Override
-	public String toString() {
-		return toString(false);
-	}
-
-	@Override
 	public String toString(boolean forDisplay) {
 		final StringBuilder ret = new StringBuilder();
 
@@ -91,7 +91,7 @@ public final class Pair implements SchemeList {
 		Pair i = this;
 		while (true) {
 			ret.append(i._car.toString(forDisplay));
-			if (i._cdr instanceof Nil) break;
+			if (i._cdr.isNull()) break;
 			ret.append(" ");
 
 			if (!(i._cdr instanceof Pair)) {

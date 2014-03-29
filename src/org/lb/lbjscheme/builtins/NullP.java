@@ -29,6 +29,6 @@ public final class NullP extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		return parameters.get(0) == Nil.getInstance() ? _true : _false;
+		return parameters.get(0).isNull() ? _true : _false;
 	}
 }

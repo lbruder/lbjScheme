@@ -29,9 +29,7 @@ public final class CloseInputPort extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		final SchemeObject o = parameters.get(0);
-		assertParameterType(o, InputPort.class);
-		((InputPort) o).close();
+		getInputPort(parameters.get(0)).close();
 		return _undefined;
 	}
 }

@@ -29,8 +29,6 @@ public final class VectorLength extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		final SchemeObject o = parameters.get(0);
-		assertParameterType(o, Vector.class);
-		return new Fixnum(((Vector) o).getLength());
+		return new Fixnum(getVector(parameters.get(0)).getLength());
 	}
 }

@@ -29,8 +29,6 @@ public final class VectorRef extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(2, parameters);
-		final SchemeObject vec = parameters.get(0);
-		assertParameterType(vec, Vector.class);
-		return ((Vector) vec).getAt(getFixnum(parameters.get(1)));
+		return getVector(parameters.get(0)).getAt(getFixnum(parameters.get(1)));
 	}
 }

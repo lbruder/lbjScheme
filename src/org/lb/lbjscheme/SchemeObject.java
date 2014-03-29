@@ -16,11 +16,100 @@
 
 package org.lb.lbjscheme;
 
-public interface SchemeObject {
+public abstract class SchemeObject {
 	@Override
-	public abstract String toString();
+	public final String toString() {
+		return toString(false);
+	}
 
 	public abstract String toString(boolean forDisplay);
 
 	public abstract Object toJavaObject() throws SchemeException;
+
+	public boolean isNumber() {
+		return false;
+	}
+
+	public boolean isChar() {
+		return false;
+	}
+
+	public boolean isString() {
+		return false;
+	}
+
+	public boolean isBool() {
+		return false;
+	}
+
+	public boolean isVector() {
+		return false;
+	}
+
+	public boolean isSymbol() {
+		return false;
+	}
+
+	public boolean isEofObject() {
+		return false;
+	}
+
+	public boolean isOutputPort() {
+		return false;
+	}
+
+	public boolean isInputPort() {
+		return false;
+	}
+
+	public boolean isPair() {
+		return false;
+	}
+
+	public boolean isNull() {
+		return false;
+	}
+
+	public boolean isInteger() {
+		return false;
+	}
+
+	public boolean isRational() {
+		return false;
+	}
+
+	public boolean isReal() {
+		return false;
+	}
+
+	public boolean isProcedure() {
+		return false;
+	}
+
+	protected final void throwTypeError(final String requester,
+			final String wanted) throws SchemeException {
+		throw new SchemeException(requester
+				+ ": Invalid parameter type; expected: " + wanted + ", got: "
+				+ getClass().getSimpleName());
+	}
+
+	public final void assertIsPair(final String requester)
+			throws SchemeException {
+		if (!isPair()) throwTypeError(requester, "Pair");
+	}
+
+	public final void assertIsString(final String requester)
+			throws SchemeException {
+		if (!isString()) throwTypeError(requester, "String");
+	}
+
+	public final void assertIsInputPort(final String requester)
+			throws SchemeException {
+		if (!isInputPort()) throwTypeError(requester, "InputPort");
+	}
+
+	public final void assertIsOutputPort(final String requester)
+			throws SchemeException {
+		if (!isOutputPort()) throwTypeError(requester, "OutputPort");
+	}
 }

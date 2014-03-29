@@ -18,16 +18,15 @@ package org.lb.lbjscheme;
 
 import java.io.*;
 
-public final class OutputPort implements SchemeObject {
+public final class OutputPort extends SchemeObject {
 	private final Writer _writer;
 
 	public OutputPort(Writer writer) {
 		_writer = writer;
 	}
 
-	@Override
-	public String toString() {
-		return toString(false);
+	public boolean isOutputPort() {
+		return true;
 	}
 
 	@Override

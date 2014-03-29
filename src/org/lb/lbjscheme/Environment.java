@@ -19,7 +19,7 @@ package org.lb.lbjscheme;
 import java.util.*;
 import org.lb.lbjscheme.builtins.*;
 
-public final class Environment implements SchemeObject {
+public final class Environment extends SchemeObject {
 	private final Environment _outer;
 	private final HashMap<Symbol, SchemeObject> _values = new HashMap<>();
 	private boolean _locked;
@@ -32,11 +32,6 @@ public final class Environment implements SchemeObject {
 
 	public Environment(Environment outer) {
 		_outer = outer;
-	}
-
-	@Override
-	public String toString() {
-		return toString(false);
 	}
 
 	@Override

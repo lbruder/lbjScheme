@@ -16,16 +16,7 @@
 
 package org.lb.lbjscheme;
 
-public abstract class SchemeNumber implements SchemeObject {
-	@Override
-	public String toString() {
-		try {
-			return toString(false, 10);
-		} catch (Exception ex) {
-			return "<internal error>";
-		}
-	}
-
+public abstract class SchemeNumber extends SchemeObject {
 	@Override
 	public String toString(boolean forDisplay) {
 		try {
@@ -33,6 +24,11 @@ public abstract class SchemeNumber implements SchemeObject {
 		} catch (Exception ex) {
 			return "<internal error>";
 		}
+	}
+
+	@Override
+	public boolean isNumber() {
+		return true;
 	}
 
 	public SchemeNumber add(SchemeNumber other) throws SchemeException {
@@ -115,8 +111,6 @@ public abstract class SchemeNumber implements SchemeObject {
 			return promoteToLevel(other.getLevel()).compareTo(other);
 		return compareTo(other.promoteToLevel(getLevel()));
 	}
-
-	public abstract boolean isInteger();
 
 	public abstract boolean isZero();
 

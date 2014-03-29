@@ -29,6 +29,6 @@ public final class NumberP extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		return parameters.get(0) instanceof SchemeNumber ? _true : _false;
+		return parameters.get(0).isNumber() ? _true : _false;
 	}
 }

@@ -90,9 +90,9 @@ public final class AnalyzingEvaluator extends Evaluator {
 			if (o instanceof Funcall) {
 				final Funcall form = (Funcall) o;
 				final SchemeObject procedure = eval(form.getProcedure(), env);
-				if (procedure instanceof Nil)
+				if (procedure.isNull())
 					throw new SchemeException("Empty list can not be evaluated");
-				if (procedure instanceof Vector)
+				if (procedure.isVector())
 					throw new SchemeException("Vectors must be quoted");
 				final List<SchemeObject> parameters = new ArrayList<>(form
 						.getParameters().size());
@@ -138,7 +138,7 @@ public final class AnalyzingEvaluator extends Evaluator {
 			if (o instanceof Apply) {
 				final Apply form = (Apply) o;
 				final SchemeObject procedure = eval(form.getProcedure(), env);
-				if (procedure instanceof Nil)
+				if (procedure.isNull())
 					throw new SchemeException("Empty list can not be applied");
 				final SchemeObject parameterList = eval(form.getParameters(),
 						env);

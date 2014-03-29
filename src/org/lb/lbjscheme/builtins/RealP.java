@@ -29,9 +29,6 @@ public final class RealP extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		final SchemeObject o = parameters.get(0);
-		return (o instanceof Fixnum) || (o instanceof Bignum)
-				|| (o instanceof Rational) || (o instanceof Real) ? _true
-				: _false;
+		return parameters.get(0).isReal() ? _true : _false;
 	}
 }

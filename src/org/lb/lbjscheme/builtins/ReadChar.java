@@ -41,8 +41,7 @@ public final class ReadChar extends Builtin {
 		if (parameters.size() == 0) {
 			if (_global != null) ret = _global.getInputPort().readChar();
 		} else {
-			assertParameterType(parameters.get(0), InputPort.class);
-			ret = ((InputPort) parameters.get(0)).readChar();
+			ret = getInputPort(parameters.get(0)).readChar();
 		}
 		return (ret == -1) ? EofObject.getInstance() : new SchemeCharacter(
 				(char) ret);

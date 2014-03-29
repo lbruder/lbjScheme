@@ -18,8 +18,7 @@ package org.lb.lbjscheme;
 
 import java.util.List;
 
-public abstract class Builtin implements SchemeObject {
-
+public abstract class Builtin extends SchemeObject {
 	protected static final True _true = True.getInstance();
 	protected static final False _false = False.getInstance();
 	protected static final Symbol _undefined = Symbol.fromString("undefined");
@@ -30,16 +29,16 @@ public abstract class Builtin implements SchemeObject {
 			throws SchemeException;
 
 	@Override
-	public String toString() {
-		return toString(false);
+	public final boolean isProcedure() {
+		return true;
 	}
 
 	@Override
-	public String toString(boolean forDisplay) {
+	public final String toString(boolean forDisplay) {
 		return "Builtin procedure " + getName();
 	}
 
-	protected void assertParameterCount(int expected,
+	protected final void assertParameterCount(int expected,
 			List<SchemeObject> parameters) throws SchemeException {
 		final int got = parameters.size();
 		if (expected != got)
@@ -48,7 +47,7 @@ public abstract class Builtin implements SchemeObject {
 					+ ", got: " + got);
 	}
 
-	protected void assertParameterCountMin(int expected,
+	protected final void assertParameterCountMin(int expected,
 			List<SchemeObject> parameters) throws SchemeException {
 		final int got = parameters.size();
 		if (expected > got)
@@ -57,7 +56,7 @@ public abstract class Builtin implements SchemeObject {
 					+ expected + ", got: " + got);
 	}
 
-	protected void assertParameterCountMax(int expected,
+	protected final void assertParameterCountMax(int expected,
 			List<SchemeObject> parameters) throws SchemeException {
 		final int got = parameters.size();
 		if (expected < got)
@@ -66,7 +65,7 @@ public abstract class Builtin implements SchemeObject {
 					+ expected + ", got: " + got);
 	}
 
-	protected void assertParameterType(SchemeObject o,
+	private final void assertParameterType(SchemeObject o,
 			Class<? extends SchemeObject> expected) throws SchemeException {
 		final Class<? extends SchemeObject> got = o.getClass();
 		if (expected.isAssignableFrom(got)) return;
@@ -75,18 +74,57 @@ public abstract class Builtin implements SchemeObject {
 				+ expected.getSimpleName() + ", got: " + got.getSimpleName());
 	}
 
-	protected SchemeNumber getNumber(SchemeObject o) throws SchemeException {
+	protected final SchemeNumber getNumber(SchemeObject o)
+			throws SchemeException {
 		assertParameterType(o, SchemeNumber.class);
 		return (SchemeNumber) o;
 	}
 
-	protected int getFixnum(SchemeObject o) throws SchemeException {
+	protected final Vector getVector(SchemeObject o) throws SchemeException {
+		assertParameterType(o, Vector.class);
+		return (Vector) o;
+	}
+
+	protected final JvmBridge getBridge(SchemeObject o) throws SchemeException {
+		assertParameterType(o, JvmBridge.class);
+		return (JvmBridge) o;
+	}
+
+	protected final Symbol getSymbol(SchemeObject o) throws SchemeException {
+		assertParameterType(o, Symbol.class);
+		return (Symbol) o;
+	}
+
+	protected final int getFixnum(SchemeObject o) throws SchemeException {
 		assertParameterType(o, Fixnum.class);
 		return ((Fixnum) o).getValue();
 	}
 
+	protected final char getCharacter(SchemeObject o) throws SchemeException {
+		assertParameterType(o, SchemeCharacter.class);
+		return ((SchemeCharacter) o).getValue();
+	}
+
+	protected final Environment getEnvironment(SchemeObject o)
+			throws SchemeException {
+		assertParameterType(o, Environment.class);
+		return (Environment) o;
+	}
+
+	protected final InputPort getInputPort(SchemeObject o)
+			throws SchemeException {
+		o.assertIsInputPort(getName());
+		return (InputPort) o;
+	}
+
+	protected final OutputPort getOutputPort(SchemeObject o)
+			throws SchemeException {
+		o.assertIsOutputPort(getName());
+		return (OutputPort) o;
+	}
+
 	@Override
-	public Object toJavaObject() throws SchemeException {
+	public final Object toJavaObject() throws SchemeException {
 		throw new SchemeException(
 				"Scheme builtin cannot be converted into a plain Java object");
 	}

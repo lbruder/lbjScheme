@@ -29,8 +29,6 @@ public final class CharToInteger extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		final SchemeObject o = parameters.get(0);
-		assertParameterType(o, SchemeCharacter.class);
-		return new Fixnum(((SchemeCharacter) o).getValue());
+		return new Fixnum(getCharacter(parameters.get(0)));
 	}
 }

@@ -30,7 +30,7 @@ public final class StringToSymbol extends Builtin {
 			throws SchemeException {
 		assertParameterCount(1, parameters);
 		final SchemeObject str = parameters.get(0);
-		assertParameterType(str, SchemeString.class);
+		str.assertIsString(getName());
 		return Symbol.fromString(((SchemeString) str).getValue());
 	}
 }

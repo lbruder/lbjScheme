@@ -16,7 +16,7 @@
 
 package org.lb.lbjscheme;
 
-public final class True implements SchemeObject {
+public final class True extends SchemeObject {
 	private True() {
 	}
 
@@ -27,8 +27,8 @@ public final class True implements SchemeObject {
 	}
 
 	@Override
-	public String toString() {
-		return "#t";
+	public boolean isBool() {
+		return true;
 	}
 
 	@Override

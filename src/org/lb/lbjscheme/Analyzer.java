@@ -127,9 +127,8 @@ public final class Analyzer {
 					"Invalid define form: Expected target and value");
 
 		final Pair p1 = (Pair) obj;
-		if (p1.getCar() instanceof Symbol) return analyzeDefineValue(p1);
-		if (p1.getCar() instanceof Pair) return analyzeDefineProcedure(p1);
-
+		if (p1.getCar().isSymbol()) return analyzeDefineValue(p1);
+		if (p1.getCar().isPair()) return analyzeDefineProcedure(p1);
 		throw new SchemeException(
 				"Invalid define form: Expected symbol or list as target");
 	}
@@ -140,7 +139,7 @@ public final class Analyzer {
 		if (!(valueObject instanceof Pair))
 			throw new SchemeException(
 					"Invalid define form: Expected target and value");
-		if (!(((Pair) valueObject).getCdr() instanceof Nil))
+		if (!(((Pair) valueObject).getCdr().isNull()))
 			throw new SchemeException(
 					"Invalid define form: Too many parameters");
 
@@ -150,7 +149,7 @@ public final class Analyzer {
 	private DefineForm analyzeDefineProcedure(Pair p1) throws SchemeException {
 		final SchemeList target = (SchemeList) p1.getCar();
 		final SchemeObject forms = p1.getCdr();
-		if (!(forms instanceof Pair))
+		if (!(forms.isPair()))
 			throw new SchemeException(
 					"Invalid define form: Expected lambda forms");
 		Symbol sym = null;

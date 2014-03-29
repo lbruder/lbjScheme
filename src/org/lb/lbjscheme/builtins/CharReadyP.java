@@ -43,7 +43,6 @@ public final class CharReadyP extends Builtin {
 						+ ": Not possible in this environment");
 			return _global.getInputPort().isCharReady() ? _true : _false;
 		}
-		assertParameterType(parameters.get(0), InputPort.class);
-		return ((InputPort) parameters.get(0)).isCharReady() ? _true : _false;
+		return getInputPort(parameters.get(0)).isCharReady() ? _true : _false;
 	}
 }

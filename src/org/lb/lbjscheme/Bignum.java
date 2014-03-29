@@ -90,6 +90,16 @@ public final class Bignum extends SchemeNumber {
 	}
 
 	@Override
+	public boolean isReal() {
+		return true;
+	}
+
+	@Override
+	public boolean isRational() {
+		return true;
+	}
+
+	@Override
 	public boolean isInteger() {
 		return true;
 	}

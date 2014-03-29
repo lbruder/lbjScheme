@@ -29,8 +29,8 @@ public final class SysError extends Builtin {
 	public SchemeObject apply(List<SchemeObject> parameters)
 			throws SchemeException {
 		assertParameterCount(1, parameters);
-		assertParameterType(parameters.get(0), Pair.class);
-		final Pair p = (Pair) parameters.get(0);
-		throw new SchemeException(p.toString(true));
+		final SchemeObject o = parameters.get(0);
+		o.assertIsPair(getName());
+		throw new SchemeException(o.toString(true));
 	}
 }
